@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+	<script type="text/javascript" src="engine.js"></script>
+	<button onclick="begin()">Click here</button>
+	<script>
+		function begin() {
+			Module.decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+			Module.printBoard();
+			begin = Module.runPerft(6);
+		}
+	</script>
+</html>
