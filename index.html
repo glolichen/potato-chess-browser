@@ -1,12 +1,35 @@
-<!doctype html>
+<!-- <script>
+	function begin() {
+		Module.decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+		Module.printBoard();
+		begin = Module.runPerft(6);
+	}
+</script> -->
+
+<!DOCTYPE html>
 <html>
-	<script type="text/javascript" src="engine.js"></script>
-	<button onclick="begin()">Click here</button>
-	<script>
-		function begin() {
-			Module.decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-			Module.printBoard();
-			begin = Module.runPerft(6);
-		}
-	</script>
+    <head>
+        <link rel="stylesheet" type="text/css" href="./style.css">
+        <title>Potato chess</title>
+    </head>
+    <body>
+		<script type="text/javascript" src="./build/engine.js"></script>
+
+		<div id="container">
+            <table id="table"></table>
+            <br>
+            <div id="buttonContainer">
+                <button id="perft">Performance test</button>
+            </div>
+        </div>
+		<dialog id="promotion">
+			<p>Select promotion piece:</p>
+			<button>Queen</button>
+			<button>Rook</button>
+			<button>Bishop</button>
+			<button>Knight</button>
+		</dialog>
+
+        <script type="module" src="./build/Drawing.js"></script>
+    </body>
 </html>

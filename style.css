@@ -1,0 +1,87 @@
+@font-face {
+    font-family: noto;
+    src: url(./Assets/NotoSans-Regular.ttf);
+}
+
+#container {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+table {
+    border-spacing: 0px;
+}
+
+td {
+    padding: 0px;
+}
+
+img {
+    position: absolute;
+    pointer-events: none;
+}
+
+td, img {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.square {
+    position: relative;
+}
+
+#buttonContainer {
+	display: flex;
+	justify-content: center;
+}
+
+.center {
+    text-align: center;
+}
+
+label {
+    font-size: 120%;
+}
+
+#fenInput, #depthInput {
+    font-size: 120%;
+    width: 55%;
+    text-align: center;
+}
+
+#depthInput {
+    width: 3%;
+}
+
+#startButton {
+    width: 4%;
+    font-size: 120%;
+}
+
+hr {
+    width: 60%;
+}
+
+* {
+    font-family: noto
+}
+
+#error {
+    color: red;
+}
+
+.hidden {
+    position: absolute;
+    right: 100000000px;
+    opacity: 0;
+}
+
+dialog {
+    text-align: center;
+}
