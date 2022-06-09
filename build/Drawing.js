@@ -41,6 +41,8 @@ function moveGen() {
     return moves;
 }
 function init() {
+    let temp = document.getElementById("temp");
+    temp.parentNode?.removeChild(temp);
     let current = 0;
     document.getElementById("table").innerHTML = "";
     for (let i = 0; i < 8; i++) {
@@ -167,7 +169,6 @@ function click(current) {
             for (let move of moves) {
                 if (move.source == current) {
                     movesFromSelected.push(move);
-                    console.log(move.promote);
                     if (move.promote != 0 && move.promote != 3 && move.promote != 5)
                         continue;
                     const image = document.createElement("img");
@@ -210,7 +211,6 @@ function click(current) {
         for (let move of moves) {
             if (move.source == current) {
                 movesFromSelected.push(move);
-                console.log(move.promote);
                 if (move.promote != 0 && move.promote != 3 && move.promote != 5)
                     continue;
                 const image = document.createElement("img");

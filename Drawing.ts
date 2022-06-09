@@ -57,6 +57,9 @@ function moveGen(): Moves.Move[] {
     return moves;
 }
 function init(): void {
+    let temp = document.getElementById("temp")!;
+    temp.parentNode?.removeChild(temp);
+
     let current = 0;
     document.getElementById("table")!.innerHTML = "";
 
@@ -209,7 +212,6 @@ function click(current: number): void {
             for (let move of moves) {
                 if (move.source == current) {
                     movesFromSelected.push(move);
-                    console.log(move.promote);
                     if (move.promote != 0 && move.promote != 3 && move.promote != 5)
                         continue;
                     const image: HTMLImageElement = document.createElement("img");
@@ -257,7 +259,6 @@ function click(current: number): void {
         for (let move of moves) {
             if (move.source == current) {
                 movesFromSelected.push(move);
-                console.log(move.promote);
                 if (move.promote != 0 && move.promote != 3 && move.promote != 5)
                     continue;
                 const image: HTMLImageElement = document.createElement("img");
