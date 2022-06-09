@@ -81,65 +81,6 @@ namespace Board {
         }
     }
 
-    export function validFEN(fen: string): boolean {
-        fen = fen.trim();
-
-        let parts: string[] = fen.split(" ");
-        if (parts.length != 6)
-            return false;
-        
-        let ranks: string[] = parts[0].split("/");
-        if (ranks.length != 8)
-            return false;
-
-        for (let line of ranks) {
-            let length: number = 0;
-            for (let char of line) {
-                if (Constants.NUMBERS.includes(char))
-                    length += parseInt(char);
-                else {
-                    if (Pieces.PIECES.includes(char))
-                        length++;
-                    else
-                        return false;
-                }
-            }
-            if (length != 8)
-                return false;
-        }
-
-        if (!["w", "b"].includes(parts[1]))
-            return false;
-
-        let castle: string = parts[2];
-        let used: Map<string, boolean> = new Map();
-        if (castle != "-") {
-            for (let char of castle) {
-                if (!["K", "Q", "k", "q"].includes(char) || used.get(char))
-                    return false;
-                used.set(char, true);
-            }
-        }
-
-        let ep = parts[3];
-        if (ep != "-") {
-            let file: string = ep[0];
-            let rank: number = parseInt(ep[1]);
-
-            if (!Constants.FILES.includes(file))
-                return false;
-            if (rank < 1 || rank > 8)
-                return false;
-        }
-
-        for (let i = 4; i <= 5; i++) {
-            if (Number.isNaN(Number(parts[i])))
-                return false;
-        }
-
-        return true;
-    }
-
     export function notationToXY(coord: number): string {
         if (coord == -1 || board[coord] == -1)
             return "-1";

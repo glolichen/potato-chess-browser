@@ -41,12 +41,57 @@ td, img {
 	justify-content: center;
 }
 
+hr {
+    width: 100%;
+}
+
+* {
+    font-family: noto;
+    font-size: medium;
+}
+
+p {
+    font-size: large;
+}
+
+dialog {
+    text-align: center;
+    padding-bottom: 1.5%;
+}
+
+#color {
+    padding-left: 3%;
+    padding-right: 3%;
+}
+#promotion {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+#result {
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+h2 {
+    font-size: x-large;
+}
+
+#error {
+    color: red;
+}
+
 .center {
     text-align: center;
 }
 
 label {
     font-size: 120%;
+}
+
+.hidden {
+    position: absolute;
+    right: 100000000px;
+    opacity: 0;
 }
 
 #fenInput, #depthInput {
@@ -62,26 +107,4 @@ label {
 #startButton {
     width: 4%;
     font-size: 120%;
-}
-
-hr {
-    width: 60%;
-}
-
-* {
-    font-family: noto
-}
-
-#error {
-    color: red;
-}
-
-.hidden {
-    position: absolute;
-    right: 100000000px;
-    opacity: 0;
-}
-
-dialog {
-    text-align: center;
 }

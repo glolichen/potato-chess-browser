@@ -30,8 +30,6 @@ namespace moves {
     void uncastle(int dir);
 
     SimpleMove convertUCI(std::string UCIMove);
-
-    void printMove(moves::Move move, bool newLine);
 }
 
 #endif

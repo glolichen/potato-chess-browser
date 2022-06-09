@@ -14,9 +14,6 @@
 #include "perft.h"
 #include "rook.h"
 
-#include <emscripten/bind.h>
-using namespace emscripten;
-
 const std::map<char, int> PIECE_TABLE = {{'p', 0},
                                     {'n', 1},
                                     {'b', 2},
@@ -166,6 +163,10 @@ std::vector<moves::Move> moveGen::moveGenWithOrdering() {
     return result;
 }
 
+
+#include <emscripten/bind.h>
+using namespace emscripten;
+
 EMSCRIPTEN_BINDINGS(my_module) {
     function("decode", &board::decode);
     function("printBoard", &board::printBoard);
@@ -179,5 +180,9 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("promote", &moves::Move::promote)
         .field("signal", &moves::Move::signal)
         .field("isEp", &moves::Move::isEp);
+    value_object<perft::Entry>("Entry")
+        .field("moves", &perft::Entry::moves)
+        .field("possible", &perft::Entry::possible);
     register_vector<moves::Move>("MoveVector");
+    register_vector<perft::Entry>("EntryVector");
 }

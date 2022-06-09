@@ -264,22 +264,3 @@ moves::SimpleMove moves::convertUCI(std::string UCIMove) {
     moves::SimpleMove result = {board::toNotation(ox, oy), board::toNotation(nx, ny)};
     return result;
 }
-
-void moves::printMove(moves::Move move, bool newLine) {
-    std::string source = board::toXY(move.source);
-    std::string dest = board::toXY(move.dest);
-
-    char ox = source[1] - '0' + 'a';
-    int oy = 8 - (source[0] - '0');
-
-    char nx = dest[1] - '0' + 'a';
-    int ny = 8 - (dest[0] - '0');
-
-    std::cout << ox << oy << nx << ny;
-
-    if (move.promote)
-        std::cout << (char) move.promote;
-
-    if (newLine)
-        std::cout << "\n";
-}
