@@ -41,8 +41,6 @@ function moveGen() {
     return moves;
 }
 function init() {
-    let temp = document.getElementById("temp");
-    temp.parentNode?.removeChild(temp);
     let current = 0;
     document.getElementById("table").innerHTML = "";
     for (let i = 0; i < 8; i++) {

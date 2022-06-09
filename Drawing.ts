@@ -57,9 +57,6 @@ function moveGen(): Moves.Move[] {
     return moves;
 }
 function init(): void {
-    let temp = document.getElementById("temp")!;
-    temp.parentNode?.removeChild(temp);
-
     let current = 0;
     document.getElementById("table")!.innerHTML = "";
 
