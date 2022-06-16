@@ -89,13 +89,13 @@ document.getElementById("startButton").onclick = () => {
     }
 
     let depth = parseInt(rawDepth);
-    if (depth < 0) {
-        error.textContent = "Depth must not be negative";
+    if (depth <= 0) {
+        error.textContent = "Depth cannot be less than 0";
         clear();
         return;
     }
     if (depth > 9) {
-        error.textContent = "Depth must not be larger than 9";
+        error.textContent = "Depth cannot be larger than 9";
         clear();
         return;
     }
