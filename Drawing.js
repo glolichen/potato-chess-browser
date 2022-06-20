@@ -1,5 +1,5 @@
-decode("7k/4Q3/7K/8/8/8/8/8 w - - 0 1");
-// decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
+// decode("7k/4Q3/7K/8/8/8/8/8 w - - 0 1");
+decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
 console.clear();
 
 var height = window.innerHeight ||
