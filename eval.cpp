@@ -4,7 +4,6 @@
 
 #include "board.h"
 #include "eval.h"
-#include "printing.h"
 
 const int PAWN[8][8] = {{0,  0,  0,   0,   0,   0,   0,  0},
                         {50, 50, 50,  50,  50,  50,  50, 50},

@@ -2,15 +2,10 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "checks.h"
 #include "board.h"
-#include "rook.h"
-#include "bishop.h"
-#include "knight.h"
-#include "pawn.h"
-#include "king.h"
-#include "moveGen.h"
+#include "checks.h"
 #include "constants.h"
+#include "moveGen.h"
 
 bool checks::enPassantLegal() {
     int kingPos = board::king[board::turn];
@@ -45,55 +40,6 @@ bool checks::enPassantLegal() {
     }
 
     return true;
-}
-
-std::vector<checks::Check> checks::getAttacked() {
-    std::vector<checks::Check> attacks;
-
-    for (int index : board::pieces[!board::turn]) {
-        char piece = tolower(board::board[index]);
-
-        switch (piece) {
-            case 'q': {
-                std::vector<checks::Check> rook = rook::rchecks(index);
-                attacks.insert(attacks.end(), rook.begin(), rook.end());
-                std::vector<checks::Check> bishop = bishop::bchecks(index);
-                attacks.insert(attacks.end(), bishop.begin(), bishop.end());
-                break;
-            }
-
-            case 'r': {
-                std::vector<checks::Check> temp = rook::rchecks(index);
-                attacks.insert(attacks.end(), temp.begin(), temp.end());
-                break;
-            }
-
-            case 'b': {
-                std::vector<checks::Check> temp = bishop::bchecks(index);
-                attacks.insert(attacks.end(), temp.begin(), temp.end());
-                break;
-            }
-
-            case 'n': {
-                std::vector<checks::Check> temp = knight::nchecks(index);
-                attacks.insert(attacks.end(), temp.begin(), temp.end());
-                break;
-            }
-
-            case 'p': {
-                std::vector<checks::Check> temp = pawn::pchecks(index);
-                attacks.insert(attacks.end(), temp.begin(), temp.end());
-                break;
-            }
-
-            case 'k': {
-                std::vector<checks::Check> temp = king::kchecks(index);
-                attacks.insert(attacks.end(), temp.begin(), temp.end());
-                break;
-            }
-        }
-    }
-    return attacks;
 }
 
 std::vector<checks::Check> checks::getPinned() {

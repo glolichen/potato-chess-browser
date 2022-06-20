@@ -7,15 +7,14 @@
 #include <cstdlib>
 #include <limits.h>
 
-#include "search.h"
+#include "board.h"
+#include "book.h"
+#include "constants.h"
 #include "eval.h"
+#include "hashing.h"
 #include "moveGen.h"
 #include "moves.h"
-#include "board.h"
-#include "hashing.h"
-#include "book.h"
-#include "printing.h"
-#include "constants.h"
+#include "search.h"
 
 struct TTEntry {
     int depth;

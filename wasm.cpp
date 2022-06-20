@@ -1,25 +1,22 @@
 #include <vector>
 #include <string>
 
+#include "attacked.h"
 #include "board.h"
 #include "checks.h"
 #include "moveGen.h"
-#include "perft.h"
 #include "moves.h"
+#include "perft.h"
 
 #include <emscripten/bind.h>
 using namespace emscripten;
-
-// std::vector<std::vector<int>> wasmMoveGen(std::string fen) {
-//     board::decode(fen);
-// }
 
 EMSCRIPTEN_BINDINGS(my_module) {
     function("decode", &board::decode);
     function("printBoard", &board::printBoard);
     function("moveGen", &moveGen::moveGen);
     function("runPerft", &perft::runPerft);
-    function("getAttacked", &checks::getAttacked);
+    function("getAttacked", &attacked::getAttacked);
     value_object<moves::Move>("Move")
         .field("source", &moves::Move::source)
         .field("dest", &moves::Move::dest)
