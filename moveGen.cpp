@@ -162,27 +162,3 @@ std::vector<moves::Move> moveGen::moveGenWithOrdering() {
 
     return result;
 }
-
-
-#include <emscripten/bind.h>
-using namespace emscripten;
-
-EMSCRIPTEN_BINDINGS(my_module) {
-    function("decode", &board::decode);
-    function("printBoard", &board::printBoard);
-    function("moveGen", &moveGen::moveGen);
-    function("runPerft", &perft::runPerft);
-    value_object<moves::Move>("Move")
-        .field("source", &moves::Move::source)
-        .field("dest", &moves::Move::dest)
-        .field("capture", &moves::Move::capture)
-        .field("castle", &moves::Move::castle)
-        .field("promote", &moves::Move::promote)
-        .field("signal", &moves::Move::signal)
-        .field("isEp", &moves::Move::isEp);
-    value_object<perft::Entry>("Entry")
-        .field("moves", &perft::Entry::moves)
-        .field("possible", &perft::Entry::possible);
-    register_vector<moves::Move>("MoveVector");
-    register_vector<perft::Entry>("EntryVector");
-}

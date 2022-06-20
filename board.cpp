@@ -20,7 +20,7 @@ bool board::turn = 0; // 0 = White, 1 = Black
 
 int board::halfMoveClock = 0;
 
-void board::decode(std::string fen) {
+void board::decode(std::string fen) {    
     std::vector<std::string> result = board::split(fen, ' ');
 
     if (!result[1].compare("w"))
@@ -48,12 +48,16 @@ void board::decode(std::string fen) {
 
     std::vector<std::string> line = board::split(result[0], '/');
 
+    std::vector<int> empty;
     for (int i = 0; i < 8; i++) {
         int cur = 2;
         std::string curRank = line[i];
         for (int j = 0; j < curRank.size(); j++) {
             if (isdigit(curRank[j])) {
-                cur += curRank[j] - '0';
+                int max = cur + (curRank[j] - '0');
+                for (int k = cur; k < max; k++)
+                    empty.push_back(i * 12 + k + 24);
+                cur = max;
                 continue;
             }
 
@@ -61,6 +65,9 @@ void board::decode(std::string fen) {
             cur++;
         }
     }
+
+    for (int square : empty)
+        board::board[square] = 0;
 
     for (int i = 0; i < 24; i++)
         board::board[i] = -1;
@@ -73,6 +80,9 @@ void board::decode(std::string fen) {
         board::board[i * 12 + 10] = -1;
         board::board[i * 12 + 11] = -1;
     }
+
+    board::pieces[0].clear();
+    board::pieces[1].clear();
 
     for (int i = 2; i < 10; i++) {
         for (int j = 2; j < 10; j++) {
@@ -165,6 +175,7 @@ void board::printBoard() {
     }
 
     std::cout << " ";
+    std::cout << "\n" << "FEN: " << board::encode();
     std::cout << "\n" << "White Kingside: " << board::K << "      " << "White Queenside: " << board::Q;
     std::cout << "\n" << "Black Kingside: " << board::k << "      " << "Black Queenside: " << board::q;
 

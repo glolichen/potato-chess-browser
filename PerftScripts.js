@@ -1,9 +1,5 @@
 const error = document.getElementById("error");
 
-const FILES = "abcdefgh";
-const NUMBERS = "0123456789";
-const PIECES = " PNBRQKpnbrqk";
-
 console.clear();
 
 var shown = false;
@@ -111,7 +107,7 @@ document.getElementById("startButton").onclick = () => {
 
     document.getElementById("count").textContent = "Working...";
 
-    const worker = new Worker("./build/PerftWorker.js");
+    const worker = new Worker("./PerftWorker.js");
     running = true;
     worker.postMessage([fen, depth]);
     worker.onmessage = e => {
