@@ -3,8 +3,8 @@
 #include <string>
 #include <algorithm>
 
-#include "moves.h"
 #include "board.h"
+#include "moves.h"
 
 int contains(int side, int square) {
     return find(board::pieces[side].begin(), board::pieces[side].end(), square) != board::pieces[side].end();

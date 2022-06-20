@@ -6,10 +6,10 @@
 #include <iterator>
 #include <map>
 
-#include "perft.h"
-#include "moves.h"
-#include "moveGen.h"
 #include "board.h"
+#include "moveGen.h"
+#include "moves.h"
+#include "perft.h"
 
 std::vector<perft::Entry> entries;
 

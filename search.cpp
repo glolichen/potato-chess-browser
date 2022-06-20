@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <limits.h>
 
+#include "attacked.h"
 #include "board.h"
 #include "book.h"
 #include "constants.h"
@@ -92,7 +93,7 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         char king = board::turn ? 'k' : 'K';
         bool inCheck = false;
 
-        for (checks::Check c : checks::getAttacked()) {
+        for (checks::Check c : attacked::getAttacked()) {
             if (board::board[c.coord] == king) {
                 inCheck = true;
                 break;

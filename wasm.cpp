@@ -7,6 +7,7 @@
 #include "moveGen.h"
 #include "moves.h"
 #include "perft.h"
+#include "search.h"
 
 #include <emscripten/bind.h>
 using namespace emscripten;
@@ -17,6 +18,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     function("moveGen", &moveGen::moveGen);
     function("runPerft", &perft::runPerft);
     function("getAttacked", &attacked::getAttacked);
+    function("search", &search::search);
     value_object<moves::Move>("Move")
         .field("source", &moves::Move::source)
         .field("dest", &moves::Move::dest)
