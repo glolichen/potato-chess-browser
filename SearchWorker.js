@@ -9,7 +9,6 @@ onmessage = e => {
         console.log(Module["encode"]());
         
         let out = Module["search"](e.data[1]);
-        console.log("hello world!");
 
         let move = new Move(out.source, out.dest, charToPiece(out.capture), out.castle, 
         charToPiece(out.promote), convertSignal(out.signal), out.isEp);
