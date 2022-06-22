@@ -101,7 +101,6 @@ void board::decode(std::string fen) {
         }
     }
 }
-
 std::string board::encode() {
     std::string fen = "";
     for (int i = 2; i < 10; i++) {
@@ -144,14 +143,9 @@ std::string board::encode() {
 
     if (board::enPassant == -1)
         fen += "-";
-    else {
-        std::string ep = board::toXY(board::enPassant);
-        int x = 8 - (ep[0] - '0');
-        char y = ep[1] - '0' + 'a';
-
-        fen += y;
-        fen += x + '0';
-    }
+    else
+        fen += board::toSAN(board::enPassant);
+        
     fen += " 0 ";
     fen += std::to_string(board::halfMoveClock + 1);
 
@@ -211,7 +205,6 @@ int board::SANToNotation(std::string san) {
     int x = 8 - (san[1] - '0') + 2;
     return x * 12 + y;
 }
-
 std::string board::toXY(int coord) {
     if (board::board[coord] == -1)
         return "-1";
@@ -225,14 +218,24 @@ std::string board::toXY(int coord) {
     std::string y = std::to_string(coord % 8);
     return x + y;
 }
+std::string board::toSAN(int coord) {
+    std::string xy = board::toXY(coord);
 
+    int x = 8 - (xy[0] - '0');
+    char y = xy[1] - '0' + 'a';
+
+    std::string out = "";
+    out += y;
+    out += x + '0';
+
+    return out;
+}
 int board::toRegularBoard(int coord) {
     coord -= 26;
     coord -= (coord / 12) * 4;
 
     return coord;
 }
-
 int board::toNotation(int x, int y) {
     return (y + 2) + x * 12 + 24;
 }

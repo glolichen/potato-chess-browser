@@ -1,13 +1,13 @@
-// decode("7k/4Q3/7K/8/8/8/8/8 w - - 0 1");
-decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
+decode("8/8/8/8/3k4/8/8/1QK5 b - - 0 1");
+// decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
 console.clear();
 
 var height = window.innerHeight ||
-document.getElementsByTagName("html")[0].clientHeight  ||
-document.getElementsByTagName("body")[0].clientHeight  ||
-screen.availHeight;
+	document.getElementsByTagName("html")[0].clientHeight  ||
+	document.getElementsByTagName("body")[0].clientHeight  ||
+	screen.availHeight;
 
-var paused = true;
+var gameOver = true;
 
 var humanSide = false;
 
@@ -19,18 +19,25 @@ const LIGHT = "#f0d9b5";
 const SEL_DARK = "#e0c434";
 const SEL_LIGHT = "#f8ec5c";
 
+const LAST_MOVE_DARK = "#aaa23a";
+const LAST_MOVE_LIGHT = "#cdd26a";
+
 var rows = [];
 
 var selected = null;
 
+var sel1 = null;
+var sel2 = null;
+
 var moves = [];
 var movesFromSelected = [];
+
+const TIME = 1000;
 
 document.getElementById("perft").onclick = () => window.open("./perft.html");
 
 function moveGen() {
     Module["decode"](encode());
-    Module["printBoard"]();
     let out = Module["moveGen"]();
 
     let legalMoves = [];
@@ -44,6 +51,8 @@ function moveGen() {
     }
 
     if (legalMoves.length == 0) {
+		gameOver = true;
+
         let inCheck = false;
         let attacked = Module["getAttacked"]();
 
@@ -65,7 +74,8 @@ function moveGen() {
 
         result.append(paragraph);
         result.append(button);
-        result.setAttribute("open", "");
+
+		setTimeout(() => result.setAttribute("open", ""), 100);
     }
 
     return legalMoves;
@@ -197,7 +207,6 @@ function init() {
         document.getElementById("table")?.appendChild(row);
     }
 }
-
 function update() {
     for (let piece of document.querySelectorAll(".piece"))
         piece.remove();
@@ -218,11 +227,11 @@ function update() {
 }    
 
 function click(current) {
-    if (paused)
+    if (gameOver)
         return;
 
     if (selected == null) {
-        if (board[current] > 0 && getColor(board[current]) == turn) {
+        if (board[current] > 0 && getColor(board[current]) == turn && getColor(board[current]) == humanSide) {
             document.getElementById(current.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; background-color: ${isLight(current) ? SEL_LIGHT : SEL_DARK}`);
             selected = current;
             movesFromSelected.length = 0;
@@ -253,14 +262,28 @@ function click(current) {
                 pickPromotion(move.dest);
             }
 
+            document.getElementById(selected.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; 
+                background-color: ${isLight(selected) ? LIGHT : DARK}`);
             makeMove(move);
-            document.getElementById(selected.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; background-color: ${isLight(selected) ? LIGHT : DARK}`);
             selected = null;
+
+            highlightLastMove(move);
+
             for (let piece of document.querySelectorAll(".highlight"))
                 piece.remove();
+
             update();
             movesFromSelected.length = 0;
-            moves = moveGen();
+
+            const worker = new Worker("./SearchWorker.js");
+            worker.postMessage([encode(), TIME]);
+            worker.onmessage = e => {
+                makeMove(e.data);
+                highlightLastMove(e.data);
+                update();
+                moves = moveGen();
+            }
+
             return;
         }
     }
@@ -291,6 +314,23 @@ function click(current) {
         selected = null;
 }
 
+function highlightLastMove(move) {
+	if (sel1 != null) {
+		document.getElementById(sel1).setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; 
+			background-color: ${isLight(sel1) ? LIGHT : DARK}`);
+		document.getElementById(sel2).setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; 
+			background-color: ${isLight(sel2) ? LIGHT : DARK}`);
+	}
+
+    sel1 = move.source;
+    sel2 = move.dest;
+
+    document.getElementById(sel1.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; 
+        background-color: ${isLight(sel1) ? LAST_MOVE_LIGHT : LAST_MOVE_DARK}`);
+    document.getElementById(sel2.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; 
+        background-color: ${isLight(sel2) ? LAST_MOVE_LIGHT : LAST_MOVE_DARK}`);
+}
+
 function isLight(notation) {
     let coord = notationToXY(notation);
     return (parseInt(coord[0]) + parseInt(coord[1])) % 2 == 0;
@@ -299,7 +339,7 @@ function isLight(notation) {
 function pickSide() {
     const whiteButton = document.createElement("button");
     whiteButton.onclick = () => {
-        paused = false;
+        gameOver = false;
         colorDialog.removeAttribute("open");
         moves = moveGen();
         init();
@@ -309,7 +349,7 @@ function pickSide() {
     const blackButton = document.createElement("button");
     blackButton.onclick = () => {
         humanSide = true;
-        paused = false;
+        gameOver = false;
         colorDialog.removeAttribute("open");
         moves = moveGen();
         init();
@@ -323,11 +363,11 @@ function pickSide() {
 }
 
 function pickPromotion(square) {
-    paused = true;
+    gameOver = true;
 
     const queen = document.createElement("button");
     queen.onclick = () => {
-        paused = false;
+        gameOver = false;
         board[square] = getColor(board[square]) ? PIECES.indexOf("q") : PIECES.indexOf("Q");
         update();
         moves = moveGen();
@@ -337,7 +377,7 @@ function pickPromotion(square) {
 
     const rook = document.createElement("button");
     rook.onclick = () => {
-        paused = false;
+        gameOver = false;
         board[square] = getColor(board[square]) ? PIECES.indexOf("r") : PIECES.indexOf("R");
         update();
         moves = moveGen();
@@ -347,7 +387,7 @@ function pickPromotion(square) {
 
     const bishop = document.createElement("button");
     bishop.onclick = () => {
-        paused = false;
+        gameOver = false;
         board[square] = getColor(board[square]) ? PIECES.indexOf("b") : PIECES.indexOf("B");
         update();
         moves = moveGen();
@@ -357,7 +397,7 @@ function pickPromotion(square) {
 
     const knight = document.createElement("button");
     knight.onclick = () => {
-        paused = false;
+        gameOver = false;
         board[square] = getColor(board[square]) ? PIECES.indexOf("n") : PIECES.indexOf("N");
         update();
         moves = moveGen();

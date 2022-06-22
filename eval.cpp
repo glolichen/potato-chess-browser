@@ -63,11 +63,11 @@ const int KING_END[8][8] = {{-50, -40, -30, -20, -20, -30, -40, -50},
                             {-50, -30, -30, -30, -30, -30, -30, -50}};
 
 const std::map<char, int> PIECE_TABLE = {{'p', 0},
-                                    {'n', 1},
-                                    {'b', 2},
-                                    {'r', 3},
-                                    {'q', 4},
-                                    {'k', 5}};
+                                        {'n', 1},
+                                        {'b', 2},
+                                        {'r', 3},
+                                        {'q', 4},
+                                        {'k', 5}};
 const int VALUES[5] = {100, 305, 333, 563, 950};
 eval::Table ALL_TABLES[2][5];
 
@@ -116,6 +116,8 @@ int eval::evaluate() {
     int whitePawn = 0;
     int blackPawn = 0;
 
+    int pieceCount = 0;
+
     for (int i = 2; i < 10; i++) {
         for (int j = 2; j < 10; j++) {
             int index = i * 12 + j;
@@ -124,12 +126,14 @@ int eval::evaluate() {
 
             int pieceNumber = PIECE_TABLE.find(tolower(board::board[index]))->second;
             int value = VALUES[pieceNumber];
+            pieceCount++;
             if ((bool) islower(board::board[index])) {
                 black += value;
                 if (board::board[index] == 'p')
                     blackPawn += 100;
                 black += ALL_TABLES[1][pieceNumber].table[i - 2][j - 2];
-            } else {
+            }
+            else {
                 white += value;
                 if (board::board[index] == 'P')
                     whitePawn += 100;
@@ -142,9 +146,10 @@ int eval::evaluate() {
     int evaluation = white - black;
 
     if (endgame) {
-        int EGWeight = board::turn ? ((black - blackPawn) / 10) : ((white - whitePawn) / 10);
-        int perspective = board::turn ? -1 : 1;
-        evaluation += perspective * eval::kingLocationEval(EGWeight);
+        int egWeight = board::turn ? ((black - blackPawn) / 10) : ((white - whitePawn) / 10);
+        if (pieceCount <= 4)
+            egWeight = 2;
+        evaluation += (board::turn ? -1 : 1) * eval::kingLocationEval(egWeight);
     }
 
     return evaluation;

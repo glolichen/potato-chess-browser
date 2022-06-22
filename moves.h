@@ -1,6 +1,7 @@
 #ifndef MOVES_H
 #define MOVES_H
 
+#include <iostream>
 #include <string>
 
 namespace moves {
@@ -15,6 +16,15 @@ namespace moves {
         int signal; // Casling rights. K disables Kingside, Q disables Queenside, X disables both
 
         bool isEp; // Is this move En Passant?
+
+        void print(bool newLine) {
+            std::cout << board::toSAN(source);
+            std::cout << board::toSAN(dest);
+            if (promote != 0)
+                std::cout << (char) promote;
+            if (newLine)
+                std::cout << "\n";
+        }
     };
     struct SimpleMove {
         int source;
@@ -22,11 +32,9 @@ namespace moves {
     };
 
     void makeMove(Move move);
-
     void unmakeMove(Move move);
 
     void castle(int dir);
-
     void uncastle(int dir);
 
     SimpleMove convertUCI(std::string UCIMove);

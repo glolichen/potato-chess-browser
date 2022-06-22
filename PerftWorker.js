@@ -1,4 +1,5 @@
 onmessage = e => {
+    importScripts("./Board.js");
     importScripts("./engine.js");
     Module["onRuntimeInitialized"] = () => {
         let startTime = new Date().getTime();
@@ -18,10 +19,6 @@ onmessage = e => {
         postMessage([total, elapsed, breakdown]);
     };
 }
-
-const FILES = "abcdefgh";
-const NUMBERS = "0123456789";
-const SIGNALS = "XxKQkq";
 
 function notationToXY(coord) {
     coord -= 26;

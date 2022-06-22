@@ -1,3 +1,4 @@
+const FILES = "abcdefgh";
 const NUMBERS = "0123456789";
 
 var board = [];

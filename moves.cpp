@@ -92,7 +92,6 @@ void moves::makeMove(moves::Move move) {
     board::board[move.dest] = board::board[move.source];
     board::board[move.source] = 0;
 }
-
 void moves::unmakeMove(moves::Move move) {
     board::enPassant = -1;
     board::turn = !board::turn;
@@ -217,7 +216,6 @@ void moves::castle(int dir) {
         }
     }
 }
-
 void moves::uncastle(int dir) {
     if (dir == 1) {
         if (!board::turn) {

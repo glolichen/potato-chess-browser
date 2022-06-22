@@ -12,7 +12,7 @@ namespace search {
 
     int quiscence(int alpha, int beta);
 
-    std::pair<moves::Move, int> search(int timeMS);
+    moves::Move search(int timeMS);
 
     bool evalIsMate(int eval);
 }

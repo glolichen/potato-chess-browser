@@ -31,11 +31,9 @@ namespace board {
     std::vector<std::string> split(std::string str, char splitOn);
 
     int SANToNotation(std::string san);
-
     std::string toXY(int coord);
-
+    std::string toSAN(int coord);
     int toRegularBoard(int coord);
-
     int toNotation(int x, int y);
 }
 

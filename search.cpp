@@ -9,7 +9,6 @@
 
 #include "attacked.h"
 #include "board.h"
-#include "book.h"
 #include "constants.h"
 #include "eval.h"
 #include "hashing.h"
@@ -23,13 +22,13 @@ struct TTEntry {
 };
 
 const int SEARCH_EXPIRED = INT_MIN + 500;
-const int BOOK_MOVE = INT_MAX - 500;
 
 bool topMoveNull;
 moves::Move search::topMove; // top move stored through iterative deepening
 std::unordered_map<unsigned long long, TTEntry> transposition; // transposition table
 
-unsigned long long limit; // time limit
+int limit;
+std::chrono::time_point<std::chrono::high_resolution_clock> start;
 
 bool sameMove(moves::Move move1, moves::Move move2) { // are two moves the same
     return (move1.capture == move2.capture) &&
@@ -43,33 +42,11 @@ bool sameMove(moves::Move move1, moves::Move move2) { // are two moves the same
 
 int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
     //check if we have reached the time limit and should end the search
-    unsigned long long millis = std::chrono::duration_cast<std::chrono::milliseconds>(
-            std::chrono::system_clock::now().time_since_epoch()).count();
-    if (millis >= limit)
+    auto now = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> elapsed = now - start;
+
+    if (elapsed.count() >= limit)
         return SEARCH_EXPIRED;
-
-    std::string truncatedFEN = board::truncateFEN(board::encode());
-
-    //opening book
-    if (depthFromStart == 0 && board::halfMoveClock <= 8) {
-        for (const auto &pair: book::openingBook) {
-            if (pair.first == truncatedFEN) {
-                std::vector<moves::SimpleMove> candidateMoves = pair.second; //all the possible moves from the opening book
-                srand(time(0));
-                int number = rand() % (candidateMoves.size()); //choose random move from book
-                moves::SimpleMove bookMove = candidateMoves[number];
-
-                std::vector<moves::Move> moves = moveGen::moveGen();
-                for (const moves::Move &move: moves) {
-                    if (move.source == bookMove.source &&
-                        move.dest == bookMove.dest) {
-                        search::topMove = move;
-                        return BOOK_MOVE;
-                    }
-                }
-            }
-        }
-    }
 
     int evaluation = 0;
     if (depth == 0)
@@ -77,6 +54,8 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
 
     std::vector<moves::Move> moves = moveGen::moveGenWithOrdering();
 
+    // place the previous best move to the top of the list
+    // this should speed up alpha-beta pruning by allowing us to prune most if not all branches
     if (depthFromStart == 0 && !topMoveNull) {
         for (int i = 0; i < static_cast<int>(moves.size()); i++) {
             if (sameMove(moves[i], topMove)) {
@@ -87,7 +66,7 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         moves.insert(moves.begin(), topMove);
     }
 
-    unsigned long long hashCode = hashing::getZobristHash();
+    // unsigned long long hashCode = hashing::getZobristHash();
 
     if (moves.size() == 0) { // check whether there are legal moves
         char king = board::turn ? 'k' : 'K';
@@ -110,11 +89,11 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
             return 0; // stalemate (draw)
     }
 
-    if (transposition.count(hashCode)) {
-        auto found = transposition.at(hashCode);
-        if (found.depth >= depth)
-            return found.eval;
-    }
+    // if (transposition.count(hashCode)) {
+    //     auto found = transposition.at(hashCode);
+    //     if (found.depth >= depth)
+    //         return found.eval;
+    // }
 
     if (board::turn == constants::WHITE && depth > 0) { // white's turn - computer tries to maximize evaluation
         evaluation = INT_MIN;
@@ -122,11 +101,11 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         std::vector<std::pair<moves::Move, int>> allEval;
 
         for (const moves::Move &m: moves) {
-            makeMove(m);
+            moves::makeMove(m);
 
-            int curEval = minimax(depth - 1, alpha, beta, depthFromStart + 1);
+            int curEval = search::minimax(depth - 1, alpha, beta, depthFromStart + 1);
 
-            unmakeMove(m);
+            moves::unmakeMove(m);
 
             if (curEval == SEARCH_EXPIRED)
                 return SEARCH_EXPIRED;
@@ -134,7 +113,7 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
             evaluation = std::max(curEval, evaluation);
 
             if (depthFromStart == 0)
-                allEval.push_back({m, curEval});
+                allEval.push_back({ m, curEval });
 
             alpha = std::max(curEval, alpha);
             if (beta <= alpha)
@@ -158,11 +137,11 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         std::vector<std::pair<moves::Move, int>> allEval;
 
         for (const moves::Move &m: moves) {
-            makeMove(m);
+            moves::makeMove(m);
 
-            int curEval = minimax(depth - 1, alpha, beta, depthFromStart + 1);
+            int curEval = search::minimax(depth - 1, alpha, beta, depthFromStart + 1);
 
-            unmakeMove(m);
+            moves::unmakeMove(m);
 
             if (curEval == SEARCH_EXPIRED)
                 return SEARCH_EXPIRED;
@@ -170,7 +149,7 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
             evaluation = std::min(curEval, evaluation);
 
             if (depthFromStart == 0)
-                allEval.push_back({m, curEval});
+                allEval.push_back({ m, curEval });
 
             beta = std::min(curEval, beta);
             if (beta <= alpha)
@@ -189,18 +168,18 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         }
     }
 
-    if (transposition.count(hashCode) == 0)
-        transposition.insert({hashCode, {depth, evaluation}});
-    else {
-        auto previous = transposition.at(hashCode);
-        if (depth > previous.depth)
-            transposition.at(hashCode) = {depth, evaluation};
-    }
+    // if (transposition.count(hashCode) == 0)
+    //     transposition.insert({ hashCode, { depth, evaluation } });
+    // else {
+    //     auto previous = transposition.at(hashCode);
+    //     if (depth > previous.depth)
+    //         transposition.at(hashCode) = { depth, evaluation };
+    // }
 
     return evaluation;
 }
 
-std::pair<moves::Move, int> search::search(int timeMS) {
+moves::Move search::search(int timeMS) {
     //iterative deepening
     //search with depth of one ply first
     //then increase depth until time runs out
@@ -213,35 +192,37 @@ std::pair<moves::Move, int> search::search(int timeMS) {
     //transposition table is still intact which means that we can still use alpha and beta values from before
 
     topMoveNull = true;
-    limit = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() +
-            timeMS;
 
     std::pair<moves::Move, int> best;
+    limit = timeMS;
+    start = std::chrono::high_resolution_clock::now();
+    std::cout << "Depth: ";
+
+    eval::initPieceTables();
+
     for (int depth = 1; depth < INT_MAX; depth++) {
         int eval = search::minimax(depth, INT_MIN, INT_MAX, 0);
         topMoveNull = false;
 
         if (eval == SEARCH_EXPIRED) {
-            std::cout << "Depth " << depth << std::endl;
+            std::cout << depth - 1;
+            std::cout << "\n";
             break;
         }
 
         best.first = topMove;
         best.second = eval;
 
-        if (evalIsMate(eval)) {
-            std::cout << "Depth " << depth << std::endl;
-            break;
-        }
-        if (eval == BOOK_MOVE) {
-            std::cout << "Book Move" << std::endl;
+        if (evalIsMate(eval)) { // checkmate has been found, do not need to search any more
+            std::cout << depth;
+            std::cout << "\n";
             break;
         }
     }
 
     transposition.clear();
 
-    return best;
+    return best.first;
 }
 
 bool search::evalIsMate(int eval) {
