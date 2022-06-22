@@ -21,7 +21,6 @@ namespace board {
     extern int halfMoveClock;
 
     void decode(std::string fen);
-
     std::string encode();
 
     void printBoard();
