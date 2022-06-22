@@ -2,8 +2,8 @@
 #define MOVEGEN_H
 
 #include <vector>
-#include "moves.h"
 #include "checks.h"
+#include "moves.h"
 
 namespace moveGen {
     std::vector<moves::Move> moveGen();
