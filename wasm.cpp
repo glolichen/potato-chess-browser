@@ -13,16 +13,6 @@
 #include <emscripten/bind.h>
 using namespace emscripten;
 
-void test() {
-    auto start = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < 1000000; i++) {
-        std::cout << "hello world ";
-    }
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double, std::milli> elapsed = end-start;
-    std::cout << "\nTime: " << elapsed.count() << " ms\n";
-}
-
 EMSCRIPTEN_BINDINGS(my_module) {
     function("decode", &board::decode);
     function("encode", &board::encode);

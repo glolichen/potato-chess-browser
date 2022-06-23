@@ -1,4 +1,4 @@
-decode("8/8/8/8/3k4/8/P7/1QK5 b - - 0 1");
+decode("8/8/8/8/3k4/8/PP6/2K5 b - - 0 1");
 // decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
 console.clear();
 

@@ -28,7 +28,6 @@ moves::Move search::topMove; // top move stored through iterative deepening
 std::unordered_map<unsigned long long, TTEntry> transposition; // transposition table
 
 int limit;
-std::chrono::time_point<std::chrono::high_resolution_clock> start;
 
 bool sameMove(moves::Move move1, moves::Move move2) { // are two moves the same
     return (move1.capture == move2.capture) &&
@@ -42,10 +41,8 @@ bool sameMove(moves::Move move1, moves::Move move2) { // are two moves the same
 
 int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
     //check if we have reached the time limit and should end the search
-    auto now = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double, std::milli> elapsed = now - start;
-
-    if (elapsed.count() >= limit)
+    int now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    if (now >= limit)
         return SEARCH_EXPIRED;
 
     int evaluation = 0;
@@ -194,8 +191,8 @@ moves::Move search::search(int timeMS) {
     topMoveNull = true;
 
     std::pair<moves::Move, int> best;
-    limit = timeMS;
-    start = std::chrono::high_resolution_clock::now();
+    limit = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    limit += timeMS;
     std::cout << "Depth: ";
 
     eval::initPieceTables();
