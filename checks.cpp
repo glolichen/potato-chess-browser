@@ -100,9 +100,9 @@ std::vector<checks::Check> checks::getPinned() {
     return pinned;
 }
 
-std::vector<int> checks::getBlocks(std::vector<checks::Check> attacked) {
+std::vector<int> checks::getBlocks(std::vector<checks::Check>* attacked) {
     std::vector<int> blocks;
-    for (checks::Check check : attacked) {
+    for (checks::Check check : *attacked) {
         if (check.coord != board::king[board::turn])
             continue;
 

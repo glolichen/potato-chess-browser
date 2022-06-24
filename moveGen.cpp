@@ -65,33 +65,33 @@ std::vector<moves::Move> moveGen::moveGen() {
 
         switch (piece) {
             case 'q': {
-                pieceMoves::rmoves(i, &moves, pinned, false);
-                pieceMoves::bmoves(i, &moves, pinned);
+                pieceMoves::rmoves(i, &moves, &pinned, false);
+                pieceMoves::bmoves(i, &moves, &pinned);
                 break;
             }
 
             case 'r': {
-                pieceMoves::rmoves(i, &moves, pinned, true);
+                pieceMoves::rmoves(i, &moves, &pinned, true);
                 break;
             }
 
             case 'b': {
-                pieceMoves::bmoves(i, &moves, pinned);
+                pieceMoves::bmoves(i, &moves, &pinned);
                 break;
             }
 
             case 'n': {
-                pieceMoves::nmoves(i, &moves, pinned);
+                pieceMoves::nmoves(i, &moves, &pinned);
                 break;
             }
 
             case 'p': {
-                pieceMoves::pmoves(i, &moves, pinned);
+                pieceMoves::pmoves(i, &moves, &pinned);
                 break;
             }
 
             case 'k': {
-                pieceMoves::kmoves(i, &moves, attacked);
+                pieceMoves::kmoves(i, &moves, &attacked);
                 break;
             }
         }
@@ -107,7 +107,7 @@ std::vector<moves::Move> moveGen::moveGen() {
     if (timesChecked == 0)
         return moves;
 
-    std::vector<int> blocks = checks::getBlocks(attacked);
+    std::vector<int> blocks = checks::getBlocks(&attacked);
     std::vector<moves::Move> result;
 
     if (timesChecked == 2)

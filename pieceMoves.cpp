@@ -9,9 +9,9 @@
 #include "moveGen.h"
 #include "pieceMoves.h"
 
-void pieceMoves::pmoves(int loc, std::vector<moves::Move>* moves, std::vector<checks::Check> pinned) {
+void pieceMoves::pmoves(int loc, std::vector<moves::Move>* moves, std::vector<checks::Check>* pinned) {
     int axis = -1;
-    for (checks::Check c : pinned) {
+    for (checks::Check c : *pinned) {
         if (c.coord == loc) {
             axis = c.axis;
             break;
@@ -67,8 +67,8 @@ void pieceMoves::pmoves(int loc, std::vector<moves::Move>* moves, std::vector<ch
         }
     }
 }
-void pieceMoves::nmoves(int loc, std::vector<moves::Move>* moves, std::vector<checks::Check> pinned) {
-    for (checks::Check c : pinned) {
+void pieceMoves::nmoves(int loc, std::vector<moves::Move>* moves, std::vector<checks::Check>* pinned) {
+    for (checks::Check c : *pinned) {
         if (c.coord == loc)
             return;
     }
@@ -84,10 +84,10 @@ void pieceMoves::nmoves(int loc, std::vector<moves::Move>* moves, std::vector<ch
         moves->push_back({ loc, i, board::board[i], 0, 0, 0, 0 });
     }
 }
-void pieceMoves::bmoves(int loc, std::vector<moves::Move>* moves, std::vector<checks::Check> pinned) {
-    for (const int &offset: constants::BISHOP) {
+void pieceMoves::bmoves(int loc, std::vector<moves::Move>* moves, std::vector<checks::Check>* pinned) {
+    for (int offset : constants::BISHOP) {
         int axis = -1;
-        for (const checks::Check &c: pinned) {
+        for (checks::Check c : *pinned) {
             if (c.coord == loc) {
                 axis = c.axis;
                 break;
@@ -111,10 +111,10 @@ void pieceMoves::bmoves(int loc, std::vector<moves::Move>* moves, std::vector<ch
         }
     }
 }
-void pieceMoves::rmoves(int loc, std::vector<moves::Move>* moves, std::vector<checks::Check> pinned, bool isRook) {
-    for (const int &offset: constants::ROOK) {
+void pieceMoves::rmoves(int loc, std::vector<moves::Move>* moves, std::vector<checks::Check>* pinned, bool isRook) {
+    for (int offset : constants::ROOK) {
         int axis = -1;
-        for (checks::Check c : pinned) {
+        for (checks::Check c : *pinned) {
             if (c.coord == loc) {
                 axis = c.axis;
                 break;
@@ -153,8 +153,8 @@ void pieceMoves::rmoves(int loc, std::vector<moves::Move>* moves, std::vector<ch
         }
     }
 }
-void pieceMoves::kmoves(int loc, std::vector<moves::Move>* moves, std::vector<checks::Check> attacked) {
-    for (const int &offset: constants::KING) {
+void pieceMoves::kmoves(int loc, std::vector<moves::Move>* moves, std::vector<checks::Check>* attacked) {
+    for (int offset : constants::KING) {
         int i = loc + offset;
 
         if (board::board[i] == -1)
@@ -163,7 +163,7 @@ void pieceMoves::kmoves(int loc, std::vector<moves::Move>* moves, std::vector<ch
             continue;
 
         bool contains = false;
-        for (const checks::Check &c: attacked) {
+        for (checks::Check c : *attacked) {
             if (c.coord == i) {
                 contains = true;
                 break;
@@ -192,7 +192,7 @@ void pieceMoves::kmoves(int loc, std::vector<moves::Move>* moves, std::vector<ch
         moves->push_back({ loc, i, board::board[i], 0, 0, signal, 0 });
     }
 
-    for (const checks::Check &c: attacked) {
+    for (checks::Check c : *attacked) {
         if (c.coord == board::king[board::turn])
             return;
     }
@@ -200,7 +200,7 @@ void pieceMoves::kmoves(int loc, std::vector<moves::Move>* moves, std::vector<ch
     if (!board::turn) {
         bool KLegal = true;
         bool QLegal = true;
-        for (const checks::Check &c: attacked) {
+        for (checks::Check c : *attacked) {
             if (c.coord == 115 || c.coord == 116)
                 KLegal = false;
             if (c.coord == 113 || c.coord == 112)
@@ -230,7 +230,7 @@ void pieceMoves::kmoves(int loc, std::vector<moves::Move>* moves, std::vector<ch
     } else {
         bool KLegal = true;
         bool QLegal = true;
-        for (const checks::Check &c: attacked) {
+        for (checks::Check c: *attacked) {
             if (c.coord == 31 || c.coord == 32)
                 KLegal = false;
             if (c.coord == 29 || c.coord == 28)

@@ -12,7 +12,7 @@ namespace checks {
 
     std::vector<checks::Check> getAttacked();
     std::vector<checks::Check> getPinned();
-    std::vector<int> getBlocks(std::vector<checks::Check> attacked);
+    std::vector<int> getBlocks(std::vector<checks::Check>* attacked);
 }
 
 #endif
