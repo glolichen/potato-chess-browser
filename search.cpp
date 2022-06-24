@@ -211,7 +211,7 @@ moves::Move search::search(int timeMS) {
         best.second = eval;
 
         if (evalIsMate(eval)) { // checkmate has been found, do not need to search any more
-            std::cout << depth << " (Mate in " << INT_MAX-eval << " found)\n";
+            std::cout << depth << " (Mate in " << abs(INT_MAX - eval) << " found)\n";
             break;
         }
     }
