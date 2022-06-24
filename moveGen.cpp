@@ -111,7 +111,7 @@ std::vector<moves::Move> moveGen::moveGen() {
             timesChecked++;
     }
 
-    if (!timesChecked)
+    if (timesChecked == 0)
         return moves;
 
     std::vector<int> blocks = checks::getBlocks(attacked);
@@ -120,13 +120,13 @@ std::vector<moves::Move> moveGen::moveGen() {
     if (timesChecked == 2)
         blocks.clear();
 
-    for (moves::Move m : moves) {
-        if (board::board[m.source] == king) {
-            result.push_back(m);
-            continue;
-        }
-        if (count(blocks.begin(), blocks.end(), m.dest))
-            result.push_back(m);
+    for (moves::Move move : moves) {
+        if (board::board[move.source] == king)
+            result.push_back(move);
+        else if (count(blocks.begin(), blocks.end(), move.dest))
+            result.push_back(move);
+        else if (move.isEp)
+            result.push_back(move);
     }
 
     return result;

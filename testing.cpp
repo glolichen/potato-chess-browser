@@ -6,8 +6,9 @@
 // #include "search.h"
 
 // int main() {
-//     board::decode("8/8/8/5Q2/3k4/8/8/2K5 w - - 0 1");
-//     search::search(3000).print(false);
+//     board::decode("8/8/8/5k2/4Pp2/8/8/4K3 b - e3 0 1");
+//     for (moves::Move move : moveGen::moveGen())
+//         move.print(true);
 
 //     return 0;
 // }

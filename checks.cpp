@@ -9,7 +9,7 @@
 
 bool checks::enPassantLegal() {
     int kingPos = board::king[board::turn];
-    for (const int &offset: constants::ROOK) {
+    for (int offset : constants::ROOK) {
         int i = kingPos;
         while (board::board[i] != -1) {
             i += offset;
@@ -23,8 +23,7 @@ bool checks::enPassantLegal() {
                 break;
         }
     }
-
-    for (const int &offset: constants::BISHOP) {
+    for (int offset : constants::BISHOP) {
         int i = kingPos;
         while (board::board[i] != -1) {
             i += offset;
@@ -38,7 +37,6 @@ bool checks::enPassantLegal() {
                 break;
         }
     }
-
     return true;
 }
 
