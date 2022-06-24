@@ -195,6 +195,7 @@ moves::Move search::search(int timeMS) {
     limit += timeMS;
     std::cout << "Depth: ";
 
+    hashing::initZobristTable();
     eval::initPieceTables();
 
     for (int depth = 1; depth < INT_MAX; depth++) {

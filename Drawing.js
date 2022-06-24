@@ -1,6 +1,9 @@
-decode("8/8/8/8/3k4/8/PP6/2K5 b - - 0 1");
+decode("4k3/4r3/8/b7/7q/2P5/4RP2/1Q2K3 w - - 0 1");
 // decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
 console.clear();
+
+// THIS POSITION DOES NOT WORK 8/8/8/5k2/4Pp2/8/8/4K3 b - e3 0 1
+// en passant out of check is not recognized
 
 var height = window.innerHeight ||
 	document.getElementsByTagName("html")[0].clientHeight  ||
