@@ -104,19 +104,19 @@ std::vector<checks::Check> checks::getPinned() {
 
 std::vector<int> checks::getBlocks(std::vector<checks::Check> attacked) {
     std::vector<int> blocks;
-    for (checks::Check c : attacked) {
-        if (c.coord != board::king[board::turn])
+    for (checks::Check check : attacked) {
+        if (check.coord != board::king[board::turn])
             continue;
 
-        if (c.axis == -10) {
-            blocks.push_back(c.original);
+        if (check.axis == -10) {
+            blocks.push_back(check.original);
             break;
         }
 
-        int i = c.coord + c.axis;
+        int i = check.coord + check.axis;
         while (!board::board[i]) {
             blocks.push_back(i);
-            i += c.axis;
+            i += check.axis;
         }
         blocks.push_back(i);
     }
