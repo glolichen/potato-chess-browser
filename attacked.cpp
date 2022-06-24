@@ -59,12 +59,12 @@ std::vector<checks::Check> attacked::getAttacked() {
 
 std::vector<checks::Check> attacked::pchecks(int loc) {
     std::vector<checks::Check> attacked;
-    for (const int &offset: constants::PAWN_CAPTURE[!board::turn]) {
+    for (int offset : constants::PAWN_CAPTURE[!board::turn]) {
         int i = loc + offset;
         if (board::board[i] == -1)
             continue;
 
-        attacked.push_back(checks::Check{i, loc, -10});
+        attacked.push_back({ i, loc, -10 });
     }
     return attacked;
 }
@@ -76,7 +76,7 @@ std::vector<checks::Check> attacked::nchecks(int loc) {
         if (board::board[i] == -1)
             continue;
 
-        attacked.push_back(checks::Check{i, loc, -10});
+        attacked.push_back({ i, loc, -10 });
     }
     return attacked;
 }
@@ -84,10 +84,10 @@ std::vector<checks::Check> attacked::nchecks(int loc) {
 std::vector<checks::Check> attacked::bchecks(int loc) {
     std::vector<checks::Check> attacked;
     char opponentKing = board::turn ? 'k' : 'K';
-    for (const int &offset: constants::BISHOP) {
+    for (int offset : constants::BISHOP) {
         int i = loc + offset;
         while (board::board[i] != -1) {
-            attacked.push_back(checks::Check{i, loc, -offset});
+            attacked.push_back({ i, loc, -offset });
 
             if (board::board[i] && board::board[i] != opponentKing)
                 break;
@@ -101,10 +101,10 @@ std::vector<checks::Check> attacked::bchecks(int loc) {
 std::vector<checks::Check> attacked::rchecks(int loc) {
     std::vector<checks::Check> attacked;
     char opponentKing = board::turn ? 'k' : 'K';
-    for (const int &offset: constants::ROOK) {
+    for (int offset : constants::ROOK) {
         int i = loc + offset;
         while (board::board[i] != -1) {
-            attacked.push_back(checks::Check{i, loc, -offset});
+            attacked.push_back({ i, loc, -offset });
 
             if (board::board[i] && board::board[i] != opponentKing)
                 break;
@@ -122,7 +122,7 @@ std::vector<checks::Check> attacked::kchecks(int loc) {
         if (board::board[i] == -1)
             continue;
 
-        attacked.push_back(checks::Check{i, loc, -10});
+        attacked.push_back({ i, loc, -10 });
     }
     return attacked;
 }

@@ -41,7 +41,7 @@ std::vector<moves::Move> moveGen::moveGen() {
             pawn = 'p';
 
         if (board::board[center - 1] == pawn) {
-            moves::Move move = {center - 1, board::enPassant, board::board[center], 0, 0, 0, 1};
+            moves::Move move = { center - 1, board::enPassant, board::board[center], 0, 0, 0, 1 };
             makeMove(move);
             board::turn = !board::turn;
             if (checks::enPassantLegal())
@@ -50,7 +50,7 @@ std::vector<moves::Move> moveGen::moveGen() {
             unmakeMove(move);
         }
         if (board::board[center + 1] == pawn) {
-            moves::Move move = {center + 1, board::enPassant, board::board[center], 0, 0, 0, 1};
+            moves::Move move = { center + 1, board::enPassant, board::board[center], 0, 0, 0, 1 };
             makeMove(move);
             board::turn = !board::turn;
             if (checks::enPassantLegal())

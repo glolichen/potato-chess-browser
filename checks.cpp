@@ -81,7 +81,6 @@ std::vector<checks::Check> checks::getPinned() {
 
             if ((bool) islower(board::board[newSquare]) == board::turn) {
                 if (tolower(board::board[newSquare]) == 'k') {
-                    std::cout << board::toXY(pin.coord) << "\n";
                     if (used)
                         isPinned = true;
                     break;

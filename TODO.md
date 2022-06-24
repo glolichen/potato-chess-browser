@@ -11,4 +11,3 @@
   * Add more information such as search depth and nodes per second
 * Improvement: 50 move rule and Threefold repetition
 * Improvement: Quiscence search
-* 

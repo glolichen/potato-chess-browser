@@ -29,20 +29,20 @@ std::vector<moves::Move> pieceMoves::pmoves(int loc, std::vector<checks::Check> 
     int offset = loc + constants::PAWN_MOVE[board::turn][0];
     if (board::board[offset] == 0 && (axis == -1 || axis == abs(constants::PAWN_MOVE[board::turn][0]))) {
         if (board::turn && offset / 12 == 9) {
-            moves.push_back(moves::Move{loc, offset, 0, 0, 'q', 0, 0});
-            moves.push_back(moves::Move{loc, offset, 0, 0, 'r', 0, 0});
-            moves.push_back(moves::Move{loc, offset, 0, 0, 'b', 0, 0});
-            moves.push_back(moves::Move{loc, offset, 0, 0, 'n', 0, 0});
+            moves.push_back({ loc, offset, 0, 0, 'q', 0, 0 });
+            moves.push_back({ loc, offset, 0, 0, 'r', 0, 0 });
+            moves.push_back({ loc, offset, 0, 0, 'b', 0, 0 });
+            moves.push_back({ loc, offset, 0, 0, 'n', 0, 0 });
         } else if (!board::turn && offset / 12 == 2) {
-            moves.push_back(moves::Move{loc, offset, 0, 0, 'Q', 0, 0});
-            moves.push_back(moves::Move{loc, offset, 0, 0, 'R', 0, 0});
-            moves.push_back(moves::Move{loc, offset, 0, 0, 'B', 0, 0});
-            moves.push_back(moves::Move{loc, offset, 0, 0, 'N', 0, 0});
+            moves.push_back({ loc, offset, 0, 0, 'Q', 0, 0 });
+            moves.push_back({ loc, offset, 0, 0, 'R', 0, 0 });
+            moves.push_back({ loc, offset, 0, 0, 'B', 0, 0 });
+            moves.push_back({ loc, offset, 0, 0, 'N', 0, 0 });
         } else
-            moves.push_back(moves::Move{loc, offset, 0, 0, 0, 0, 0});
+            moves.push_back({ loc, offset, 0, 0, 0, 0, 0 });
 
         if (starting && board::board[loc + constants::PAWN_START[board::turn][0]] == 0)
-            moves.push_back(moves::Move{loc, loc + constants::PAWN_START[board::turn][0], 0, 0, 0, 0, 0});
+            moves.push_back({ loc, loc + constants::PAWN_START[board::turn][0], 0, 0, 0, 0, 0 });
     }
 
     for (int offset2 : constants::PAWN_CAPTURE[board::turn]) {
@@ -55,17 +55,17 @@ std::vector<moves::Move> pieceMoves::pmoves(int loc, std::vector<checks::Check> 
 
         if (pieceIsLower != turn && (axis == -1 || axis == abs(offset2))) {
             if (board::turn && i / 12 == 9) {
-                moves.push_back(moves::Move{loc, i, board::board[i], 0, 'q', 0, 0});
-                moves.push_back(moves::Move{loc, i, board::board[i], 0, 'r', 0, 0});
-                moves.push_back(moves::Move{loc, i, board::board[i], 0, 'b', 0, 0});
-                moves.push_back(moves::Move{loc, i, board::board[i], 0, 'n', 0, 0});
+                moves.push_back({ loc, i, board::board[i], 0, 'q', 0, 0 });
+                moves.push_back({ loc, i, board::board[i], 0, 'r', 0, 0 });
+                moves.push_back({ loc, i, board::board[i], 0, 'b', 0, 0 });
+                moves.push_back({ loc, i, board::board[i], 0, 'n', 0, 0 });
             } else if (!board::turn && i / 12 == 2) {
-                moves.push_back(moves::Move{loc, i, board::board[i], 0, 'Q', 0, 0});
-                moves.push_back(moves::Move{loc, i, board::board[i], 0, 'R', 0, 0});
-                moves.push_back(moves::Move{loc, i, board::board[i], 0, 'B', 0, 0});
-                moves.push_back(moves::Move{loc, i, board::board[i], 0, 'N', 0, 0});
+                moves.push_back({ loc, i, board::board[i], 0, 'Q', 0, 0 });
+                moves.push_back({ loc, i, board::board[i], 0, 'R', 0, 0 });
+                moves.push_back({ loc, i, board::board[i], 0, 'B', 0, 0 });
+                moves.push_back({ loc, i, board::board[i], 0, 'N', 0, 0 });
             } else
-                moves.push_back(moves::Move{loc, i, board::board[i], 0, 0, 0, 0});
+                moves.push_back({ loc, i, board::board[i], 0, 0, 0, 0 });
         }
     }
 
@@ -88,7 +88,7 @@ std::vector<moves::Move> pieceMoves::nmoves(int loc, std::vector<checks::Check> 
         if ((bool) islower(board::board[i]) == board::turn && board::board[i])
             continue;
 
-        moves.push_back(moves::Move{loc, i, board::board[i], 0, 0, 0, 0});
+        moves.push_back({ loc, i, board::board[i], 0, 0, 0, 0 });
     }
 
     return moves;
@@ -114,7 +114,7 @@ std::vector<moves::Move> pieceMoves::bmoves(int loc, std::vector<checks::Check> 
             if (board::board[i] && (bool) islower(board::board[i]) == board::turn)
                 break;
 
-            moves.push_back(moves::Move{loc, i, board::board[i], 0, 0, 0, 0});
+            moves.push_back({ loc, i, board::board[i], 0, 0, 0, 0 });
 
             if (board::board[i])
                 break;
@@ -161,7 +161,7 @@ std::vector<moves::Move> pieceMoves::rmoves(int loc, std::vector<checks::Check> 
                 }
             }
 
-            moves.push_back(moves::Move{loc, i, board::board[i], 0, 0, signal, 0});
+            moves.push_back({ loc, i, board::board[i], 0, 0, signal, 0 });
 
             if (board::board[i])
                 break;
@@ -211,7 +211,7 @@ std::vector<moves::Move> pieceMoves::kmoves(int loc, std::vector<checks::Check> 
                 signal = 'Q';
         }
 
-        moves.push_back(moves::Move{loc, i, board::board[i], 0, 0, signal, 0});
+        moves.push_back({ loc, i, board::board[i], 0, 0, signal, 0 });
     }
 
     for (const checks::Check &c: attacked) {
@@ -237,7 +237,7 @@ std::vector<moves::Move> pieceMoves::kmoves(int loc, std::vector<checks::Check> 
                 signal = 'K';
             else if (board::Q)
                 signal = 'Q';
-            moves.push_back(moves::Move{114, 116, 0, 1, 0, signal, 0});
+            moves.push_back({ 114, 116, 0, 1, 0, signal, 0 });
         }
         if (board::Q && QLegal && board::board[114] == 'K' && board::board[110] == 'R' && !board::board[113] && !board::board[112] && !board::board[111]) {
             char signal = 0;
@@ -247,7 +247,7 @@ std::vector<moves::Move> pieceMoves::kmoves(int loc, std::vector<checks::Check> 
                 signal = 'K';
             else if (board::Q)
                 signal = 'Q';
-            moves.push_back(moves::Move{114, 112, 0, 2, 0, signal, 0});
+            moves.push_back({ 114, 112, 0, 2, 0, signal, 0 });
         }
     } else {
         bool KLegal = true;
@@ -267,7 +267,7 @@ std::vector<moves::Move> pieceMoves::kmoves(int loc, std::vector<checks::Check> 
                 signal = 'k';
             else if (board::q)
                 signal = 'q';
-            moves.push_back(moves::Move{30, 32, 0, 1, 0, signal, 0});
+            moves.push_back({ 30, 32, 0, 1, 0, signal, 0 });
         }
         if (board::q && QLegal && board::board[30] == 'k' && board::board[26] == 'r' && !board::board[29] && !board::board[28] && !board::board[27]) {
             char signal = 0;
@@ -277,7 +277,7 @@ std::vector<moves::Move> pieceMoves::kmoves(int loc, std::vector<checks::Check> 
                 signal = 'k';
             else if (board::q)
                 signal = 'q';
-            moves.push_back(moves::Move{30, 28, 0, 2, 0, signal, 0});
+            moves.push_back({ 30, 28, 0, 2, 0, signal, 0 });
         }
     }
 
