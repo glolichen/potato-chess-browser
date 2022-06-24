@@ -11,13 +11,13 @@
 #include "pieceMoves.h"
 #include "perft.h"
 
-const std::map<char, int> PIECE_TABLE = {{'p', 0},
-                                    {'n', 1},
-                                    {'b', 2},
-                                    {'r', 3},
-                                    {'q', 4},
-                                    {'k', 5}};
-const int PIECE_VALUES[] = {100, 305, 333, 563, 950, 100};
+const std::map<char, int> PIECE_TABLE = { { 'p', 0 },
+                                    { 'n', 1 },
+                                    { 'b', 2 },
+                                    { 'r', 3 },
+                                    { 'q', 4 },
+                                    { 'k', 5 } };
+const int PIECE_VALUES[] = { 100, 305, 333, 563, 950, 100 };
 
 bool sortMoveOrder(std::pair<moves::Move, int> o1, std::pair<moves::Move, int> o2) {
     return o1.second > o2.second;
@@ -65,40 +65,33 @@ std::vector<moves::Move> moveGen::moveGen() {
 
         switch (piece) {
             case 'q': {
-                std::vector<moves::Move> rook = pieceMoves::rmoves(i, pinned, false);
-                moves.insert(moves.end(), rook.begin(), rook.end());
-                std::vector<moves::Move> bishop = pieceMoves::bmoves(i, pinned);
-                moves.insert(moves.end(), bishop.begin(), bishop.end());
+                pieceMoves::rmoves(i, &moves, pinned, false);
+                pieceMoves::bmoves(i, &moves, pinned);
                 break;
             }
 
             case 'r': {
-                std::vector<moves::Move> temp = pieceMoves::rmoves(i, pinned, true);
-                moves.insert(moves.end(), temp.begin(), temp.end());
+                pieceMoves::rmoves(i, &moves, pinned, true);
                 break;
             }
 
             case 'b': {
-                std::vector<moves::Move> temp = pieceMoves::bmoves(i, pinned);
-                moves.insert(moves.end(), temp.begin(), temp.end());
+                pieceMoves::bmoves(i, &moves, pinned);
                 break;
             }
 
             case 'n': {
-                std::vector<moves::Move> temp = pieceMoves::nmoves(i, pinned);
-                moves.insert(moves.end(), temp.begin(), temp.end());
+                pieceMoves::nmoves(i, &moves, pinned);
                 break;
             }
 
             case 'p': {
-                std::vector<moves::Move> temp = pieceMoves::pmoves(i, pinned);
-                moves.insert(moves.end(), temp.begin(), temp.end());
+                pieceMoves::pmoves(i, &moves, pinned);
                 break;
             }
 
             case 'k': {
-                std::vector<moves::Move> temp = pieceMoves::kmoves(i, attacked);
-                moves.insert(moves.end(), temp.begin(), temp.end());
+                pieceMoves::kmoves(i, &moves, attacked);
                 break;
             }
         }
