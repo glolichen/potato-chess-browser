@@ -1,6 +1,5 @@
 # TODO LIST
 
-* Fix bug: En Passant out of check is not recognized
 * Improvement: Implement Tranposition Table for endgames
 * Improvement: Improve endgame evaluation (single piece mating isn't possible)
   * Try to get own king close to enemy king
