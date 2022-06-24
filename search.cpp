@@ -1,11 +1,12 @@
-#include <vector>
 #include <algorithm>
-#include <iostream>
 #include <array>
-#include <unordered_map>
 #include <chrono>
+#include <cmath>
 #include <cstdlib>
+#include <iostream>
 #include <limits.h>
+#include <unordered_map>
+#include <vector>
 
 #include "attacked.h"
 #include "board.h"
@@ -211,7 +212,7 @@ moves::Move search::search(int timeMS) {
         best.second = eval;
 
         if (evalIsMate(eval)) { // checkmate has been found, do not need to search any more
-            std::cout << depth << " (Mate in " << abs(INT_MAX - eval) << " found)\n";
+            std::cout << depth << " (Mate in " << depth - 1 << " found)\n";
             break;
         }
     }

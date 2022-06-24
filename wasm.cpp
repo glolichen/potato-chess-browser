@@ -1,6 +1,6 @@
-#include <vector>
-#include <string>
 #include <chrono>
+#include <string>
+#include <vector>
 
 #include "attacked.h"
 #include "board.h"

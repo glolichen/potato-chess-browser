@@ -1,7 +1,7 @@
-#include <iostream>
-#include <cstdlib>
-#include <string>
 #include <algorithm>
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 #include "board.h"
 #include "moves.h"

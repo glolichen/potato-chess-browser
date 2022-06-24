@@ -1,6 +1,6 @@
-﻿#include <string>
+﻿#include <iostream>
+#include <string>
 #include <vector>
-#include <iostream>
 
 #include "board.h"
 #include "moveGen.h"

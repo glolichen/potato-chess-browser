@@ -1,7 +1,6 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
-#include <utility>
 #include "moves.h"
 
 namespace search {

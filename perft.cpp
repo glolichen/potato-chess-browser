@@ -1,10 +1,10 @@
-#include <iostream>
-#include <vector>
 #include <chrono>
 #include <ctime>
-#include <string>
+#include <iostream>
 #include <iterator>
 #include <map>
+#include <string>
+#include <vector>
 
 #include "board.h"
 #include "moveGen.h"

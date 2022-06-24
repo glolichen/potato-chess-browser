@@ -1,7 +1,7 @@
-#include <vector>
+#include <algorithm>
 #include <iostream>
 #include <map>
-#include <algorithm>
+#include <vector>
 
 #include "attacked.h"
 #include "board.h"

@@ -1,6 +1,7 @@
-#include <vector>
-#include <iostream>
+#include <cmath>
 #include <cstdlib>
+#include <iostream>
+#include <vector>
 
 #include "board.h"
 #include "checks.h"
@@ -53,16 +54,16 @@ std::vector<checks::Check> checks::getPinned() {
         int offset = 0;
         if (pieceType == 'r' || pieceType == 'q') {
             if (piece / 12 == kingPos / 12)
-                offset = (kingPos - piece) / abs(kingPos - piece);
+                offset = (kingPos - piece) / std::abs(kingPos - piece);
             else if (piece % 12 == kingPos % 12)
-                offset = (kingPos - piece) / abs(kingPos - piece) * 12;
+                offset = (kingPos - piece) / std::abs(kingPos - piece) * 12;
         }
         
         if (pieceType == 'b' || pieceType == 'q') {
             if ((kingPos - piece) % 11 == 0)
-                offset = (kingPos - piece) / abs(kingPos - piece) * 11;
+                offset = (kingPos - piece) / std::abs(kingPos - piece) * 11;
             else if ((kingPos - piece) % 13 == 0)
-                offset = (kingPos - piece) / abs(kingPos - piece) * 13;
+                offset = (kingPos - piece) / std::abs(kingPos - piece) * 13;
         }
 
         if (offset == 0)
@@ -87,7 +88,7 @@ std::vector<checks::Check> checks::getPinned() {
                 if (used)
                     break;
                 used = true;
-                pin = { newSquare, -1, abs(offset) };
+                pin = { newSquare, -1, std::abs(offset) };
             }
             else
                 break;

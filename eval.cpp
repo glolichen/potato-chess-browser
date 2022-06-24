@@ -1,6 +1,6 @@
-#include <map>
-#include <iostream>
 #include <algorithm>
+#include <iostream>
+#include <map>
 
 #include "board.h"
 #include "eval.h"

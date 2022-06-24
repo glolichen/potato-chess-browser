@@ -1,6 +1,6 @@
+#include <iostream>
 #include <map>
 #include <random>
-#include <iostream>
 
 #include "board.h"
 #include "hashing.h"

@@ -1,6 +1,6 @@
-#include <vector>
 #include <algorithm>
 #include <cstdlib>
+#include <vector>
 
 #include "board.h"
 #include "checks.h"
