@@ -1,5 +1,5 @@
-// decode("4k3/4r3/8/b7/7q/2P5/4RP2/1Q2K3 w - - 0 1");
-decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
+decode("7k/8/8/8/8/8/PPP4K/8 b - - 0 1");
+// decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
 console.clear();
 
 // THIS POSITION DOES NOT WORK 8/8/8/5k2/4Pp2/8/8/4K3 b - e3 0 1
@@ -277,24 +277,11 @@ function click(current) {
             update();
             movesFromSelected.length = 0;
 
-            const worker = new Worker("./SearchWorker.js");
-            worker.postMessage([encode(), TIME]);
-            worker.onmessage = e => {
-                makeMove(e.data[0]);
-                highlightLastMove(e.data[0]);
-
-                document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${
-                    e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
-                document.getElementById("eval").innerHTML = `<b>Eval: ${e.data[2]}</b>`;
-
-                update();
-                moves = moveGen();
-            }
+            computerMove();
 
             return;
         }
     }
-
 
     document.getElementById(selected.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; background-color: ${isLight(selected) ? LIGHT : DARK}`);
     for (let piece of document.querySelectorAll(".highlight"))
@@ -319,6 +306,24 @@ function click(current) {
     }
     else
         selected = null;
+}
+
+function computerMove() {
+    const worker = new Worker("./SearchWorker.js");
+    worker.postMessage([encode(), TIME]);
+    worker.onmessage = e => {
+        makeMove(e.data[0]);
+        highlightLastMove(e.data[0]);
+
+        document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${
+            e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
+        document.getElementById("eval").innerHTML = `<b>Eval: ${e.data[2]}</b>`;
+        console.log(typeof(e.data[0]));
+        document.getElementById("move").innerHTML = `<b>Move: ${moveToString(e.data[0])}</b>`;
+
+        update();
+        moves = moveGen();
+    }
 }
 
 function highlightLastMove(move) {

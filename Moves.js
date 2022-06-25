@@ -99,6 +99,16 @@ function castle(dir) {
     }
 }
 
+function moveToString(move) {
+	let asString = "";
+    asString += notationToSAN(move.source);
+    asString += notationToSAN(move.dest);
+    if (move.promote != 0)
+        asString += PIECES[move.promote];
+    console.log(asString);
+    return asString;
+}
+
 class Move {
     constructor(source, dest, capture, castle, promote, signal, isEp) { 
         this.source = source;

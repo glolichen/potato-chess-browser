@@ -4,9 +4,7 @@ onmessage = e => {
     importScripts("./Moves.js");
 
     Module["onRuntimeInitialized"] = () => {
-        console.log(e.data[0]);
         Module["decode"](e.data[0]);
-        console.log(Module["encode"]());
         
         let out = Module["search"](e.data[1]);
 
