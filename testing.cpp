@@ -1,14 +1,16 @@
 // #include <iostream>
+// #include <chrono>
 
 // #include "board.h"
 // #include "moveGen.h"
-// #include "moves.h"
-// #include "search.h"
+// #include "perft.h"
 
-// int main() {
-//     board::decode("8/8/8/5k2/4Pp2/8/8/4K3 b - e3 0 1");
-//     for (moves::Move move : moveGen::moveGen())
-//         move.print(true);
+// int main() {    
+//     int start = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+//     auto all = perft::runPerft("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", 6);
+//     int end = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    
+//     std::cout << end - start << "\n";
 
 //     return 0;
 // }

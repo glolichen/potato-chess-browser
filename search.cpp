@@ -98,12 +98,12 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
 
         std::vector<std::pair<moves::Move, int>> allEval;
 
-        for (const moves::Move &m: moves) {
-            moves::makeMove(m);
+        for (moves::Move move : moves) {
+            moves::makeMove(&move);
 
             int curEval = search::minimax(depth - 1, alpha, beta, depthFromStart + 1);
 
-            moves::unmakeMove(m);
+            moves::unmakeMove(&move);
 
             if (curEval == SEARCH_EXPIRED)
                 return SEARCH_EXPIRED;
@@ -111,7 +111,7 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
             evaluation = std::max(curEval, evaluation);
 
             if (depthFromStart == 0)
-                allEval.push_back({ m, curEval });
+                allEval.push_back({ move, curEval });
 
             alpha = std::max(curEval, alpha);
             if (beta <= alpha)
@@ -120,7 +120,7 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
 
         if (depthFromStart == 0) {
             int topEval = INT_MIN;
-            for (const auto &p: allEval) {
+            for (auto p : allEval) {
                 if (p.second > topEval) {
                     topEval = p.second;
                     topMove = p.first;
@@ -134,12 +134,12 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
 
         std::vector<std::pair<moves::Move, int>> allEval;
 
-        for (const moves::Move &m: moves) {
-            moves::makeMove(m);
+        for (moves::Move move: moves) {
+            moves::makeMove(&move);
 
             int curEval = search::minimax(depth - 1, alpha, beta, depthFromStart + 1);
 
-            moves::unmakeMove(m);
+            moves::unmakeMove(&move);
 
             if (curEval == SEARCH_EXPIRED)
                 return SEARCH_EXPIRED;
@@ -147,7 +147,7 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
             evaluation = std::min(curEval, evaluation);
 
             if (depthFromStart == 0)
-                allEval.push_back({ m, curEval });
+                allEval.push_back({ move, curEval });
 
             beta = std::min(curEval, beta);
             if (beta <= alpha)
@@ -156,7 +156,7 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
 
         if (depthFromStart == 0) {
             int topEval = INT_MAX;
-            for (const auto &p: allEval) {
+            for (auto p : allEval) {
                 if (p.second < topEval) {
                     topEval = p.second;
                     topMove = p.first;
@@ -177,7 +177,7 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
     return evaluation;
 }
 
-moves::Move search::search(int timeMS) {
+search::SearchResult search::search(int timeMS) {
     //iterative deepening
     //search with depth of one ply first
     //then increase depth until time runs out
@@ -199,12 +199,15 @@ moves::Move search::search(int timeMS) {
     hashing::initZobristTable();
     eval::initPieceTables();
 
-    for (int depth = 1; depth < INT_MAX; depth++) {
+    int depth = 1;
+    bool isMate = false;
+
+    for (; depth < INT_MAX; depth++) {
         int eval = search::minimax(depth, INT_MIN, INT_MAX, 0);
         topMoveNull = false;
 
         if (eval == SEARCH_EXPIRED) {
-            std::cout << depth - 1 << "\n";
+            depth--;
             break;
         }
 
@@ -212,17 +215,14 @@ moves::Move search::search(int timeMS) {
         best.second = eval;
 
         if (evalIsMate(eval)) { // checkmate has been found, do not need to search any more
-            std::cout << depth << " (Mate in " << depth - 1 << " found)\n";
+            isMate = true;
             break;
         }
     }
 
     transposition.clear();
-    
-    std::cout << "Move: ";
-    best.first.print(true);
 
-    return best.first;
+    return { best.first, depth, best.second, isMate };
 }
 
 bool search::evalIsMate(int eval) {

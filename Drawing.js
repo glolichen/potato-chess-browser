@@ -1,5 +1,5 @@
-decode("4k3/4r3/8/b7/7q/2P5/4RP2/1Q2K3 w - - 0 1");
-// decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
+// decode("4k3/4r3/8/b7/7q/2P5/4RP2/1Q2K3 w - - 0 1");
+decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
 console.clear();
 
 // THIS POSITION DOES NOT WORK 8/8/8/5k2/4Pp2/8/8/4K3 b - e3 0 1
@@ -14,7 +14,7 @@ var gameOver = true;
 
 var humanSide = false;
 
-const SIZE = Math.floor(height * 0.7 / 8);
+const SIZE = Math.floor(height * 0.08);
 
 const DARK = "#b58863";
 const LIGHT = "#f0d9b5";
@@ -35,9 +35,9 @@ var sel2 = null;
 var moves = [];
 var movesFromSelected = [];
 
-const TIME = 1000;
+const TIME = 1500;
 
-document.getElementById("perft").onclick = () => window.open("./perft.html");
+document.getElementById("perft").onclick = () => window.location.replace("./perft.html");
 
 function moveGen() {
     Module["decode"](encode());
@@ -91,7 +91,7 @@ function charToPiece(char) {
 
 function init() {
     let current = 0;
-    document.getElementById("table").innerHTML = "";
+    document.getElementById("board").innerHTML = "";
 
     for (let i = 0; i < 8; i++) {
         rows[i] = document.createElement("tr");
@@ -206,9 +206,8 @@ function init() {
         }
     }
 
-    for (let row of rows) {
-        document.getElementById("table")?.appendChild(row);
-    }
+    for (let row of rows)
+        document.getElementById("board")?.appendChild(row);
 }
 function update() {
     for (let piece of document.querySelectorAll(".piece"))
@@ -281,8 +280,13 @@ function click(current) {
             const worker = new Worker("./SearchWorker.js");
             worker.postMessage([encode(), TIME]);
             worker.onmessage = e => {
-                makeMove(e.data);
-                highlightLastMove(e.data);
+                makeMove(e.data[0]);
+                highlightLastMove(e.data[0]);
+
+                document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${
+                    e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
+                document.getElementById("eval").innerHTML = `<b>Eval: ${e.data[2]}</b>`;
+
                 update();
                 moves = moveGen();
             }

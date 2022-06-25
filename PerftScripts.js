@@ -1,5 +1,7 @@
 const error = document.getElementById("error");
 
+document.getElementById("back").onclick = () => window.location.replace("./index.html");
+
 console.clear();
 
 var shown = false;

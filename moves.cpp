@@ -14,155 +14,155 @@ void del(int side, int square) {
     board::pieces[side].erase(remove(board::pieces[side].begin(), board::pieces[side].end(), square), board::pieces[side].end());
 }
 
-void moves::makeMove(moves::Move move) {
+void moves::makeMove(moves::Move* move) {
     board::enPassant = -1;
     board::turn = !board::turn;
 
-    if (move.signal == 'X') {
+    if (move->signal == 'X') {
         board::K = false;
         board::Q = false;
     }
-    if (move.signal == 'K')
+    if (move->signal == 'K')
         board::K = false;
-    if (move.signal == 'Q')
+    if (move->signal == 'Q')
         board::Q = false;
 
-    if (move.signal == 'x') {
+    if (move->signal == 'x') {
         board::k = false;
         board::q = false;
     }
-    if (move.signal == 'k')
+    if (move->signal == 'k')
         board::k = false;
-    if (move.signal == 'q')
+    if (move->signal == 'q')
         board::q = false;
 
-    if (move.castle) {
-        moves::castle(move.castle);
+    if (move->castle) {
+        moves::castle(move->castle);
         return;
     }
 
-    if (move.isEp) {
-        board::board[move.dest] = board::board[move.source];
-        board::board[move.source] = 0;
+    if (move->isEp) {
+        board::board[move->dest] = board::board[move->source];
+        board::board[move->source] = 0;
 
         int dir = 1;
         if (!board::turn)
             dir = -1;
         dir *= 12;
 
-        board::board[move.dest + dir] = 0;
+        board::board[move->dest + dir] = 0;
 
-        del(board::turn, move.dest + dir);
-        del(!board::turn, move.source);
-        board::pieces[!board::turn].push_back(move.dest);
-
-        return;
-    }
-
-    if (move.promote) {
-        board::board[move.dest] = move.promote;
-        board::board[move.source] = 0;
-
-        del(!board::turn, move.source);
-        del(board::turn, move.dest);
-        board::pieces[!board::turn].push_back(move.dest);
+        del(board::turn, move->dest + dir);
+        del(!board::turn, move->source);
+        board::pieces[!board::turn].push_back(move->dest);
 
         return;
     }
 
-    if (board::turn && board::board[move.source] == 'P' && move.source - move.dest == 24) {
-        if (board::board[move.dest - 1] == 'p')
-            board::enPassant = move.dest + 12;
-        if (board::board[move.dest + 1] == 'p')
-            board::enPassant = move.dest + 12;
-    } else if (!board::turn && board::board[move.source] == 'p' && move.dest - move.source == 24) {
-        if (board::board[move.dest - 1] == 'P')
-            board::enPassant = move.dest - 12;
-        if (board::board[move.dest + 1] == 'P')
-            board::enPassant = move.dest - 12;
+    if (move->promote) {
+        board::board[move->dest] = move->promote;
+        board::board[move->source] = 0;
+
+        del(!board::turn, move->source);
+        del(board::turn, move->dest);
+        board::pieces[!board::turn].push_back(move->dest);
+
+        return;
     }
 
-    if (tolower(board::board[move.source]) == 'k')
-        board::king[!board::turn] = move.dest;
+    if (board::turn && board::board[move->source] == 'P' && move->source - move->dest == 24) {
+        if (board::board[move->dest - 1] == 'p')
+            board::enPassant = move->dest + 12;
+        if (board::board[move->dest + 1] == 'p')
+            board::enPassant = move->dest + 12;
+    } else if (!board::turn && board::board[move->source] == 'p' && move->dest - move->source == 24) {
+        if (board::board[move->dest - 1] == 'P')
+            board::enPassant = move->dest - 12;
+        if (board::board[move->dest + 1] == 'P')
+            board::enPassant = move->dest - 12;
+    }
 
-    del(!board::turn, move.source);
-    del(board::turn, move.dest);
-    board::pieces[!board::turn].push_back(move.dest);
+    if (tolower(board::board[move->source]) == 'k')
+        board::king[!board::turn] = move->dest;
 
-    board::board[move.dest] = board::board[move.source];
-    board::board[move.source] = 0;
+    del(!board::turn, move->source);
+    del(board::turn, move->dest);
+    board::pieces[!board::turn].push_back(move->dest);
+
+    board::board[move->dest] = board::board[move->source];
+    board::board[move->source] = 0;
 }
-void moves::unmakeMove(moves::Move move) {
+void moves::unmakeMove(moves::Move* move) {
     board::enPassant = -1;
     board::turn = !board::turn;
 
-    if (move.signal == 'X') {
+    if (move->signal == 'X') {
         board::K = true;
         board::Q = true;
     }
-    if (move.signal == 'K')
+    if (move->signal == 'K')
         board::K = true;
-    if (move.signal == 'Q')
+    if (move->signal == 'Q')
         board::Q = true;
 
-    if (move.signal == 'x') {
+    if (move->signal == 'x') {
         board::k = true;
         board::q = true;
     }
-    if (move.signal == 'k')
+    if (move->signal == 'k')
         board::k = true;
-    if (move.signal == 'q')
+    if (move->signal == 'q')
         board::q = true;
 
-    if (move.castle) {
-        moves::uncastle(move.castle);
+    if (move->castle) {
+        moves::uncastle(move->castle);
     }
 
-    if (move.isEp) {
-        board::enPassant = move.dest;
+    if (move->isEp) {
+        board::enPassant = move->dest;
 
-        board::board[move.source] = board::board[move.dest];
-        board::board[move.dest] = 0;
+        board::board[move->source] = board::board[move->dest];
+        board::board[move->dest] = 0;
 
-        int pawn = move.capture;
+        int pawn = move->capture;
 
         int dir = -1;
         if (!board::turn)
             dir = 1;
         dir *= 12;
 
-        board::board[move.dest + dir] = pawn;
+        board::board[move->dest + dir] = pawn;
 
-        board::pieces[board::turn].push_back(move.source);
-        board::pieces[!board::turn].push_back(move.dest + dir);
-        del(board::turn, move.dest);
+        board::pieces[board::turn].push_back(move->source);
+        board::pieces[!board::turn].push_back(move->dest + dir);
+        del(board::turn, move->dest);
 
         return;
     }
 
-    if (move.promote) {
+    if (move->promote) {
         int pawn = board::turn ? 'p' : 'P';
-        board::board[move.source] = pawn;
-        board::board[move.dest] = move.capture;
+        board::board[move->source] = pawn;
+        board::board[move->dest] = move->capture;
 
-        if (move.capture)
-            board::pieces[!board::turn].push_back(move.dest);
-        del(board::turn, move.dest);
-        board::pieces[board::turn].push_back(move.source);
+        if (move->capture)
+            board::pieces[!board::turn].push_back(move->dest);
+        del(board::turn, move->dest);
+        board::pieces[board::turn].push_back(move->source);
 
         return;
     }
 
-    if (tolower(board::board[move.dest]) == 'k')
-        board::king[board::turn] = move.source;
+    if (tolower(board::board[move->dest]) == 'k')
+        board::king[board::turn] = move->source;
 
-    del(board::turn, move.dest);
-    board::pieces[board::turn].push_back(move.source);
-    if (move.capture)
-        board::pieces[!board::turn].push_back(move.dest);
+    del(board::turn, move->dest);
+    board::pieces[board::turn].push_back(move->source);
+    if (move->capture)
+        board::pieces[!board::turn].push_back(move->dest);
 
-    board::board[move.source] = board::board[move.dest];
-    board::board[move.dest] = move.capture;
+    board::board[move->source] = board::board[move->dest];
+    board::board[move->dest] = move->capture;
 }
 
 void moves::castle(int dir) {

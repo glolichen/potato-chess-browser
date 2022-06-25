@@ -10,10 +10,10 @@ onmessage = e => {
         
         let out = Module["search"](e.data[1]);
 
-        let move = new Move(out.source, out.dest, charToPiece(out.capture), out.castle, 
-        charToPiece(out.promote), convertSignal(out.signal), out.isEp);
+        let move = new Move(out.move.source, out.move.dest, charToPiece(out.move.capture), out.move.castle, 
+            charToPiece(out.move.promote), convertSignal(out.move.signal), out.move.isEp);
 
-        postMessage(move);
+        postMessage([move, out.depth, out.eval, out.mateFound]);
     };
 }
 

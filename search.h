@@ -4,6 +4,13 @@
 #include "moves.h"
 
 namespace search {
+    struct SearchResult {
+        moves::Move move;
+        int depth;
+        int eval;
+        bool mateFound;
+    };
+
     extern moves::Move topMove;
     extern int topPosition[144];
 
@@ -11,7 +18,7 @@ namespace search {
 
     int quiscence(int alpha, int beta);
 
-    moves::Move search(int timeMS);
+    SearchResult search(int timeMS);
 
     bool evalIsMate(int eval);
 }

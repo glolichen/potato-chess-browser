@@ -42,21 +42,21 @@ std::vector<moves::Move> moveGen::moveGen() {
 
         if (board::board[center - 1] == pawn) {
             moves::Move move = { center - 1, board::enPassant, board::board[center], 0, 0, 0, 1 };
-            makeMove(move);
+            makeMove(&move);
             board::turn = !board::turn;
             if (checks::enPassantLegal())
                 moves.push_back(move);
             board::turn = !board::turn;
-            unmakeMove(move);
+            unmakeMove(&move);
         }
         if (board::board[center + 1] == pawn) {
             moves::Move move = { center + 1, board::enPassant, board::board[center], 0, 0, 0, 1 };
-            makeMove(move);
+            makeMove(&move);
             board::turn = !board::turn;
             if (checks::enPassantLegal())
                 moves.push_back(move);
             board::turn = !board::turn;
-            unmakeMove(move);
+            unmakeMove(&move);
         }
     }
 

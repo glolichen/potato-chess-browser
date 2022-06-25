@@ -31,8 +31,8 @@ namespace moves {
         int dest;
     };
 
-    void makeMove(Move move);
-    void unmakeMove(Move move);
+    void makeMove(Move* move);
+    void unmakeMove(Move* move);
 
     void castle(int dir);
     void uncastle(int dir);

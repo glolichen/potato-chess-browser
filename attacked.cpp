@@ -95,7 +95,7 @@ void attacked::rchecks(int loc, std::vector<checks::Check>* attacked) {
     }
 }
 void attacked::kchecks(int loc, std::vector<checks::Check>* attacked) {
-    for (const int offset : constants::KING) {
+    for (int offset : constants::KING) {
         int i = loc + offset;
         if (board::board[i] == -1)
             continue;

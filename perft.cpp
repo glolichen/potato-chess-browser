@@ -22,13 +22,13 @@ perft::ul perft::perft(int depth, bool first) {
     ul old = 0;
     ul positions = 0;
 
-    for (moves::Move m : moves) {
-        makeMove(m);
+    for (moves::Move move : moves) {
+        makeMove(&move);
         positions += perft(depth - 1, false);
-        unmakeMove(m);
+        unmakeMove(&move);
 
         if (first) {
-            entries.push_back({ m, positions-old });
+            entries.push_back({ move, positions-old });
             old = positions;
         }
     }

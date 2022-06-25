@@ -36,6 +36,11 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("coord", &checks::Check::coord)
         .field("original", &checks::Check::original)
         .field("axis", &checks::Check::axis);
+    value_object<search::SearchResult>("SearchRersult")
+        .field("move", &search::SearchResult::move)
+        .field("depth", &search::SearchResult::depth)
+        .field("eval", &search::SearchResult::eval)
+        .field("mateFound", &search::SearchResult::mateFound);
     register_vector<moves::Move>("MoveVector");
     register_vector<checks::Check>("CheckVector");
     register_vector<perft::Entry>("EntryVector");

@@ -3,27 +3,38 @@
     src: url(./Assets/NotoSans-Regular.ttf);
 }
 
-#container {
-    position: absolute;
-    left: 50%;
-    top: 40%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+* {
+    font-family: noto;
 }
-
-table {
-    border-spacing: 0px;
+body {
+    margin: 1%;
 }
-
-td {
-    padding: 0px;
+dialog {
+    text-align: center;
+    padding-bottom: 1.5%;
 }
-
 img {
     position: absolute;
     pointer-events: none;
 }
-
+h2 {
+    font-size: x-large;
+}
+hr {
+    width: 100%;
+}
+label {
+    font-size: 120%;
+}
+p {
+    font-size: large;
+}
+table {
+    border-spacing: 0px;
+}
+td {
+    padding: 0px;
+}
 td, img {
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -32,6 +43,20 @@ td, img {
     user-select: none;
 }
 
+.center {
+    text-align: center;
+}
+.hidden {
+    position: absolute;
+    right: 100000000px;
+    opacity: 0;
+}
+.info {
+    font-size: large;
+}
+.red {
+    color: red;
+}
 .square {
     position: relative;
 }
@@ -40,28 +65,24 @@ td, img {
 	display: flex;
 	justify-content: center;
 }
-
-hr {
-    width: 100%;
-}
-
-* {
-    font-family: noto;
-    font-size: medium;
-}
-
-p {
-    font-size: large;
-}
-
-dialog {
-    text-align: center;
-    padding-bottom: 1.5%;
-}
-
 #color {
     padding-left: 3%;
     padding-right: 3%;
+}
+#container {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+#fenInput, #depthInput {
+    font-size: 120%;
+    width: 55%;
+    text-align: center;
+}
+#depthInput {
+    width: 3%;
 }
 #promotion {
     padding-left: 2%;
@@ -71,39 +92,6 @@ dialog {
     padding-left: 4%;
     padding-right: 4%;
 }
-
-h2 {
-    font-size: x-large;
-}
-
-#error {
-    color: red;
-}
-
-.center {
-    text-align: center;
-}
-
-label {
-    font-size: 120%;
-}
-
-.hidden {
-    position: absolute;
-    right: 100000000px;
-    opacity: 0;
-}
-
-#fenInput, #depthInput {
-    font-size: 120%;
-    width: 55%;
-    text-align: center;
-}
-
-#depthInput {
-    width: 3%;
-}
-
 #startButton {
     width: 4%;
     font-size: 120%;
