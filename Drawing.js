@@ -1,5 +1,5 @@
-decode("7k/8/8/8/8/8/PPP4K/8 b - - 0 1");
-// decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
+// decode("7k/8/8/8/8/8/PPP4K/8 b - - 0 1");
+decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
 console.clear();
 
 // THIS POSITION DOES NOT WORK 8/8/8/5k2/4Pp2/8/8/4K3 b - e3 0 1
@@ -258,8 +258,11 @@ function click(current) {
 
     for (let move of movesFromSelected) {
         if (move.dest == current) {
+            let promote = false;
+
             move.source = selected;
             if (move.promote != 0) {
+                promote = true;
                 move.promote = 0;
                 pickPromotion(move.dest);
             }
@@ -277,7 +280,10 @@ function click(current) {
             update();
             movesFromSelected.length = 0;
 
-            computerMove();
+            moves = moveGen();
+
+            if (!promote)
+                computerMove();
 
             return;
         }
@@ -318,7 +324,6 @@ function computerMove() {
         document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${
             e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
         document.getElementById("eval").innerHTML = `<b>Eval: ${e.data[2]}</b>`;
-        console.log(typeof(e.data[0]));
         document.getElementById("move").innerHTML = `<b>Move: ${moveToString(e.data[0])}</b>`;
 
         update();
@@ -355,6 +360,8 @@ function pickSide() {
         colorDialog.removeAttribute("open");
         moves = moveGen();
         init();
+        if (turn != humanSide)
+            computerMove();
     }
     whiteButton.textContent = "White";
 
@@ -365,6 +372,8 @@ function pickSide() {
         colorDialog.removeAttribute("open");
         moves = moveGen();
         init();
+        if (turn != humanSide)
+            computerMove();
     }
     blackButton.textContent = "Black";
 
@@ -382,7 +391,7 @@ function pickPromotion(square) {
         gameOver = false;
         board[square] = getColor(board[square]) ? PIECES.indexOf("q") : PIECES.indexOf("Q");
         update();
-        moves = moveGen();
+        computerMove();
         promotionDialog.removeAttribute("open");
     }
     queen.textContent = "Queen";
@@ -392,7 +401,7 @@ function pickPromotion(square) {
         gameOver = false;
         board[square] = getColor(board[square]) ? PIECES.indexOf("r") : PIECES.indexOf("R");
         update();
-        moves = moveGen();
+        computerMove();
         promotionDialog.removeAttribute("open");
     }
     rook.textContent = "Rook";
@@ -402,7 +411,7 @@ function pickPromotion(square) {
         gameOver = false;
         board[square] = getColor(board[square]) ? PIECES.indexOf("b") : PIECES.indexOf("B");
         update();
-        moves = moveGen();
+        computerMove();
         promotionDialog.removeAttribute("open");
     }
     bishop.textContent = "Bishop";
@@ -412,7 +421,7 @@ function pickPromotion(square) {
         gameOver = false;
         board[square] = getColor(board[square]) ? PIECES.indexOf("n") : PIECES.indexOf("N");
         update();
-        moves = moveGen();
+        computerMove();
         promotionDialog.removeAttribute("open");
     }
     knight.textContent = "Knight";

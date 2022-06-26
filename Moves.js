@@ -105,7 +105,6 @@ function moveToString(move) {
     asString += notationToSAN(move.dest);
     if (move.promote != 0)
         asString += PIECES[move.promote];
-    console.log(asString);
     return asString;
 }
 

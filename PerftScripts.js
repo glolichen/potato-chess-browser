@@ -114,7 +114,6 @@ document.getElementById("startButton").onclick = () => {
     worker.postMessage([fen, depth]);
     worker.onmessage = e => {
         running = false;
-        console.log(e.data[0]);
         document.getElementById("count").textContent = `Total nodes: ${e.data[0]}`;
         document.getElementById("time").textContent = `Time taken: ${e.data[1]}ms`;
         document.getElementById("nps").textContent = `Nodes per second: ${Math.round(e.data[0] / (e.data[1]/1000))}`;
