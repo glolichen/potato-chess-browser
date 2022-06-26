@@ -1,5 +1,5 @@
 {
-  "name": "potato-chess-wasm",
+  "name": "potato-chess",
   "version": "1.0.0",
   "description": "A chess engine written in C++ and compiled to Web Assembly with an html frontend",
   "main": "index.js",

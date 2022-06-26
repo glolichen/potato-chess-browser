@@ -1,5 +1,0 @@
-#!/bin/bash
-
-sudo electron-builder --linux appimage
-sudo electron-builder --win portable
-sudo electron-builder --mac mas
