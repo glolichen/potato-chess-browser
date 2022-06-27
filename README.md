@@ -6,4 +6,4 @@ Compiled by [Emscripten](https://github.com/emscripten-core/emscripten)
 
 Frontend code written with HTML and Javascript that can be used in the browser or as a desktop app with electron.
 
-Compile to Web Assembly using `em++ -lembind -o engine.js -O2 *.cpp` and packaged using electron-builder and electron-packager
+Compile to Web Assembly using `em++ -lembind -o engine.js -O3 *.cpp` and packaged using electron-builder and electron-packager

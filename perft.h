@@ -8,12 +8,12 @@
 #include "moves.h"
 
 namespace perft {
-    using ul = unsigned long;
+    using ui = unsigned int;
     struct Entry {
         moves::Move moves;
-        ul possible;
+        ui possible;
     };
-    ul perft(int depth, bool first);
+    ui perft(int depth, bool first);
     std::vector<Entry> runPerft(std::string fen, int depth);
 }
 

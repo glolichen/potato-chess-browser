@@ -51,7 +51,8 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
     if (depth == 0)
         return eval::evaluate();
 
-    std::vector<moves::Move> moves = moveGen::moveGenWithOrdering();
+    std::vector<moves::Move> moves;
+    moveGen::moveGenWithOrdering(&moves);
 
     // place the previous best move to the top of the list
     // this should speed up alpha-beta pruning by allowing us to prune most if not all branches
@@ -205,7 +206,8 @@ search::SearchResult search::search(int timeMS) {
             int number = rand() % (candidateMoves.size()); //choose random move from book
             moves::SimpleMove bookMove = candidateMoves[number];
 
-            std::vector<moves::Move> moves = moveGen::moveGen();
+            std::vector<moves::Move> moves;
+            moveGen::moveGen(&moves);
             for (moves::Move move : moves) {
                 if (move.source == bookMove.source &&
                     move.dest == bookMove.dest) {

@@ -18,7 +18,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     function("decode", &board::decode);
     function("encode", &board::encode);
     function("printBoard", &board::printBoard);
-    function("moveGen", &moveGen::moveGen);
+    function("moveGen", &moveGen::moveGenForJS);
     function("runPerft", &perft::runPerft);
     function("getAttacked", &attacked::getAttackedForJS);
     function("search", &search::search);

@@ -10,9 +10,8 @@ namespace checks {
 
     bool enPassantLegal();
 
-    std::vector<checks::Check> getAttacked();
-    std::vector<checks::Check> getPinned();
-    std::vector<int> getBlocks(std::vector<checks::Check>* attacked);
+    void getPinned(std::vector<checks::Check>* pinned);
+    void getBlocks(std::vector<int>* blocks, std::vector<checks::Check>* attacked);
 }
 
 #endif

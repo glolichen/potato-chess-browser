@@ -41,8 +41,7 @@ bool checks::enPassantLegal() {
     return true;
 }
 
-std::vector<checks::Check> checks::getPinned() {
-    std::vector<checks::Check> pinned;
+void checks::getPinned(std::vector<checks::Check>* pinned) {
     int kingPos = board::king[board::turn];
 
     for (int piece : board::pieces[!board::turn]) {
@@ -94,29 +93,25 @@ std::vector<checks::Check> checks::getPinned() {
                 break;
         }
         if (isPinned)
-            pinned.push_back(pin);
+            pinned->push_back(pin);
     }
-
-    return pinned;
 }
 
-std::vector<int> checks::getBlocks(std::vector<checks::Check>* attacked) {
-    std::vector<int> blocks;
+void checks::getBlocks(std::vector<int>* blocks, std::vector<checks::Check>* attacked) {
     for (checks::Check check : *attacked) {
         if (check.coord != board::king[board::turn])
             continue;
 
         if (check.axis == -10) {
-            blocks.push_back(check.original);
+            blocks->push_back(check.original);
             break;
         }
 
         int i = check.coord + check.axis;
         while (!board::board[i]) {
-            blocks.push_back(i);
+            blocks->push_back(i);
             i += check.axis;
         }
-        blocks.push_back(i);
+        blocks->push_back(i);
     }
-    return blocks;
 }

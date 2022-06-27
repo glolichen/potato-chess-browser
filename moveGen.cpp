@@ -23,12 +23,12 @@ bool sortMoveOrder(std::pair<moves::Move, int> o1, std::pair<moves::Move, int> o
     return o1.second > o2.second;
 }
 
-std::vector<moves::Move> moveGen::moveGen() {
-    std::vector<moves::Move> moves;
-
+void moveGen::moveGen(std::vector<moves::Move>* moves) {
     std::vector<checks::Check> attacked;
     attacked::getAttacked(&attacked);
-    std::vector<checks::Check> pinned = checks::getPinned();
+
+    std::vector<checks::Check> pinned;
+    checks::getPinned(&pinned);
 
     if (board::enPassant != -1) {
         int dir = 1;
@@ -46,7 +46,7 @@ std::vector<moves::Move> moveGen::moveGen() {
             makeMove(&move);
             board::turn = !board::turn;
             if (checks::enPassantLegal())
-                moves.push_back(move);
+                moves->push_back(move);
             board::turn = !board::turn;
             unmakeMove(&move);
         }
@@ -55,7 +55,7 @@ std::vector<moves::Move> moveGen::moveGen() {
             makeMove(&move);
             board::turn = !board::turn;
             if (checks::enPassantLegal())
-                moves.push_back(move);
+                moves->push_back(move);
             board::turn = !board::turn;
             unmakeMove(&move);
         }
@@ -66,33 +66,33 @@ std::vector<moves::Move> moveGen::moveGen() {
 
         switch (piece) {
             case 'q': {
-                pieceMoves::rmoves(i, &moves, &pinned, false);
-                pieceMoves::bmoves(i, &moves, &pinned);
+                pieceMoves::rmoves(i, moves, &pinned, false);
+                pieceMoves::bmoves(i, moves, &pinned);
                 break;
             }
 
             case 'r': {
-                pieceMoves::rmoves(i, &moves, &pinned, true);
+                pieceMoves::rmoves(i, moves, &pinned, true);
                 break;
             }
 
             case 'b': {
-                pieceMoves::bmoves(i, &moves, &pinned);
+                pieceMoves::bmoves(i, moves, &pinned);
                 break;
             }
 
             case 'n': {
-                pieceMoves::nmoves(i, &moves, &pinned);
+                pieceMoves::nmoves(i, moves, &pinned);
                 break;
             }
 
             case 'p': {
-                pieceMoves::pmoves(i, &moves, &pinned);
+                pieceMoves::pmoves(i, moves, &pinned);
                 break;
             }
 
             case 'k': {
-                pieceMoves::kmoves(i, &moves, &attacked);
+                pieceMoves::kmoves(i, moves, &attacked);
                 break;
             }
         }
@@ -106,50 +106,56 @@ std::vector<moves::Move> moveGen::moveGen() {
     }
 
     if (timesChecked == 0)
-        return moves;
+        return;
 
-    std::vector<int> blocks = checks::getBlocks(&attacked);
+    std::vector<int> blocks;
+    checks::getBlocks(&blocks, &attacked);
+
     std::vector<moves::Move> result;
 
     if (timesChecked == 2)
         blocks.clear();
 
-    for (moves::Move move : moves) {
+    std::vector<moves::Move> copy = *moves;
+    moves->clear();
+    for (moves::Move move : copy) {
         if (board::board[move.source] == king)
-            result.push_back(move);
+            moves->push_back(move);
         else if (count(blocks.begin(), blocks.end(), move.dest))
-            result.push_back(move);
+            moves->push_back(move);
         else if (move.isEp)
-            result.push_back(move);
+            moves->push_back(move);
     }
-
-    return result;
 }
 
-std::vector<moves::Move> moveGen::moveGenWithOrdering() {
-    std::vector<moves::Move> moves = moveGen();
+std::vector<moves::Move> moveGen::moveGenForJS() {
+    std::vector<moves::Move> moves;
+    moveGen::moveGen(&moves);
+    return moves;
+}
+
+void moveGen::moveGenWithOrdering(std::vector<moves::Move>* moves) {
+    std::vector<moves::Move> unorderedMoves;
+    moveGen::moveGen(&unorderedMoves);
 
     std::vector<std::pair<moves::Move, int>> score;
-    for (moves::Move m : moves) {
+    for (moves::Move move : unorderedMoves) {
         int estimatedScore = 0;
 
-        if (m.capture) {
-            int movedPiece = PIECE_TABLE.find(tolower(board::board[m.source]))->second;
-            int capturedPiece = PIECE_TABLE.find(tolower(m.capture))->second;
+        if (move.capture) {
+            int movedPiece = PIECE_TABLE.find(tolower(board::board[move.source]))->second;
+            int capturedPiece = PIECE_TABLE.find(tolower(move.capture))->second;
 
             estimatedScore = std::max(capturedPiece - movedPiece, 1) * capturedPiece;;
         }
-        if (m.promote)
-            estimatedScore += PIECE_TABLE.find(tolower(m.promote))->second;
+        if (move.promote)
+            estimatedScore += PIECE_TABLE.find(tolower(move.promote))->second;
 
-        score.push_back({m, estimatedScore});
+        score.push_back({move, estimatedScore});
     }
 
     sort(score.begin(), score.end(), sortMoveOrder);
 
-    std::vector<moves::Move> result;
     for (std::pair<moves::Move, int> p : score)
-        result.push_back(p.first);
-
-    return result;
+        moves->push_back(p.first);
 }
