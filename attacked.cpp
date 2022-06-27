@@ -5,46 +5,47 @@
 #include "checks.h"
 #include "constants.h"
 
-std::vector<checks::Check> attacked::getAttacked() {
-    std::vector<checks::Check> attacked;
-
+void attacked::getAttacked(std::vector<checks::Check>* attacked) {
     for (int index : board::pieces[!board::turn]) {
         char piece = tolower(board::board[index]);
 
         switch (piece) {
             case 'q': {
-                attacked::rchecks(index, &attacked);
-                attacked::bchecks(index, &attacked);
+                attacked::rchecks(index, attacked);
+                attacked::bchecks(index, attacked);
                 break;
             }
 
             case 'r': {
-                attacked::rchecks(index, &attacked);
+                attacked::rchecks(index, attacked);
                 break;
             }
 
             case 'b': {
-                attacked::bchecks(index, &attacked);
+                attacked::bchecks(index, attacked);
                 break;
             }
 
             case 'n': {
-                attacked::nchecks(index, &attacked);
+                attacked::nchecks(index, attacked);
                 break;
             }
 
             case 'p': {
-                attacked::pchecks(index, &attacked);
+                attacked::pchecks(index, attacked);
                 break;
             }
 
             case 'k': {
-                attacked::kchecks(index, &attacked);
+                attacked::kchecks(index, attacked);
                 break;
             }
         }
     }
-
+}
+std::vector<checks::Check> attacked::getAttackedForJS() {
+    std::vector<checks::Check> attacked;
+    attacked::getAttacked(&attacked);
     return attacked;
 }
 

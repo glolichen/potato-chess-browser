@@ -26,7 +26,8 @@ bool sortMoveOrder(std::pair<moves::Move, int> o1, std::pair<moves::Move, int> o
 std::vector<moves::Move> moveGen::moveGen() {
     std::vector<moves::Move> moves;
 
-    std::vector<checks::Check> attacked = attacked::getAttacked();
+    std::vector<checks::Check> attacked;
+    attacked::getAttacked(&attacked);
     std::vector<checks::Check> pinned = checks::getPinned();
 
     if (board::enPassant != -1) {

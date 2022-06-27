@@ -71,7 +71,9 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         char king = board::turn ? 'k' : 'K';
         bool inCheck = false;
 
-        for (checks::Check c : attacked::getAttacked()) {
+        std::vector<checks::Check> attacked;
+        attacked::getAttacked(&attacked);
+        for (checks::Check c : attacked) {
             if (board::board[c.coord] == king) {
                 inCheck = true;
                 break;

@@ -5,7 +5,8 @@
 #include "checks.h"
 
 namespace attacked {
-    std::vector<checks::Check> getAttacked();
+    void getAttacked(std::vector<checks::Check>* attacked);
+    std::vector<checks::Check> getAttackedForJS();
     void pchecks(int loc, std::vector<checks::Check>* attacked);
     void nchecks(int loc, std::vector<checks::Check>* attacked);
     void bchecks(int loc, std::vector<checks::Check>* attacked);

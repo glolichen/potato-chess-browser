@@ -20,7 +20,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     function("printBoard", &board::printBoard);
     function("moveGen", &moveGen::moveGen);
     function("runPerft", &perft::runPerft);
-    function("getAttacked", &attacked::getAttacked);
+    function("getAttacked", &attacked::getAttackedForJS);
     function("search", &search::search);
     function("initOpeningBook", &book::initOpeningBook);
     value_object<moves::Move>("Move")
