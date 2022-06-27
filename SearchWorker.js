@@ -4,6 +4,7 @@ onmessage = e => {
     importScripts("./Moves.js");
 
     Module["onRuntimeInitialized"] = () => {
+        Module["initOpeningBook"](loadFile("bookFEN.txt"));
         Module["decode"](e.data[0]);
         
         let out = Module["search"](e.data[1]);
@@ -13,6 +14,16 @@ onmessage = e => {
 
         postMessage([move, out.depth, out.eval, out.mateFound]);
     };
+}
+
+function loadFile(filePath) {
+    let result = null;
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", filePath, false);
+    xmlhttp.send();
+    if (xmlhttp.status == 200)
+        result = xmlhttp.responseText;
+    return result;
 }
 
 function convertSignal(char) {

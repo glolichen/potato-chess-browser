@@ -10,6 +10,7 @@
 
 #include "attacked.h"
 #include "board.h"
+#include "book.h"
 #include "constants.h"
 #include "eval.h"
 #include "hashing.h"
@@ -191,13 +192,30 @@ search::SearchResult search::search(int timeMS) {
 
     topMoveNull = true;
 
+    hashing::initZobristTable();
+    eval::initPieceTables();
+
+    std::string truncatedFEN = board::truncateFEN(board::encode());
+    for (auto pair : book::openingBook) {
+        if (pair.first == truncatedFEN) {
+            std::vector<moves::SimpleMove> candidateMoves = pair.second; //all the possible moves from the opening book
+            srand(time(0));
+            int number = rand() % (candidateMoves.size()); //choose random move from book
+            moves::SimpleMove bookMove = candidateMoves[number];
+
+            std::vector<moves::Move> moves = moveGen::moveGen();
+            for (moves::Move move : moves) {
+                if (move.source == bookMove.source &&
+                    move.dest == bookMove.dest) {
+                    return { move, "Book Move", "-", false };
+                }
+            }
+        }
+    }
+
     std::pair<moves::Move, int> best;
     limit = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     limit += timeMS;
-    std::cout << "Depth: ";
-
-    hashing::initZobristTable();
-    eval::initPieceTables();
 
     int depth = 1;
     bool isMate = false;
@@ -222,7 +240,7 @@ search::SearchResult search::search(int timeMS) {
 
     transposition.clear();
 
-    return { best.first, depth, best.second, isMate };
+    return { best.first, std::to_string(depth), std::to_string(best.second), isMate };
 }
 
 bool search::evalIsMate(int eval) {

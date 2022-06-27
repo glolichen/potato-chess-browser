@@ -1,13 +1,14 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
+#include <string>
 #include "moves.h"
 
 namespace search {
     struct SearchResult {
         moves::Move move;
-        int depth;
-        int eval;
+        std::string depth;
+        std::string eval;
         bool mateFound;
     };
 
