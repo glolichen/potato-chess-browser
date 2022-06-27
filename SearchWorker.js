@@ -4,7 +4,7 @@ onmessage = e => {
     importScripts("./Moves.js");
 
     Module["onRuntimeInitialized"] = () => {
-        Module["initOpeningBook"](loadFile("bookFEN.txt"));
+        Module["initOpeningBook"](loadFile("./Assets/bookFEN.txt"));
         Module["decode"](e.data[0]);
         
         let out = Module["search"](e.data[1]);
