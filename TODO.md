@@ -5,6 +5,6 @@
   * Try to get own king close to enemy king
 * Improvement: Maybe use tapered eval?
 * Improvement: Speed up search (futility pruning?)
-* Improvement: 50 move rule and Threefold repetition
+* Improvement: Threefold repetition
 * Improvement: Quiscence search
 * Improvement: Represent pieces as shorts rather than chars
