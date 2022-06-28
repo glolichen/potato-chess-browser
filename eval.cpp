@@ -4,6 +4,7 @@
 
 #include "board.h"
 #include "eval.h"
+#include "pieces.h"
 
 const int PAWN[8][8] = {{0,  0,  0,   0,   0,   0,   0,  0},
                         {50, 50, 50,  50,  50,  50,  50, 50},
@@ -62,12 +63,6 @@ const int KING_END[8][8] = {{-50, -40, -30, -20, -20, -30, -40, -50},
                             {-30, -30, 0,   0,   0,   0,   -30, -30},
                             {-50, -30, -30, -30, -30, -30, -30, -50}};
 
-const std::map<char, int> PIECE_TABLE = {{'p', 0},
-                                        {'n', 1},
-                                        {'b', 2},
-                                        {'r', 3},
-                                        {'q', 4},
-                                        {'k', 5}};
 const int VALUES[5] = {100, 305, 333, 563, 950};
 eval::Table ALL_TABLES[2][5];
 
@@ -124,7 +119,7 @@ int eval::evaluate() {
             if (board::board[index] == 0 || tolower(board::board[index]) == 'k')
                 continue;
 
-            int pieceNumber = PIECE_TABLE.find(tolower(board::board[index]))->second;
+            int pieceNumber = pieces::PIECE_TABLE.at(tolower(board::board[index]));
             int value = VALUES[pieceNumber];
             pieceCount++;
             if ((bool) islower(board::board[index])) {

@@ -1,14 +1,12 @@
-#include <fstream>
-#include <iostream>
-#include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "board.h"
 #include "book.h"
 #include "moves.h"
 
-std::map<std::string, std::vector<moves::SimpleMove>> book::openingBook;
+std::unordered_map<std::string, std::vector<moves::SimpleMove>> book::openingBook;
 
 void book::initOpeningBook(std::string text) {
     std::vector<std::string> split = board::split(text, '\n');
