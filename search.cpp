@@ -195,7 +195,7 @@ search::SearchResult search::search(int timeMS) {
 
     topMoveNull = true;
 
-    hashing::initZobristTable();
+    hashing::initZobristTables();
     eval::initPieceTables();
 
     std::string truncatedFEN = board::truncateFEN(board::encode());

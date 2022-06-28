@@ -5,31 +5,38 @@
 #include "board.h"
 #include "hashing.h"
 
-unsigned long long zobristTable[8][8][12];
+hashing::ull zobristTables[3][8][8][12];
 
-void hashing::initZobristTable() {
-    std::random_device rd;
-    std::mt19937_64 random(rd());
-    std::uniform_int_distribution<unsigned long long> distribution;
+void hashing::initZobristTables() {
+    for (int i = 0; i < 3; i++) {
+        std::random_device rd;
+        std::mt19937_64 random(rd());
+        std::uniform_int_distribution<hashing::ull> distribution;
 
-    for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            for (int k = 0; k < 12; k++)
-                zobristTable[i][j][k] = distribution(random);
+            for (int k = 0; k < 8; k++) {
+                for (int m = 0; m < 12; m++)
+                    zobristTables[i][j][k][m] = distribution(random);
+            }
         }
     }
 }
 
-unsigned long long hashing::getZobristHash() {
-    unsigned long long result = 0;
-    for (int i = 2; i < 10; i++) {
+hashing::Hashes hashing::getZobristHash() {
+    Hashes hashes = { 0, 0, 0 };
+    ull* hashLocations[3] = { &hashes.hash1, &hashes.hash2, &hashes.hash3 };
+
+    for (int i = 0; i < 3; i++) {
         for (int j = 2; j < 10; j++) {
-            int index = i * 12 + j;
-            if (board::board[index])
-                result ^= zobristTable[i - 2][j - 2][hashing::toPiece(board::board[index])];
+            for (int k = 2; k < 10; k++) {
+                int index = j * 12 + k;
+                if (board::board[index])
+                    *hashLocations[i] ^= zobristTables[i][j - 2][k - 2][hashing::toPiece(board::board[index])];
+            }
         }
     }
-    return result;
+    
+    return hashes;
 }
 
 int hashing::toPiece(char piece) {
