@@ -75,6 +75,11 @@ td, img {
     padding-left: 3%;
     padding-right: 3%;
 }
+#board {
+    position: relative; 
+    left: 50%;
+    transform: translateX(-50%);
+}
 #container {
     position: absolute;
     left: 50%;
@@ -82,9 +87,14 @@ td, img {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+#fen {
+    font-size: 110%;
+    width: 45rem;
+    text-align: center;
+}
 #fenInput, #depthInput {
     font-size: 120%;
-    width: 55%;
+    width: 55rem;
     text-align: center;
 }
 #depthInput {

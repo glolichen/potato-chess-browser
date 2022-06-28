@@ -18,7 +18,7 @@ bool board::q = 0; // Black Queenside
 
 bool board::turn = 0; // 0 = White, 1 = Black
 
-int board::halfMoveClock = 0;
+int board::fiftyMoveClock = 0;
 
 void board::decode(std::string fen) {    
     std::vector<std::string> result = board::split(fen, ' ');
@@ -28,7 +28,7 @@ void board::decode(std::string fen) {
     else
         board::turn = true;
 
-    board::halfMoveClock = stoi(result[4]);
+    board::fiftyMoveClock = stoi(result[4]);
 
     std::string castle = result[2];
     if (castle.find('K') != std::string::npos)
@@ -147,7 +147,7 @@ std::string board::encode() {
         fen += board::toSAN(board::enPassant);
         
     fen += " 0 ";
-    fen += std::to_string(board::halfMoveClock + 1);
+    fen += std::to_string(board::fiftyMoveClock + 1);
 
     return fen;
 }

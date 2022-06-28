@@ -18,6 +18,8 @@
 #include "moves.h"
 #include "search.h"
 
+using ull = unsigned long long;
+
 struct TTEntry {
     int depth;
     int eval;
@@ -27,7 +29,7 @@ const int SEARCH_EXPIRED = INT_MIN + 500;
 
 bool topMoveNull;
 moves::Move search::topMove; // top move stored through iterative deepening
-std::unordered_map<unsigned long long, TTEntry> transposition; // transposition table
+// std::map<std::tuple<ull, ull, ull>, TTEntry> transposition; // transposition table
 
 int limit;
 
@@ -51,6 +53,9 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
     if (depth == 0)
         return eval::evaluate();
 
+    if (board::fiftyMoveClock >= 50)
+        return 0;
+
     std::vector<moves::Move> moves;
     moveGen::moveGenWithOrdering(&moves);
 
@@ -65,8 +70,6 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         }
         moves.insert(moves.begin(), topMove);
     }
-
-    // unsigned long long hashCode = hashing::getZobristHash();
 
     if (moves.size() == 0) { // check whether there are legal moves
         char king = board::turn ? 'k' : 'K';
@@ -91,10 +94,13 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
             return 0; // stalemate (draw)
     }
 
-    // if (transposition.count(hashCode)) {
-    //     auto found = transposition.at(hashCode);
-    //     if (found.depth >= depth)
+    // std::tuple<ull, ull, ull> hashes = hashing::getZobristHash();
+    // if (transposition.count(hashes)) {
+    //     TTEntry found = transposition.at(hashes);
+    //     if (depth <= found.depth) {
+    //         std::cout << "MATCH FOUND!\n";
     //         return found.eval;
+    //     }
     // }
 
     if (board::turn == constants::WHITE && depth > 0) { // white's turn - computer tries to maximize evaluation
@@ -103,11 +109,18 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         std::vector<std::pair<moves::Move, int>> allEval;
 
         for (moves::Move move : moves) {
+            int oldFiftyMoveClock = board::fiftyMoveClock;
+            if (move.capture || tolower(move.source))
+                board::fiftyMoveClock = 0;
+            else
+                board::fiftyMoveClock++;
+
             moves::makeMove(&move);
 
             int curEval = search::minimax(depth - 1, alpha, beta, depthFromStart + 1);
 
             moves::unmakeMove(&move);
+            board::fiftyMoveClock = oldFiftyMoveClock;
 
             if (curEval == SEARCH_EXPIRED)
                 return SEARCH_EXPIRED;
@@ -139,11 +152,18 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         std::vector<std::pair<moves::Move, int>> allEval;
 
         for (moves::Move move: moves) {
+            int oldFiftyMoveClock = board::fiftyMoveClock;
+            if (move.capture || tolower(move.source))
+                board::fiftyMoveClock = 0;
+            else
+                board::fiftyMoveClock++;
+
             moves::makeMove(&move);
 
             int curEval = search::minimax(depth - 1, alpha, beta, depthFromStart + 1);
 
             moves::unmakeMove(&move);
+            board::fiftyMoveClock = oldFiftyMoveClock;
 
             if (curEval == SEARCH_EXPIRED)
                 return SEARCH_EXPIRED;
@@ -170,12 +190,12 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         }
     }
 
-    // if (transposition.count(hashCode) == 0)
-    //     transposition.insert({ hashCode, { depth, evaluation } });
+    // if (transposition.count(hashes) == 0)
+    //     transposition.insert({ hashes, { depth, evaluation } });
     // else {
-    //     auto previous = transposition.at(hashCode);
+    //     TTEntry previous = transposition.at(hashes);
     //     if (depth > previous.depth)
-    //         transposition.at(hashCode) = { depth, evaluation };
+    //         transposition.at(hashes) = { depth, evaluation };
     // }
 
     return evaluation;
@@ -195,7 +215,6 @@ search::SearchResult search::search(int timeMS) {
 
     topMoveNull = true;
 
-    hashing::initZobristTables();
     eval::initPieceTables();
 
     std::string truncatedFEN = board::truncateFEN(board::encode());
@@ -242,7 +261,7 @@ search::SearchResult search::search(int timeMS) {
         }
     }
 
-    transposition.clear();
+    // transposition.clear();
 
     return { best.first, std::to_string(depth), std::to_string(best.second), isMate };
 }

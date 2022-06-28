@@ -6,7 +6,6 @@
 
 #include "board.h"
 #include "book.h"
-#include "hashing.h"
 #include "moves.h"
 
 std::map<std::string, std::vector<moves::SimpleMove>> book::openingBook;

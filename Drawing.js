@@ -1,9 +1,7 @@
-// decode("7k/8/8/8/8/8/PPP4K/8 b - - 0 1");
 decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
 console.clear();
 
-// THIS POSITION DOES NOT WORK 8/8/8/5k2/4Pp2/8/8/4K3 b - e3 0 1
-// en passant out of check is not recognized
+document.getElementById("fen").value = encode();
 
 var height = window.innerHeight ||
 	document.getElementsByTagName("html")[0].clientHeight  ||
@@ -116,7 +114,7 @@ function init() {
                 image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
                 image.src = `./Assets/${getImage(board[notation])}.png`;
                 image.className = "piece";
-                light.appendChild(image);
+                light.appendChild(image);makeMove
             }
 
             current++;
@@ -270,6 +268,22 @@ function click(current) {
             document.getElementById(selected.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; 
                 background-color: ${isLight(selected) ? LIGHT : DARK}`);
             makeMove(move);
+            if (fiftyMoveClock >= 50) {
+                let paragraph = document.createElement("p");
+                paragraph.textContent = "Draw by 50 move rule";
+                
+                let button = document.createElement("button");
+                button.onclick = () => {
+                    result.removeAttribute("open");
+                }
+                button.textContent = "OK";
+
+                result.append(paragraph);
+                result.append(button);
+
+                setTimeout(() => result.setAttribute("open", ""), 100);
+            }
+            document.getElementById("fen").value = encode();
             selected = null;
 
             highlightLastMove(move);
@@ -319,6 +333,22 @@ function computerMove() {
     worker.postMessage([encode(), TIME]);
     worker.onmessage = e => {
         makeMove(e.data[0]);
+        if (fiftyMoveClock >= 50) {
+            let paragraph = document.createElement("p");
+            paragraph.textContent = "Draw by 50 move rule";
+            
+            let button = document.createElement("button");
+            button.onclick = () => {
+                result.removeAttribute("open");
+            }
+            button.textContent = "OK";
+
+            result.append(paragraph);
+            result.append(button);
+
+            setTimeout(() => result.setAttribute("open", ""), 100);
+        }
+        document.getElementById("fen").value = encode();
         highlightLastMove(e.data[0]);
 
         document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${

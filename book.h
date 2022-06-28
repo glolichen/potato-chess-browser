@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "hashing.h"
 #include "moves.h"
 
 namespace book {

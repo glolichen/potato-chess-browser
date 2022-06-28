@@ -22,9 +22,11 @@ void hashing::initZobristTables() {
     }
 }
 
-hashing::Hashes hashing::getZobristHash() {
-    Hashes hashes = { 0, 0, 0 };
-    ull* hashLocations[3] = { &hashes.hash1, &hashes.hash2, &hashes.hash3 };
+std::tuple<hashing::ull, hashing::ull, hashing::ull> hashing::getZobristHash() {
+    ull hash1 = 0;
+    ull hash2 = 0;
+    ull hash3 = 0;
+    ull* hashLocations[3] = { &hash1, &hash2, &hash3 };
 
     for (int i = 0; i < 3; i++) {
         for (int j = 2; j < 10; j++) {
@@ -36,7 +38,7 @@ hashing::Hashes hashing::getZobristHash() {
         }
     }
     
-    return hashes;
+    return { hash1, hash2, hash3 };
 }
 
 int hashing::toPiece(char piece) {

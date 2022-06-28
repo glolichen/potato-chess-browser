@@ -18,7 +18,7 @@ namespace board {
 
     extern bool turn;
 
-    extern int halfMoveClock;
+    extern int fiftyMoveClock;
 
     void decode(std::string fen);
     std::string encode();

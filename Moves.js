@@ -3,6 +3,11 @@ const WHITE = false;
 const BLACK = true;
 
 function makeMove(move) {
+    if (['p', 'P'].includes(PIECES[board[move.source]]) || move.capture != 0)
+        fiftyMoveClock = 0;
+    else
+        fiftyMoveClock++;
+        
     enPassant = -1;
     turn = !turn;
 

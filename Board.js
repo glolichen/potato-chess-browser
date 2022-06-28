@@ -13,7 +13,7 @@ var q = false; // Black Queenside
 
 var turn = false; // false = White, true = Black
 
-var halfMoveClock = 0;
+var fiftyMoveClock = 0;
 
 function decode(fen) {
     board.length = 144;
@@ -25,7 +25,7 @@ function decode(fen) {
 
     turn = result[1] == "b";
 
-    halfMoveClock = parseInt(result[4]);
+    fiftyMoveClock = parseInt(result[4]);
 
     let castle = result[2];
     if (castle.includes("K"))
@@ -66,14 +66,10 @@ function decode(fen) {
                 continue;
             }
 
-            let color = getColor(board[index]) ? 1 : 0;
-
             if (PIECES[board[index]] == "K")
                 king[0] = index;
             if (PIECES[board[index]] == "k")
                 king[1] = index;
-
-            // pieces[color].push(index);
         }
     }
 }
@@ -124,8 +120,7 @@ function encode() {
         let ep = notationToSAN(enPassant);
         fen += ep;
     }
-    fen += " 0 ";
-    fen += halfMoveClock + 1;
+    fen += ` ${fiftyMoveClock} 1`;
 
     return fen;
 }

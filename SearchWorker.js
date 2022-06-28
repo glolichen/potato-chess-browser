@@ -4,7 +4,7 @@ onmessage = e => {
     importScripts("./Moves.js");
 
     Module["onRuntimeInitialized"] = () => {
-        Module["initOpeningBook"](loadFile("./Assets/bookFEN.txt"));
+        Module["initOpeningBook"](readFile("./Assets/bookFEN.txt"));
         Module["decode"](e.data[0]);
         
         let out = Module["search"](e.data[1]);
@@ -16,7 +16,7 @@ onmessage = e => {
     };
 }
 
-function loadFile(filePath) {
+function readFile(filePath) {
     let result = null;
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", filePath, false);
