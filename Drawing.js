@@ -9,7 +9,6 @@ var height = window.innerHeight ||
 	screen.availHeight;
 
 var gameOver = true;
-
 var humanSide = false;
 
 const SIZE = Math.floor(height * 0.08);
@@ -33,7 +32,7 @@ var sel2 = null;
 var moves = [];
 var movesFromSelected = [];
 
-const TIME = 500;
+const TIME = 1500;
 
 document.getElementById("perft").onclick = () => window.location.replace("./perft.html");
 
