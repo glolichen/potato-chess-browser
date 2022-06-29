@@ -1,5 +1,4 @@
-// decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
-decode("6bq/8/8/8/8/7k/8/K6 w - - 0 1");
+decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
 console.clear();
 
 document.getElementById("fen").value = encode();
