@@ -1,6 +1,5 @@
 #include <cmath>
 #include <cstdlib>
-#include <iostream>
 #include <vector>
 
 #include "board.h"

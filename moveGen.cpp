@@ -1,6 +1,5 @@
 #include <algorithm>
-#include <iostream>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include "attacked.h"
@@ -11,12 +10,12 @@
 #include "pieceMoves.h"
 #include "perft.h"
 
-const std::map<char, int> PIECE_TABLE = { { 'p', 0 },
-                                    { 'n', 1 },
-                                    { 'b', 2 },
-                                    { 'r', 3 },
-                                    { 'q', 4 },
-                                    { 'k', 5 } };
+const std::unordered_map<char, int> PIECE_TABLE = { { 'p', 0 },
+                                                    { 'n', 1 },
+                                                    { 'b', 2 },
+                                                    { 'r', 3 },
+                                                    { 'q', 4 },
+                                                    { 'k', 5 } };
 const int PIECE_VALUES[] = { 100, 305, 333, 563, 950, 100 };
 
 bool sortMoveOrder(std::pair<moves::Move, int> o1, std::pair<moves::Move, int> o2) {
@@ -143,13 +142,13 @@ void moveGen::moveGenWithOrdering(std::vector<moves::Move>* moves) {
         int estimatedScore = 0;
 
         if (move.capture) {
-            int movedPiece = PIECE_TABLE.find(tolower(board::board[move.source]))->second;
-            int capturedPiece = PIECE_TABLE.find(tolower(move.capture))->second;
+            int movedPiece = PIECE_TABLE.at(tolower(board::board[move.source]));
+            int capturedPiece = PIECE_TABLE.at(tolower(move.capture));
 
             estimatedScore = std::max(capturedPiece - movedPiece, 1) * capturedPiece;;
         }
         if (move.promote)
-            estimatedScore += PIECE_TABLE.find(tolower(move.promote))->second;
+            estimatedScore += PIECE_TABLE.at(tolower(move.promote));
 
         score.push_back({move, estimatedScore});
     }

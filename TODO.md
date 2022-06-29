@@ -7,4 +7,3 @@
 * Improvement: Speed up search (futility pruning?)
 * Improvement: Threefold repetition
 * Improvement: Quiscence search
-* Improvement: Represent pieces as shorts rather than chars
