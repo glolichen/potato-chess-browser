@@ -1,4 +1,5 @@
-decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
+// decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
+decode("7q/8/8/8/8/8/8/K1k5 w - - 0 1");
 console.clear();
 
 document.getElementById("fen").value = encode();
@@ -33,59 +34,9 @@ var sel2 = null;
 var moves = [];
 var movesFromSelected = [];
 
-const TIME = 1500;
+const TIME = 500;
 
 document.getElementById("perft").onclick = () => window.location.replace("./perft.html");
-
-function moveGen() {
-    Module["decode"](encode());
-    let out = Module["moveGen"]();
-
-    let legalMoves = [];
-    for (let i = 0; i < out.size(); i++) {
-        let current = out.get(i);
-
-        let move = new Move(current.source, current.dest, charToPiece(current.capture), current.castle, 
-        charToPiece(current.promote), String.fromCharCode(current.signal), current.isEp);
-
-        legalMoves.push(move);
-    }
-
-    if (legalMoves.length == 0) {
-		gameOver = true;
-
-        let inCheck = false;
-        let attacked = Module["getAttacked"]();
-
-        for (let i = 0; i < attacked.size(); i++) {
-            if (attacked.get(i).coord == king[turn ? 1 : 0]) {
-                inCheck = true;
-                break;
-            }
-        }
-
-        let paragraph = document.createElement("p");
-        paragraph.textContent = inCheck ? "Checkmate" : "Stalemate";
-        
-        let button = document.createElement("button");
-        button.onclick = () => {
-            result.removeAttribute("open");
-        }
-        button.textContent = "OK";
-
-        result.append(paragraph);
-        result.append(button);
-
-		setTimeout(() => result.setAttribute("open", ""), 100);
-    }
-
-    return legalMoves;
-}
-
-function charToPiece(char) {
-    let piece = PIECES.indexOf(String.fromCharCode(char));
-    return piece == -1 ? 0 : piece;
-}
 
 function init() {
     let current = 0;
@@ -114,7 +65,7 @@ function init() {
                 image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
                 image.src = `./Assets/${getImage(board[notation])}.png`;
                 image.className = "piece";
-                light.appendChild(image);makeMove
+                light.appendChild(image);
             }
 
             current++;
@@ -268,9 +219,20 @@ function click(current) {
             document.getElementById(selected.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; 
                 background-color: ${isLight(selected) ? LIGHT : DARK}`);
             makeMove(move);
-            if (fiftyMoveClock >= 50) {
+
+            let text = "";
+            let gameEnd = false;
+            if (fiftyMoveClock >= 50)  {
+                text = "Draw by 50 move rule";
+                gameEnd = true;
+            }
+            if (insufMat())  {
+                text = "Draw by insufficient material";
+                gameEnd = true;
+            }
+            if (gameEnd) {
                 let paragraph = document.createElement("p");
-                paragraph.textContent = "Draw by 50 move rule";
+                paragraph.textContent = text;
                 
                 let button = document.createElement("button");
                 button.onclick = () => {
@@ -283,6 +245,7 @@ function click(current) {
 
                 setTimeout(() => result.setAttribute("open", ""), 100);
             }
+
             document.getElementById("fen").value = encode();
             selected = null;
 
@@ -333,9 +296,20 @@ function computerMove() {
     worker.postMessage([encode(), TIME]);
     worker.onmessage = e => {
         makeMove(e.data[0]);
-        if (fiftyMoveClock >= 50) {
+
+        let text = "";
+        let gameEnd = false;
+        if (fiftyMoveClock >= 50)  {
+            text = "Draw by 50 move rule";
+            gameEnd = true;
+        }
+        if (insufMat())  {
+            text = "Draw by insufficient material";
+            gameEnd = true;
+        }
+        if (gameEnd) {
             let paragraph = document.createElement("p");
-            paragraph.textContent = "Draw by 50 move rule";
+            paragraph.textContent = text;
             
             let button = document.createElement("button");
             button.onclick = () => {
@@ -348,6 +322,7 @@ function computerMove() {
 
             setTimeout(() => result.setAttribute("open", ""), 100);
         }
+
         document.getElementById("fen").value = encode();
         highlightLastMove(e.data[0]);
 
@@ -376,11 +351,6 @@ function highlightLastMove(move) {
         background-color: ${isLight(sel1) ? LAST_MOVE_LIGHT : LAST_MOVE_DARK}`);
     document.getElementById(sel2.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; 
         background-color: ${isLight(sel2) ? LAST_MOVE_LIGHT : LAST_MOVE_DARK}`);
-}
-
-function isLight(notation) {
-    let coord = notationToXY(notation);
-    return (parseInt(coord[0]) + parseInt(coord[1])) % 2 == 0;
 }
 
 function pickSide() {

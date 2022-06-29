@@ -119,15 +119,18 @@ int eval::evaluate() {
 
     int pieceCount = 0;
 
+    std::vector<char> pieces;
     for (int i = 2; i < 10; i++) {
         for (int j = 2; j < 10; j++) {
             int index = i * 12 + j;
             if (board::board[index] == 0 || tolower(board::board[index]) == 'k')
                 continue;
 
+            pieces.push_back(board::board[index]);
             int pieceNumber = PIECE_TABLE.at(tolower(board::board[index]));
             int value = VALUES[pieceNumber];
             pieceCount++;
+
             if ((bool) islower(board::board[index])) {
                 black += value;
                 if (board::board[index] == 'p')
@@ -143,6 +146,9 @@ int eval::evaluate() {
         }
     }
 
+    if (eval::insufMat(&pieces))
+        return 0;
+
     bool endgame = (white + black) < 3526;
     int evaluation = white - black;
 
@@ -156,6 +162,19 @@ int eval::evaluate() {
     return evaluation;
 }
 
+bool eval::insufMat(std::vector<char>* pieces) {
+    if (pieces->size() >= 4)
+        return false;
+    
+    for (char piece : *pieces) {
+        piece = tolower(piece);
+        if (piece == 'r' || piece == 'q' || piece == 'p')
+            return false;
+    }
+
+    return true;
+}
+
 int eval::kingSquareEval(bool endgame) {
     std::string ownKing = board::toXY(board::king[board::turn]);
     int x = ownKing[0]-'0';
@@ -163,6 +182,7 @@ int eval::kingSquareEval(bool endgame) {
 
     return endgame ? (KING_END[x][y]) : (KING_MID[x][y]);
 }
+
 int eval::kingLocationEval(int EGWeight) {
 //    string ownKing = toXY(king[turn]);
     std::string enemyKing = board::toXY(board::king[!board::turn]);
