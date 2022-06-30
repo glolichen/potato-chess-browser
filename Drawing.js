@@ -326,7 +326,14 @@ function computerMove() {
 
         document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${
             e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
-        document.getElementById("eval").innerHTML = `<b>Eval: ${e.data[2]}</b>`;
+        
+        if (e.data[2] != "-") {
+            let sign = e.data[2] > 0 ? "+" : e.data[2] == 0 ? "" : "-";
+            document.getElementById("eval").innerHTML = `<b>Eval: ${sign}${Math.abs(e.data[2] / 100)}</b>`;
+        }
+        else
+            document.getElementById("eval").innerHTML = `<b>Eval: -</b>`;
+
         document.getElementById("move").innerHTML = `<b>Move: ${moveToString(e.data[0])}</b>`;
 
         update();
