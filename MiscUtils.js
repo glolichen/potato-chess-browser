@@ -1,5 +1,11 @@
 function moveGen() {
-    Module["decode"](encode());
+    while (true) {
+        try {
+            Module["decode"](encode());
+            break;
+        }
+        catch { }
+    }
     let out = Module["moveGen"]();
 
     let legalMoves = [];
