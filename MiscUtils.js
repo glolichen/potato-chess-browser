@@ -1,10 +1,9 @@
 function moveGen() {
-    while (true) {
-        try {
-            Module["decode"](encode());
-            break;
-        }
-        catch { }
+    try {
+        Module["decode"](encode());
+    }
+    catch {
+        return
     }
     let out = Module["moveGen"]();
 
