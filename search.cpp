@@ -9,7 +9,6 @@
 
 #include "attacked.h"
 #include "board.h"
-#include "book.h"
 #include "constants.h"
 #include "eval.h"
 #include "hashing.h"
@@ -75,7 +74,8 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         bool inCheck = false;
 
         std::vector<checks::Check> attacked;
-        attacked::getAttacked(&attacked);
+        std::unordered_set<int> attackedSet;
+        attacked::getAttacked(&attacked, &attackedSet);
         for (checks::Check c : attacked) {
             if (board::board[c.coord] == king) {
                 inCheck = true;
@@ -216,25 +216,6 @@ search::SearchResult search::search(int timeMS) {
 
     eval::initPieceTables();
 
-    std::string truncatedFEN = board::truncateFEN(board::encode());
-    for (auto pair : book::openingBook) {
-        if (pair.first == truncatedFEN) {
-            std::vector<moves::SimpleMove> candidateMoves = pair.second; //all the possible moves from the opening book
-            srand(time(0));
-            int number = rand() % (candidateMoves.size()); //choose random move from book
-            moves::SimpleMove bookMove = candidateMoves[number];
-
-            std::vector<moves::Move> moves;
-            moveGen::moveGen(&moves);
-            for (moves::Move move : moves) {
-                if (move.source == bookMove.source &&
-                    move.dest == bookMove.dest) {
-                    return { move, "Book Move", "-", false };
-                }
-            }
-        }
-    }
-
     std::pair<moves::Move, int> best;
     limit = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     limit += timeMS;
@@ -262,7 +243,7 @@ search::SearchResult search::search(int timeMS) {
 
     // transposition.clear();
 
-    return { best.first, std::to_string(depth), std::to_string(best.second), isMate };
+    return { best.first, depth, best.second, isMate };
 }
 
 bool search::evalIsMate(int eval) {

@@ -7,8 +7,8 @@
 namespace search {
     struct SearchResult {
         moves::Move move;
-        std::string depth;
-        std::string eval;
+        int depth;
+        int eval;
         bool mateFound;
     };
 

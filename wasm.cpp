@@ -4,7 +4,6 @@
 
 #include "attacked.h"
 #include "board.h"
-#include "book.h"
 #include "checks.h"
 #include "moveGen.h"
 #include "moves.h"
@@ -22,7 +21,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
     function("runPerft", &perft::runPerft);
     function("getAttacked", &attacked::getAttackedForJS);
     function("search", &search::search);
-    function("initOpeningBook", &book::initOpeningBook);
     value_object<moves::Move>("Move")
         .field("source", &moves::Move::source)
         .field("dest", &moves::Move::dest)

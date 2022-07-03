@@ -3,9 +3,9 @@
 
 namespace checks {
     struct Check {
-        int coord; //Square of piece getting checked
-        int original; //Square of piece checking the king
-        int axis; //Axis of the check (offset from the piece to the king)
+        int coord; // Square of piece getting checked
+        int original; // Square of piece checking the king
+        int axis; // Axis of the check (offset from the piece to the king)
     };
 
     bool enPassantLegal();

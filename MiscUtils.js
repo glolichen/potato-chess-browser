@@ -67,6 +67,21 @@ function insufMat() {
     return true;
 }
 
+function initOpeningBook() {
+    let result = "";
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", "./Assets/book.txt", false);
+    xhr.send();
+    if (xhr.status == 200)
+        result = xhr.responseText;
+    
+    for (let line of result.split("\n")) {
+        let split = line.split(" ");
+        let position = split.splice(0, 1)[0];
+        book[position] = split;
+    }
+}
+
 function charToPiece(char) {
     let piece = PIECES.indexOf(String.fromCharCode(char));
     return piece == -1 ? 0 : piece;

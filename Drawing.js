@@ -32,11 +32,14 @@ var sel2 = null;
 var moves = [];
 var movesFromSelected = [];
 
+var book = [];
+
 const TIME = 1500;
 
-document.getElementById("perft").onclick = () => window.location.replace("./perft.html");
-
 function init() {
+    initOpeningBook();
+    document.getElementById("perft").onclick = () => window.location.replace("./perft.html");
+
     let current = 0;
     document.getElementById("board").innerHTML = "";
 
@@ -324,15 +327,13 @@ function computerMove() {
         document.getElementById("fen").value = encode();
         highlightLastMove(e.data[0]);
 
-        document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${
-            e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
-        
-        if (e.data[2] != "-") {
-            let sign = e.data[2] > 0 ? "+" : e.data[2] == 0 ? "" : "-";
-            document.getElementById("eval").innerHTML = `<b>Eval: ${sign}${Math.abs(e.data[2] / 100)}</b>`;
+        document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
+        document.getElementById("eval").innerHTML = `<b>Eval: ${e.data[2] > 0 ? "+" : ""}${e.data[2] / 100}</b>`;
+        if (e.data[1] == 2147483147) {
+            document.getElementById("depth").innerHTML = "<b>Depth: -</b>";
+            document.getElementById("eval").innerHTML = "<b>Eval: Book Move</b>";
+            console.log("aa");
         }
-        else
-            document.getElementById("eval").innerHTML = `<b>Eval: -</b>`;
 
         document.getElementById("move").innerHTML = `<b>Move: ${moveToString(e.data[0])}</b>`;
 
