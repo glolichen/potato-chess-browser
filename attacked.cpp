@@ -1,44 +1,43 @@
 #include <vector>
-#include <unordered_set>
 
 #include "attacked.h"
 #include "board.h"
 #include "checks.h"
 #include "constants.h"
 
-void attacked::getAttacked(std::vector<checks::Check>* attacked, std::unordered_set<int>* attackedSet) {
+void attacked::getAttacked(std::vector<checks::Check>* attacked) {
     for (int index : board::pieces[!board::turn]) {
         char piece = tolower(board::board[index]);
 
         switch (piece) {
             case 'q': {
-                attacked::rchecks(index, attacked, attackedSet);
-                attacked::bchecks(index, attacked, attackedSet);
+                attacked::rchecks(index, attacked);
+                attacked::bchecks(index, attacked);
                 break;
             }
 
             case 'r': {
-                attacked::rchecks(index, attacked, attackedSet);
+                attacked::rchecks(index, attacked);
                 break;
             }
 
             case 'b': {
-                attacked::bchecks(index, attacked, attackedSet);
+                attacked::bchecks(index, attacked);
                 break;
             }
 
             case 'n': {
-                attacked::nchecks(index, attacked, attackedSet);
+                attacked::nchecks(index, attacked);
                 break;
             }
 
             case 'p': {
-                attacked::pchecks(index, attacked, attackedSet);
+                attacked::pchecks(index, attacked);
                 break;
             }
 
             case 'k': {
-                attacked::kchecks(index, attacked, attackedSet);
+                attacked::kchecks(index, attacked);
                 break;
             }
         }
@@ -46,38 +45,34 @@ void attacked::getAttacked(std::vector<checks::Check>* attacked, std::unordered_
 }
 std::vector<checks::Check> attacked::getAttackedForJS() {
     std::vector<checks::Check> attacked;
-    std::unordered_set<int> attackedSet;
-    attacked::getAttacked(&attacked, &attackedSet);
+    attacked::getAttacked(&attacked);
     return attacked;
 }
 
-void attacked::pchecks(int loc, std::vector<checks::Check>* attacked, std::unordered_set<int>* attackedSet) {
+void attacked::pchecks(int loc, std::vector<checks::Check>* attacked) {
     for (int offset : constants::PAWN_CAPTURE[!board::turn]) {
         int i = loc + offset;
         if (board::board[i] == -1)
             continue;
 
         attacked->push_back({ i, loc, -10 });
-        attackedSet->insert(i);
     }
 }
-void attacked::nchecks(int loc, std::vector<checks::Check>* attacked, std::unordered_set<int>* attackedSet) {
+void attacked::nchecks(int loc, std::vector<checks::Check>* attacked) {
     for (int offset : constants::KNIGHT) {
         int i = loc + offset;
         if (board::board[i] == -1)
             continue;
 
         attacked->push_back({ i, loc, -10 });
-        attackedSet->insert(i);
     }
 }
-void attacked::bchecks(int loc, std::vector<checks::Check>* attacked, std::unordered_set<int>* attackedSet) {
+void attacked::bchecks(int loc, std::vector<checks::Check>* attacked) {
     char opponentKing = board::turn ? 'k' : 'K';
     for (int offset : constants::BISHOP) {
         int i = loc + offset;
         while (board::board[i] != -1) {
             attacked->push_back({ i, loc, -offset });
-            attackedSet->insert(i);
 
             if (board::board[i] && board::board[i] != opponentKing)
                 break;
@@ -86,13 +81,12 @@ void attacked::bchecks(int loc, std::vector<checks::Check>* attacked, std::unord
         }
     }
 }
-void attacked::rchecks(int loc, std::vector<checks::Check>* attacked, std::unordered_set<int>* attackedSet) {
+void attacked::rchecks(int loc, std::vector<checks::Check>* attacked) {
     char opponentKing = board::turn ? 'k' : 'K';
     for (int offset : constants::ROOK) {
         int i = loc + offset;
         while (board::board[i] != -1) {
             attacked->push_back({ i, loc, -offset });
-            attackedSet->insert(i);
 
             if (board::board[i] && board::board[i] != opponentKing)
                 break;
@@ -101,13 +95,12 @@ void attacked::rchecks(int loc, std::vector<checks::Check>* attacked, std::unord
         }
     }
 }
-void attacked::kchecks(int loc, std::vector<checks::Check>* attacked, std::unordered_set<int>* attackedSet) {
+void attacked::kchecks(int loc, std::vector<checks::Check>* attacked) {
     for (int offset : constants::KING) {
         int i = loc + offset;
         if (board::board[i] == -1)
             continue;
 
         attacked->push_back({ i, loc, -10 });
-        attackedSet->insert(i);
     }
 }

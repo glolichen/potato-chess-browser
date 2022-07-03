@@ -24,8 +24,7 @@ bool sortMoveOrder(std::pair<moves::Move, int> o1, std::pair<moves::Move, int> o
 
 void moveGen::moveGen(std::vector<moves::Move>* moves) {
     std::vector<checks::Check> attacked;
-    std::unordered_set<int> attackedSet;
-    attacked::getAttacked(&attacked, &attackedSet);
+    attacked::getAttacked(&attacked);
 
     std::vector<checks::Check> pinned;
     checks::getPinned(&pinned);

@@ -74,8 +74,7 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
         bool inCheck = false;
 
         std::vector<checks::Check> attacked;
-        std::unordered_set<int> attackedSet;
-        attacked::getAttacked(&attacked, &attackedSet);
+        attacked::getAttacked(&attacked);
         for (checks::Check c : attacked) {
             if (board::board[c.coord] == king) {
                 inCheck = true;
