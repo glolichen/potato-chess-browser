@@ -209,24 +209,32 @@ int eval::evaluate() {
     endgame[0] = 0;
     endgame[1] = 0;
 
-    for (int i = 0; i < 144; i++) {
-        int piece = board::board[i];
-        if (piece == 0 || piece == -1)
-            continue;
+    std::vector<char> pieces;
+    for (int side = 0; side <= 1; side++) {
+        for (int i : board::pieces[side]) {
+            int piece = board::board[i];
+            // if (piece == 0 || piece == -1)
+            //     continue;
 
-        int pieceNumber = PIECES.at(piece);
-        int pieceColor = (bool) islower(piece);
-        int square = i - 26;
-        square -= (square / 12) * 4;
+            pieces.push_back(piece);
 
-        midgame[pieceColor] += midgameTables[pieceNumber][square];
-        endgame[pieceColor] += endgameTables[pieceNumber][square];
+            int pieceNumber = PIECES.at(piece);
+            int pieceColor = (bool) islower(piece);
+            int square = i - 26;
+            square -= (square / 12) * 4;
 
-        midgame[pieceColor] += midValues[pieceNumber % 6];
-        endgame[pieceColor] += endValues[pieceNumber % 6];
+            midgame[pieceColor] += midgameTables[pieceNumber][square];
+            endgame[pieceColor] += endgameTables[pieceNumber][square];
 
-        gamePhase += gamephaseInc[pieceNumber];
+            midgame[pieceColor] += midValues[pieceNumber % 6];
+            endgame[pieceColor] += endValues[pieceNumber % 6];
+
+            gamePhase += gamephaseInc[pieceNumber];
+        }
     }
+
+    if (eval::insufMat(&pieces))
+        return 0;
 
     /* tapered eval */
     int midgameScore = midgame[0] - midgame[1];
@@ -235,5 +243,41 @@ int eval::evaluate() {
     int midPhase = std::min(gamePhase, 24);
     int endPhase = 24 - midPhase;
 
-    return (midgameScore * midPhase + endgameScore * endPhase) / 24;
+    // std::cout << endPhase << "\n";
+
+    return (midgameScore * midPhase + endgameScore * endPhase) / 24 + eval::kingLocationEval(endPhase);
+}
+
+bool eval::insufMat(std::vector<char>* pieces) {
+    if (pieces->size() >= 4)
+        return false;
+    
+    for (char piece : *pieces) {
+        piece = tolower(piece);
+        if (piece == 'r' || piece == 'q' || piece == 'p')
+            return false;
+    }
+
+    return true;
+}
+
+int eval::kingLocationEval(int endPhase) {
+    int ownKing = board::king[board::turn] - 26;
+    ownKing -= (ownKing / 12) * 4;
+    int ownKingX = ownKing / 12;
+    int ownKingY = ownKing % 12;
+
+    int enemyKing = board::king[!board::turn] - 26;
+    enemyKing -= (enemyKing / 12) * 4;
+    int enemyKingX = enemyKing / 12;
+    int enemyKingY = enemyKing % 12;
+
+    int enemyKingDstFromEdgeX = 3 - std::min(abs(3 - enemyKingX), abs(enemyKingX - 4));
+    int enemyKingDstFromEdgeY = 3 - std::min(abs(3 - enemyKingY), abs(enemyKingY - 4));
+    int enemyKingDstFromEdge = enemyKingDstFromEdgeX + enemyKingDstFromEdgeY;
+
+    int enemyKingDstFromOwn = std::abs(ownKingX - enemyKingX) + std::abs(ownKingY - enemyKingY);
+
+    int weight = endPhase * 10;
+    return (enemyKingDstFromEdge + (enemyKingDstFromOwn * 0.75)) * weight;
 }

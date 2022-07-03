@@ -9,8 +9,7 @@ namespace eval {
     int evaluate();
 
     bool insufMat(std::vector<char>* pieces);
-    int kingSquareEval(bool endgame);
-    int kingLocationEval(int EGWeight);
+    int kingLocationEval(int endPhase);
 }
 
 #endif
