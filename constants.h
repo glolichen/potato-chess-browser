@@ -7,7 +7,6 @@ namespace constants {
     extern int QUEEN[8];
     extern int KNIGHT[8];
     extern int KING[8];
-
     extern int PAWN_MOVE[2][1];
     extern int PAWN_CAPTURE[2][2];
     extern int PAWN_START[2][1];
