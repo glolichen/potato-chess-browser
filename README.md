@@ -14,4 +14,4 @@ Features:
  * Minimax search with Alpha-Beta pruning
  * Move ordering is used to guess the strength of moves to speed up AB pruning
 
-By the way, the name "potato chess" came from GothamChess' infamous video [1660 hung a piece on move 6](https://www.youtube.com/watch?v=7MRNWxCuIrI) where he called the player a potato
+By the way, the name "potato chess" came from GothamChess' infamous video [1660 hung a piece on move 6](https://www.youtube.com/watch?v=7MRNWxCuIrI) where he calls the player a potato
