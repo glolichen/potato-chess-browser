@@ -77,9 +77,11 @@ function initOpeningBook() {
     
     for (let line of result.split("\n")) {
         let split = line.split(" ");
-        let position = split.splice(0, 1)[0];
-        book[position] = split;
+        let position = split.shift();
+        book.set(position, split);
     }
+
+    
 }
 
 function charToPiece(char) {

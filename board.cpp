@@ -143,7 +143,7 @@ std::string board::encode() {
     if (board::enPassant == -1)
         fen += "-";
     else
-        fen += board::toSAN(board::enPassant);
+        fen += board::notationToSAN(board::enPassant);
         
     fen += " 0 ";
     fen += std::to_string(board::fiftyMoveClock + 1);
@@ -217,7 +217,7 @@ std::string board::toXY(int coord) {
     std::string y = std::to_string(coord % 8);
     return x + y;
 }
-std::string board::toSAN(int coord) {
+std::string board::notationToSAN(int coord) {
     std::string xy = board::toXY(coord);
 
     int x = 8 - (xy[0] - '0');

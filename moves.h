@@ -18,8 +18,8 @@ namespace moves {
         bool isEp; // Is this move En Passant?
 
         void print(bool newLine) {
-            std::cout << board::toSAN(source);
-            std::cout << board::toSAN(dest);
+            std::cout << board::notationToSAN(source);
+            std::cout << board::notationToSAN(dest);
             if (promote != 0)
                 std::cout << (char) promote;
             if (newLine)

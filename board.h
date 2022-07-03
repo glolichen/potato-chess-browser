@@ -31,7 +31,7 @@ namespace board {
 
     int SANToNotation(std::string san);
     std::string toXY(int coord);
-    std::string toSAN(int coord);
+    std::string notationToSAN(int coord);
     int toRegularBoard(int coord);
     int toNotation(int x, int y);
 }

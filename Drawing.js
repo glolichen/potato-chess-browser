@@ -32,12 +32,11 @@ var sel2 = null;
 var moves = [];
 var movesFromSelected = [];
 
-var book = [];
+var book = new Map();
 
 const TIME = 1500;
 
 function init() {
-    initOpeningBook();
     document.getElementById("perft").onclick = () => window.location.replace("./perft.html");
 
     let current = 0;
@@ -293,6 +292,25 @@ function click(current) {
 }
 
 function computerMove() {
+    let bookMoves = book.get(encode().split(" ")[0]);
+    if (bookMoves != undefined) {
+        let bookMove = bookMoves[Math.floor(Math.random() * bookMoves.length)];
+        for (let move of moveGen()) {
+            if (moveToString(move) == bookMove) {
+                document.getElementById("depth").innerHTML = "<b>Depth: Book Move</b>";
+                document.getElementById("eval").innerHTML = "<b>Evaluation: -</b>";
+                document.getElementById("move").innerHTML = `<b>Move: ${bookMove}</b>`;
+
+                makeMove(move);
+                highlightLastMove(move);
+                moves = moveGen();
+                update();
+
+                return;
+            }
+        }
+    }
+
     const worker = new Worker("./SearchWorker.js");
     worker.postMessage([encode(), TIME]);
     worker.onmessage = e => {
@@ -328,12 +346,7 @@ function computerMove() {
         highlightLastMove(e.data[0]);
 
         document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
-        document.getElementById("eval").innerHTML = `<b>Eval: ${e.data[2] > 0 ? "+" : ""}${e.data[2] / 100}</b>`;
-        if (e.data[1] == 2147483147) {
-            document.getElementById("depth").innerHTML = "<b>Depth: -</b>";
-            document.getElementById("eval").innerHTML = "<b>Eval: Book Move</b>";
-            console.log("aa");
-        }
+        document.getElementById("eval").innerHTML = `<b>Evaluation: ${e.data[2] > 0 ? "+" : ""}${e.data[2] / 100}</b>`;
 
         document.getElementById("move").innerHTML = `<b>Move: ${moveToString(e.data[0])}</b>`;
 
@@ -441,5 +454,6 @@ function pickPromotion(square) {
     promotionDialog.setAttribute("open", "");
 }
 
+initOpeningBook();
 init();
 pickSide();

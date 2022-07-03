@@ -1,11 +1,9 @@
 #ifndef EVAL_H
 #define EVAL_H
 
-namespace eval {
-    struct Table {
-        int table[8][8];
-    };
+#include <vector>
 
+namespace eval {
     void initPieceTables();
 
     int evaluate();

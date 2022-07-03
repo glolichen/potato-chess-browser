@@ -1,23 +1,13 @@
 // #include <iostream>
 
 // #include "board.h"
-// #include "hashing.h"
+// #include "eval.h"
 
 // int main() {
-//     hashing::initZobristTables();
-//     board::decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-
-//     hashing::Hashes hash1 = hashing::getZobristHash();
-//     std::cout << hash1.hash1 << "\n";
-//     std::cout << hash1.hash2 << "\n";
-//     std::cout << hash1.hash3 << "\n";
-
-//     hashing::Hashes hash2 = hashing::getZobristHash();
-//     std::cout << hash2.hash1 << "\n";
-//     std::cout << hash2.hash2 << "\n";
-//     std::cout << hash2.hash3 << "\n";
-
-//     // std::cout << (hash1 == hash2) << "\n";
+//     eval::initPieceTables();
+//     board::decode("rnb1kbnr/pppBpppp/8/3p4/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 0 3");
+//     // board::decode("1Q6/8/8/8/8/k3K3/8/8 w - - 0 1");
+//     std::cout << eval::evaluate() << "\n";
 
 //     return 0;
 // }
