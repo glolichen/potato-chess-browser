@@ -1,4 +1,5 @@
-﻿#include <string>
+﻿#include <fstream>
+#include <string>
 #include <vector>
 
 #include "board.h"
@@ -19,7 +20,11 @@ bool board::turn = 0; // 0 = White, 1 = Black
 
 int board::fiftyMoveClock = 0;
 
-void board::decode(std::string fen) {    
+void board::decode(std::string fen) {   
+    std::ofstream fout("file.txt");
+    fout << fen;
+    fout.close();
+
     std::vector<std::string> result = board::split(fen, ' ');
 
     if (!result[1].compare("w"))
