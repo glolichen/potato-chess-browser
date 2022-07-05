@@ -5,8 +5,11 @@
         <link rel="stylesheet" type="text/css" href="./style.css">
         <title>Potato chess</title>
     </head>
-    <body>
-		<script type="text/javascript" src="./engine.js"></script>
+    <body onload="document.forms['form'].submit()">
+        <iframe name="iframe" class="hidden"></iframe>
+        <form name="form" action="https://safe-crag-74461.herokuapp.com/" method="GET" target="iframe"></form>
+		
+        <script type="text/javascript" src="./engine.js"></script>
         <script type="text/javascript" src="./Pieces.js"></script>
         <script type="text/javascript" src="./Board.js"></script>
         <script type="text/javascript" src="./Moves.js"></script>
