@@ -125,6 +125,65 @@ function encode() {
     return fen;
 }
 
+function validFEN(fen) {
+    fen = fen.trim();
+
+    let parts = fen.split(" ");
+    if (parts.length != 6)
+        return false;
+    
+    let ranks = parts[0].split("/");
+    if (ranks.length != 8)
+        return false;
+
+    for (let line of ranks) {
+        let length = 0;
+        for (let char of line) {
+            if (NUMBERS.includes(char))
+                length += parseInt(char);
+            else {
+                if (PIECES.includes(char))
+                    length++;
+                else
+                    return false;
+            }
+        }
+        if (length != 8)
+            return false;
+    }
+
+    if (!["w", "b"].includes(parts[1]))
+        return false;
+
+    let castle = parts[2];
+    let used = new Map();
+    if (castle != "-") {
+        for (let char of castle) {
+            if (!["K", "Q", "k", "q"].includes(char) || used.get(char))
+                return false;
+            used.set(char, true);
+        }
+    }
+
+    let ep = parts[3];
+    if (ep != "-") {
+        let file = ep[0];
+        let rank = parseInt(ep[1]);
+
+        if (!FILES.includes(file))
+            return false;
+        if (rank < 1 || rank > 8)
+            return false;
+    }
+
+    for (let i = 4; i <= 5; i++) {
+        if (Number.isNaN(Number(parts[i])))
+            return false;
+    }
+
+    return true;
+}
+
 function notationToXY(coord) {
     if (coord == -1 || board[coord] == -1)
         return "-1";

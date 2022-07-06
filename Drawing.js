@@ -14,7 +14,7 @@ const SEL_LIGHT = "#f8ec5c";
 const LAST_MOVE_DARK = "#aaa23a";
 const LAST_MOVE_LIGHT = "#cdd26a";
 
-decode("rnbqkbnr/pppppppP/Q7/8/8/8/PPPPPPP1/RNBQKBNR w KQkq - 0 1");
+decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 console.clear();
 
 document.getElementById("fen").value = encode();
@@ -35,6 +35,7 @@ var book = new Map();
 
 const TIME = 1500;
 
+var initialized = false;
 var promotionSquare = -1;
 
 function init() {
@@ -191,6 +192,8 @@ function init() {
     document.getElementById("close").onclick = () => {
         document.getElementById("result").removeAttribute("open");
     }
+
+    document.getElementById("resetFenInput").value = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 }
 function update() {
     for (let piece of document.querySelectorAll(".piece"))
@@ -410,6 +413,7 @@ function highlightLastMove(move) {
 
 function initSidePicker() {
     document.getElementById("whiteButton").onclick = () => {
+        initialized = true;
         freezeBoard = false;
         document.getElementById("color").removeAttribute("open");
         moves = moveGen();
@@ -418,6 +422,7 @@ function initSidePicker() {
             computerMove();
     }
     document.getElementById("blackButton").onclick = () => {
+        initialized = true;
         humanSide = true;
         freezeBoard = false;
         document.getElementById("color").removeAttribute("open");
@@ -431,8 +436,32 @@ function initSidePicker() {
 }
 
 document.getElementById("reset").onclick = () => {
+    if (initialized) {
+        document.getElementById("resetInput").setAttribute("open", "");
+        init();
+        update();
+    }
+}
+document.getElementById("loadButton").onclick = () => {
+    let fen = document.getElementById("resetFenInput").value;
+    if (!validFEN(fen)) {
+        alert("Invalid FEN");
+        return;
+    }
+    decode(fen);
     init();
+
+    document.getElementById("depth").innerHTML = "<b>Depth: </b>"
+    document.getElementById("eval").innerHTML = "<b>Eval: </b>"
+    document.getElementById("move").innerHTML = "<b>Move: </b>"
+
     update();
+    document.getElementById("resetInput").removeAttribute("open");
+
+    initSidePicker();
+}
+document.getElementById("closeButton").onclick = () => {
+    document.getElementById("resetInput").removeAttribute("open");
 }
 
 init();

@@ -19,7 +19,7 @@
             <br><br><br><br><br>
             <table id="board"></table>
             <br>
-            <input type="text" id="fen" readonly>
+            <input type="text" id="fen" class="fen" readonly>
             <br><hr><br>
             <div style="text-align: center;">
                 <span id="depth" class="info"><b>Depth: </b></span><br>
@@ -38,7 +38,11 @@
             <button id="blackButton">Black</button>
 		</dialog>
         <dialog id="resetInput">
-            <input type="text">
+            <p>Enter new FEN:</p>
+            <input type="text" id="resetFenInput" class="fen">
+            <br><br>
+            <button id="closeButton">Close</button>
+            <button id="loadButton">Load</button>
         </dialog>
 		<dialog id="promotion">
             <p>Select promotion piece:</p>

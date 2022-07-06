@@ -52,6 +52,11 @@ td, img {
 .center {
     text-align: center;
 }
+.fen {
+    font-size: 1.2rem;
+    width: 45rem;
+    text-align: center;
+}
 .hidden {
     position: absolute;
     right: 100000000px;
@@ -86,11 +91,6 @@ td, img {
     top: 40%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-}
-#fen {
-    font-size: 110%;
-    width: 45rem;
-    text-align: center;
 }
 #fenInput, #depthInput {
     font-size: 120%;
