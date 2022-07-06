@@ -30,19 +30,8 @@ function moveGen() {
             }
         }
 
-        let paragraph = document.createElement("p");
-        paragraph.textContent = inCheck ? "Checkmate" : "Stalemate";
-        
-        let button = document.createElement("button");
-        button.onclick = () => {
-            result.removeAttribute("open");
-        }
-        button.textContent = "OK";
-
-        result.append(paragraph);
-        result.append(button);
-
-		setTimeout(() => result.setAttribute("open", ""), 100);
+        document.getElementById("resultText").textContent = inCheck ? "Checkmate" : "Stalemate";
+		setTimeout(() => document.getElementById("result").setAttribute("open", ""), 100);
     }
 
     return legalMoves;
@@ -80,8 +69,6 @@ function initOpeningBook() {
         let position = split.shift();
         book.set(position, split);
     }
-
-    
 }
 
 function charToPiece(char) {

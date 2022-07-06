@@ -1,15 +1,7 @@
-decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); 
-console.clear();
-
-document.getElementById("fen").value = encode();
-
-var height = window.innerHeight ||
+const height = window.innerHeight ||
 	document.getElementsByTagName("html")[0].clientHeight  ||
 	document.getElementsByTagName("body")[0].clientHeight  ||
 	screen.availHeight;
-
-var gameOver = true;
-var humanSide = false;
 
 const SIZE = Math.floor(height * 0.08);
 
@@ -22,10 +14,17 @@ const SEL_LIGHT = "#f8ec5c";
 const LAST_MOVE_DARK = "#aaa23a";
 const LAST_MOVE_LIGHT = "#cdd26a";
 
+decode("rnbqkbnr/pppppppP/Q7/8/8/8/PPPPPPP1/RNBQKBNR w KQkq - 0 1");
+console.clear();
+
+document.getElementById("fen").value = encode();
+
+var freezeBoard = true;
+var humanSide = false;
+
 var rows = [];
 
 var selected = null;
-
 var sel1 = null;
 var sel2 = null;
 
@@ -35,6 +34,8 @@ var movesFromSelected = [];
 var book = new Map();
 
 const TIME = 1500;
+
+var promotionSquare = -1;
 
 function init() {
     document.getElementById("perft").onclick = () => window.location.replace("./perft.html");
@@ -157,6 +158,39 @@ function init() {
 
     for (let row of rows)
         document.getElementById("board")?.appendChild(row);
+
+    document.getElementById("queen").onclick = () => {
+        freezeBoard = false;
+        board[promotionSquare] = getColor(board[promotionSquare]) ? PIECES.indexOf("q") : PIECES.indexOf("Q");
+        update();
+        computerMove();
+        document.getElementById("promotion").removeAttribute("open");
+    }
+    document.getElementById("rook").onclick = () => {
+        freezeBoard = false;
+        board[promotionSquare] = getColor(board[promotionSquare]) ? PIECES.indexOf("r") : PIECES.indexOf("R");
+        update();
+        computerMove();
+        document.getElementById("promotion").removeAttribute("open");
+    }
+    document.getElementById("bishop").onclick = () => {
+        freezeBoard = false;
+        board[promotionSquare] = getColor(board[promotionSquare]) ? PIECES.indexOf("b") : PIECES.indexOf("B");
+        update();
+        computerMove();
+        document.getElementById("promotion").removeAttribute("open");
+    }
+    document.getElementById("knight").onclick = () => {
+        freezeBoard = false;
+        board[promotionSquare] = getColor(board[promotionSquare]) ? PIECES.indexOf("n") : PIECES.indexOf("N");
+        update();
+        computerMove();
+        document.getElementById("promotion").removeAttribute("open");
+    }
+
+    document.getElementById("close").onclick = () => {
+        document.getElementById("result").removeAttribute("open");
+    }
 }
 function update() {
     for (let piece of document.querySelectorAll(".piece"))
@@ -178,7 +212,7 @@ function update() {
 }    
 
 function click(current) {
-    if (gameOver)
+    if (freezeBoard)
         return;
 
     if (selected == null) {
@@ -189,13 +223,13 @@ function click(current) {
             for (let move of moves) {
                 if (move.source == current) {
                     movesFromSelected.push(move);
-                    if (move.promote != 0 && move.promote != 3 && move.promote != 5)
-                        continue;
-                    const image = document.createElement("img");
-                    image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; opacity: 50%`);
-                    image.src = board[move.dest] > 0 ? "./Assets/capture.png" : "./Assets/highlight.png";
-                    image.className = "highlight";
-                    document.getElementById(move.dest.toString())?.appendChild(image);
+                    if (move.promote == 0 || move.promote == 5 || move.promote == 11) {
+                        const image = document.createElement("img");
+                        image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; opacity: 50%`);
+                        image.src = board[move.dest] > 0 ? "./Assets/capture.png" : "./Assets/highlight.png";
+                        image.className = "highlight";
+                        document.getElementById(move.dest.toString())?.appendChild(image);
+                    }
                 }
             }
         }
@@ -213,7 +247,9 @@ function click(current) {
             if (move.promote != 0) {
                 promote = true;
                 move.promote = 0;
-                pickPromotion(move.dest);
+                freezeBoard = true;
+                promotionSquare = move.dest;
+                document.getElementById("promotion").setAttribute("open", "");
             }
 
             document.getElementById(selected.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; 
@@ -277,13 +313,13 @@ function click(current) {
         for (let move of moves) {
             if (move.source == current) {
                 movesFromSelected.push(move);
-                if (move.promote != 0 && move.promote != 3 && move.promote != 5)
-                    continue;
-                const image = document.createElement("img");
-                image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; opacity: 50%`);
-                image.src = board[move.dest] > 0 ? "./Assets/capture.png" : "./Assets/highlight.png";
-                image.className = "highlight";
-                document.getElementById(move.dest.toString())?.appendChild(image);
+                if (move.promote == 0 || move.promote == 5 || move.promote == 11) {
+                    const image = document.createElement("img");
+                    image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; opacity: 50%`);
+                    image.src = board[move.dest] > 0 ? "./Assets/capture.png" : "./Assets/highlight.png";
+                    image.className = "highlight";
+                    document.getElementById(move.dest.toString())?.appendChild(image);
+                }
             }
         }
     }
@@ -372,88 +408,33 @@ function highlightLastMove(move) {
         background-color: ${isLight(sel2) ? LAST_MOVE_LIGHT : LAST_MOVE_DARK}`);
 }
 
-function pickSide() {
-    const whiteButton = document.createElement("button");
-    whiteButton.onclick = () => {
-        gameOver = false;
-        colorDialog.removeAttribute("open");
+function initSidePicker() {
+    document.getElementById("whiteButton").onclick = () => {
+        freezeBoard = false;
+        document.getElementById("color").removeAttribute("open");
         moves = moveGen();
         init();
         if (turn != humanSide)
             computerMove();
     }
-    whiteButton.textContent = "White";
-
-    const blackButton = document.createElement("button");
-    blackButton.onclick = () => {
+    document.getElementById("blackButton").onclick = () => {
         humanSide = true;
-        gameOver = false;
-        colorDialog.removeAttribute("open");
+        freezeBoard = false;
+        document.getElementById("color").removeAttribute("open");
         moves = moveGen();
         init();
         if (turn != humanSide)
             computerMove();
     }
-    blackButton.textContent = "Black";
 
-    const colorDialog = document.getElementById("color");
-    colorDialog.appendChild(whiteButton);
-    colorDialog.appendChild(blackButton);
-    colorDialog.setAttribute("open", "");
+    document.getElementById("color").setAttribute("open", "");
 }
 
-function pickPromotion(square) {
-    gameOver = true;
-
-    const queen = document.createElement("button");
-    queen.onclick = () => {
-        gameOver = false;
-        board[square] = getColor(board[square]) ? PIECES.indexOf("q") : PIECES.indexOf("Q");
-        update();
-        computerMove();
-        promotionDialog.removeAttribute("open");
-    }
-    queen.textContent = "Queen";
-
-    const rook = document.createElement("button");
-    rook.onclick = () => {
-        gameOver = false;
-        board[square] = getColor(board[square]) ? PIECES.indexOf("r") : PIECES.indexOf("R");
-        update();
-        computerMove();
-        promotionDialog.removeAttribute("open");
-    }
-    rook.textContent = "Rook";
-
-    const bishop = document.createElement("button");
-    bishop.onclick = () => {
-        gameOver = false;
-        board[square] = getColor(board[square]) ? PIECES.indexOf("b") : PIECES.indexOf("B");
-        update();
-        computerMove();
-        promotionDialog.removeAttribute("open");
-    }
-    bishop.textContent = "Bishop";
-
-    const knight = document.createElement("button");
-    knight.onclick = () => {
-        gameOver = false;
-        board[square] = getColor(board[square]) ? PIECES.indexOf("n") : PIECES.indexOf("N");
-        update();
-        computerMove();
-        promotionDialog.removeAttribute("open");
-    }
-    knight.textContent = "Knight";
-
-    const promotionDialog = document.getElementById("promotion");
-    promotionDialog.innerHTML = "<p>Select promotion piece:</p>";
-    promotionDialog.appendChild(queen);
-    promotionDialog.appendChild(rook);
-    promotionDialog.appendChild(bishop);
-    promotionDialog.appendChild(knight);
-    promotionDialog.setAttribute("open", "");
+document.getElementById("reset").onclick = () => {
+    init();
+    update();
 }
 
-initOpeningBook();
 init();
-pickSide();
+initSidePicker();
+initOpeningBook();

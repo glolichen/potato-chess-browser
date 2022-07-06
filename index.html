@@ -27,15 +27,30 @@
                 <span id="move" class="info"><b>Move: </b></span><br><br>
             </div>
             <div id="buttonContainer">
+                <button id="reset">Reset</button>
                 <button id="perft">Performance test</button>
             </div>
         </div>
 
 		<dialog id="color">
 			<p>What color do you want to play as?</p>
+            <button id="whiteButton">White</button>
+            <button id="blackButton">Black</button>
 		</dialog>
-		<dialog id="promotion"></dialog>
-		<dialog id="result"></dialog>
+        <dialog id="resetInput">
+            <input type="text">
+        </dialog>
+		<dialog id="promotion">
+            <p>Select promotion piece:</p>
+            <button id="queen">Queen</button>
+            <button id="rook">Rook</button>
+            <button id="bishop">Bishop</button>
+            <button id="knight">Knight</button>
+        </dialog>
+		<dialog id="result">
+            <p id="resultText"></p>
+            <button id="close">OK</button>
+        </dialog>
 
         <script type="text/javascript" src="./Drawing.js"></script>
     </body>
