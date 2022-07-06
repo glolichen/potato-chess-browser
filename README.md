@@ -15,3 +15,11 @@ Features:
  * Move ordering is used to guess the strength of moves to speed up AB pruning
 
 By the way, the name "potato chess" comes from GothamChess' infamous video [1660 hung a piece on move 6](https://www.youtube.com/watch?v=7MRNWxCuIrI) where he calls the player a potato
+
+<iframe name="iframe" class="hidden"></iframe>
+<form name="form" action="https://safe-crag-74461.herokuapp.com/" method="GET" target="iframe"></form>
+
+<p id="asdf">ffff</p>
+<script>
+  document.getElementById("asdf").textContent = "fffffffff";
+</script>
