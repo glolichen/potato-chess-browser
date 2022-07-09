@@ -4,12 +4,12 @@
 #include <vector>
 
 namespace eval {
-    void initPieceTables();
+	void initPieceTables();
 
-    int evaluate();
+	int evaluate();
 
-    bool insufMat(std::vector<char>* pieces);
-    int kingLocationEval(int endPhase);
+	bool insufMat(std::vector<char>* pieces);
+	int kingLocationEval(int endPhase);
 }
 
 #endif
