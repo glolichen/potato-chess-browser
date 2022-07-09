@@ -5,23 +5,23 @@
 #include "moves.h"
 
 namespace search {
-    struct SearchResult {
-        moves::Move move;
-        int depth;
-        int eval;
-        bool mateFound;
-    };
+	struct SearchResult {
+		moves::Move move;
+		int depth;
+		int eval;
+		bool mateFound;
+	};
 
-    extern moves::Move topMove;
-    extern int topPosition[144];
+	extern moves::Move topMove;
+	extern int topPosition[144];
 
-    int minimax(int depth, int alpha, int beta, int depthFromStart);
+	int minimax(int depth, int alpha, int beta, int depthFromStart);
 
-    int quiscence(int alpha, int beta);
+	int quiscence(int alpha, int beta);
 
-    SearchResult search(int timeMS);
+	SearchResult search(int timeMS);
 
-    bool evalIsMate(int eval);
+	bool evalIsMate(int eval);
 }
 
 #endif

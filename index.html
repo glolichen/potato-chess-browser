@@ -1,61 +1,61 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="shortcut icon" type="image/x-icon" href="./Assets/favicon.ico?">
-        <link rel="stylesheet" type="text/css" href="./style.css">
-        <title>Potato chess</title>
-    </head>
-    <body onload="document.forms['form'].submit()">
-        <iframe name="iframe" class="hidden"></iframe>
-        <form name="form" action="https://safe-crag-74461.herokuapp.com/" method="GET" target="iframe"></form>
+	<head>
+		<link rel="shortcut icon" type="image/x-icon" href="./Assets/favicon.ico?">
+		<link rel="stylesheet" type="text/css" href="./style.css">
+		<title>Potato chess</title>
+	</head>
+	<body onload="document.forms['form'].submit()">
+		<iframe name="iframe" class="hidden"></iframe>
+		<form name="form" action="https://safe-crag-74461.herokuapp.com/" method="GET" target="iframe"></form>
 		
-        <script type="text/javascript" src="./engine.js"></script>
-        <script type="text/javascript" src="./Pieces.js"></script>
-        <script type="text/javascript" src="./Board.js"></script>
-        <script type="text/javascript" src="./Moves.js"></script>
-        <script type="text/javascript" src="./MiscUtils.js"></script>
+		<script type="text/javascript" src="./engine.js"></script>
+		<script type="text/javascript" src="./Pieces.js"></script>
+		<script type="text/javascript" src="./Board.js"></script>
+		<script type="text/javascript" src="./Moves.js"></script>
+		<script type="text/javascript" src="./MiscUtils.js"></script>
 
 		<div id="container">
-            <br><br><br><br><br>
-            <table id="board"></table>
-            <br>
-            <input type="text" id="fen" class="fen" readonly>
-            <br><hr><br>
-            <div style="text-align: center;">
-                <span id="depth" class="info"><b>Depth: </b></span><br>
-                <span id="eval" class="info"><b>Evaluation: </b></span><br>
-                <span id="move" class="info"><b>Move: </b></span><br><br>
-            </div>
-            <div id="buttonContainer">
-                <button id="reset">Reset</button>
-                <button id="perft">Performance test</button>
-            </div>
-        </div>
+			<br><br><br><br><br>
+			<table id="board"></table>
+			<br>
+			<input type="text" id="fen" class="fen" readonly>
+			<br><hr><br>
+			<div style="text-align: center;">
+				<span id="depth" class="info"><b>Depth: </b></span><br>
+				<span id="eval" class="info"><b>Evaluation: </b></span><br>
+				<span id="move" class="info"><b>Move: </b></span><br><br>
+			</div>
+			<div id="buttonContainer">
+				<button id="reset">Reset</button>
+				<button id="perft">Performance test</button>
+			</div>
+		</div>
 
 		<dialog id="color">
 			<p>What color do you want to play as?</p>
-            <button id="whiteButton">White</button>
-            <button id="blackButton">Black</button>
+			<button id="whiteButton">White</button>
+			<button id="blackButton">Black</button>
 		</dialog>
-        <dialog id="resetInput">
-            <p>Enter new FEN:</p>
-            <input type="text" id="resetFenInput" class="fen">
-            <br><br>
-            <button id="closeButton">Close</button>
-            <button id="loadButton">Load</button>
-        </dialog>
+		<dialog id="resetInput">
+			<p>Enter new FEN:</p>
+			<input type="text" id="resetFenInput" class="fen">
+			<br><br>
+			<button id="closeButton">Close</button>
+			<button id="loadButton">Load</button>
+		</dialog>
 		<dialog id="promotion">
-            <p>Select promotion piece:</p>
-            <button id="queen">Queen</button>
-            <button id="rook">Rook</button>
-            <button id="bishop">Bishop</button>
-            <button id="knight">Knight</button>
-        </dialog>
+			<p>Select promotion piece:</p>
+			<button id="queen">Queen</button>
+			<button id="rook">Rook</button>
+			<button id="bishop">Bishop</button>
+			<button id="knight">Knight</button>
+		</dialog>
 		<dialog id="result">
-            <p id="resultText"></p>
-            <button id="close">OK</button>
-        </dialog>
+			<p id="resultText"></p>
+			<button id="close">OK</button>
+		</dialog>
 
-        <script type="text/javascript" src="./Drawing.js"></script>
-    </body>
+		<script type="text/javascript" src="./Drawing.js"></script>
+	</body>
 </html>

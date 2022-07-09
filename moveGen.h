@@ -6,9 +6,9 @@
 #include "moves.h"
 
 namespace moveGen {
-    void moveGen(std::vector<moves::Move>* moves);
-    std::vector<moves::Move> moveGenForJS();
-    void moveGenWithOrdering(std::vector<moves::Move>* moves);
+	void moveGen(std::vector<moves::Move>* moves);
+	std::vector<moves::Move> moveGenForJS();
+	void moveGenWithOrdering(std::vector<moves::Move>* moves);
 }
 
 #endif

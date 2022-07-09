@@ -1,75 +1,75 @@
 @font-face {
-    font-family: noto;
-    src: url(./Assets/NotoSans-Regular.ttf);
+	font-family: noto;
+	src: url(./Assets/NotoSans-Regular.ttf);
 }
 
 * {
-    font-family: noto;
+	font-family: noto;
 }
 body {
-    margin: 1%;
+	margin: 1%;
 }
 button {
-    font-size: 1.1rem;
+	font-size: 1.1rem;
 }
 dialog {
-    text-align: center;
-    padding-bottom: 1.5%;
+	text-align: center;
+	padding-bottom: 1.5%;
 }
 img {
-    position: absolute;
-    pointer-events: none;
+	position: absolute;
+	pointer-events: none;
 }
 h2 {
-    font-size: x-large;
+	font-size: x-large;
 }
 hr {
-    width: 100%;
+	width: 100%;
 }
 label {
-    font-size: 120%;
+	font-size: 120%;
 }
 p {
-    font-size: large;
+	font-size: large;
 }
 p, dialog {
-    font-size: 1.2rem;
+	font-size: 1.2rem;
 }
 table {
-    border-spacing: 0px;
+	border-spacing: 0px;
 }
 td {
-    padding: 0px;
+	padding: 0px;
 }
 td, img {
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -o-user-select: none;
-    user-select: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 
 .center {
-    text-align: center;
+	text-align: center;
 }
 .fen {
-    font-size: 1.2rem;
-    width: 45rem;
-    text-align: center;
+	font-size: 1.2rem;
+	width: 45rem;
+	text-align: center;
 }
 .hidden {
-    position: absolute;
-    right: 100000000px;
-    opacity: 0;
+	position: absolute;
+	right: 100000000px;
+	opacity: 0;
 }
 .info {
-    font-size: large;
+	font-size: large;
 }
 .red {
-    color: red;
+	color: red;
 }
 .square {
-    position: relative;
+	position: relative;
 }
 
 #buttonContainer {
@@ -77,37 +77,37 @@ td, img {
 	justify-content: center;
 }
 #color {
-    padding-left: 3%;
-    padding-right: 3%;
+	padding-left: 3%;
+	padding-right: 3%;
 }
 #board {
-    position: relative; 
-    left: 50%;
-    transform: translateX(-50%);
+	position: relative; 
+	left: 50%;
+	transform: translateX(-50%);
 }
 #container {
-    position: absolute;
-    left: 50%;
-    top: 40%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+	position: absolute;
+	left: 50%;
+	top: 40%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
 }
 #fenInput, #depthInput {
-    font-size: 120%;
-    width: 55rem;
-    text-align: center;
+	font-size: 120%;
+	width: 55rem;
+	text-align: center;
 }
 #depthInput {
-    width: 3.5%;
+	width: 3.5%;
 }
 #promotion {
-    padding-left: 2%;
-    padding-right: 2%;
+	padding-left: 2%;
+	padding-right: 2%;
 }
 #result {
-    padding-left: 4%;
-    padding-right: 4%;
+	padding-left: 4%;
+	padding-right: 4%;
 }
 #startButton {
-    font-size: medium;
+	font-size: medium;
 }
