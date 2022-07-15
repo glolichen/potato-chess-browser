@@ -10,7 +10,14 @@ body {
 	margin: 1%;
 }
 button {
-	font-size: 1.1rem;
+	font-size: 1.2rem;
+	border-radius: 1rem;
+	height: 2.5rem;
+	padding-left: 0.75rem;
+	padding-right: 0.75rem;
+	border-color: #eeeeee;
+	background-color: #eeeeee;
+	color: #4199d8;
 }
 dialog {
 	text-align: center;
@@ -109,5 +116,5 @@ td, img {
 	padding-right: 4%;
 }
 #startButton {
-	font-size: medium;
+	font-size: 1.5rem;
 }
