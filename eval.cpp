@@ -4,8 +4,8 @@
 #include "board.h"
 #include "eval.h"
 
-int midValues[6] = { 100, 320, 333, 510, 880,  0 }; // alphazero piece values
-int endValues[6] = { 120, 310, 340, 510, 1000,  0 };
+int midValues[6] = { 100, 330, 343, 510, 880,  0 }; // alphazero piece values
+int endValues[6] = { 120, 320, 350, 510, 1000,  0 };
 
 // piece table values from Rofchade by Ronald Friederich
 // https://www.chessprogramming.org/RofChade
