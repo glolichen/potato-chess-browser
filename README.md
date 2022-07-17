@@ -4,7 +4,8 @@ A chess engine written in C++ and compiled to Web Assembly
 
 Features:
  * Written in C++ and compiled to web assembly using [Emscripten](https://github.com/emscripten-core/emscripten)
-   * Compiled using the command `em++ -lembind -o engine.js -O3 *.cpp`
+   * Compiled using the command `em++ -O3 -lembind -o engine.js *.cpp -fno-signed-zeros -freciprocal-math -ffp-contract=fast -ffinite-math-only -ffast-math`
+   * Yes, I know options like `-ffast-math` will break floating point arithmetic, but none of them are used in my code and I see a small but real performance increase by using them
  * Can also be used as a desktop app (electron) for maximum performance
  * 144-long array board representation (because I don't understand bitboards)
  * 22 million nodes per second move generator
