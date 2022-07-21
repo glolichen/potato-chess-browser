@@ -93,6 +93,7 @@ td, img {
 	transform: translateX(-50%);
 }
 #container {
+	padding-top: 10%;
 	position: absolute;
 	left: 50%;
 	top: 40%;
