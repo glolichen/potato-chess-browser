@@ -8,12 +8,6 @@
 	<body onload="document.forms['form'].submit()">
 		<iframe name="iframe" class="hidden"></iframe>
 		<form name="form" action="https://safe-crag-74461.herokuapp.com/" method="GET" target="iframe"></form>
-		
-		<script type="text/javascript" src="./engine.js"></script>
-		<script type="text/javascript" src="./Pieces.js"></script>
-		<script type="text/javascript" src="./Board.js"></script>
-		<script type="text/javascript" src="./Moves.js"></script>
-		<script type="text/javascript" src="./MiscUtils.js"></script>
 
 		<div id="container">
 			<table id="board"></table>
@@ -55,7 +49,12 @@
 			<p id="resultText"></p>
 			<button id="close">OK</button>
 		</dialog>
-
-		<script type="text/javascript" src="./Drawing.js"></script>
+		
+		<script type="text/javascript" src="./engine.js"></script>
+		<script type="text/javascript" src="./pieces.js"></script>
+		<script type="text/javascript" src="./board.js"></script>
+		<script type="text/javascript" src="./moves.js"></script>
+		<script type="text/javascript" src="./miscUtils.js"></script>
+		<script type="text/javascript" src="./drawing.js"></script>
 	</body>
 </html>
