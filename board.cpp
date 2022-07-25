@@ -153,7 +153,7 @@ std::string board::encode() {
 }
 
 void board::printBoard() {
-	std::cout << "+---+---+---+---+---+---+---+---+" << "\n";
+	std::cout << "┌───┬───┬───┬───┬───┬───┬───┬───┐" << "\n";
 
 	for (int i = 2; i < 10; i++) {
 		for (int j = 2; j < 10; j++) {
@@ -163,9 +163,12 @@ void board::printBoard() {
 			if (board::board[index] != 0)
 				print = (char) (board::board[index]);
 
-			std::cout << "| " << print << " ";
+			std::cout << "│ " << print << " ";
 		}
-		std::cout << "|" << "\n" << "+---+---+---+---+---+---+---+---+" << "\n";
+		if (i < 9)
+			std::cout << "│\n├───┼───┼───┼───┼───┼───┼───┼───┤" << "\n";
+		else
+			std::cout << "│\n└───┴───┴───┴───┴───┴───┴───┴───┘" << "\n";
 	}
 
 	std::cout << " ";
