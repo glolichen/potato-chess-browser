@@ -153,7 +153,7 @@ std::string board::encode() {
 }
 
 void board::printBoard() {
-	std::cout << "┌───┬───┬───┬───┬───┬───┬───┬───┐" << "\n";
+	std::cout << "╭───┬───┬───┬───┬───┬───┬───┬───╮" << "\n";
 
 	for (int i = 2; i < 10; i++) {
 		for (int j = 2; j < 10; j++) {
@@ -165,19 +165,21 @@ void board::printBoard() {
 
 			std::cout << "│ " << print << " ";
 		}
+
+		std::cout << "│";
+
 		if (i < 9)
-			std::cout << "│\n├───┼───┼───┼───┼───┼───┼───┼───┤" << "\n";
+			std::cout << "\n├───┼───┼───┼───┼───┼───┼───┼───┤\n";
 		else
-			std::cout << "│\n└───┴───┴───┴───┴───┴───┴───┴───┘" << "\n";
+			std::cout << "\n╰───┴───┴───┴───┴───┴───┴───┴───╯\n";
 	}
 
-	std::cout << " ";
-	std::cout << "\n" << "FEN: " << board::encode();
-	std::cout << "\n" << "White Kingside: " << board::K << "	  " << "White Queenside: " << board::Q;
-	std::cout << "\n" << "Black Kingside: " << board::k << "	  " << "Black Queenside: " << board::q;
+	std::cout << "\nFEN: " << board::encode();
+	std::cout << "\nWhite Kingside: " << board::K << "	  " << "White Queenside: " << board::Q;
+	std::cout << "\nBlack Kingside: " << board::k << "	  " << "Black Queenside: " << board::q;
 
-	std::cout << "\n" << "En Passant Square: " << board::toXY(board::enPassant);
-	std::cout << "\n" << "Turn: " << (board::turn ? "Black" : "White");
+	std::cout << "\nEn Passant Square: " << board::toXY(board::enPassant);
+	std::cout << "\nTurn: " << (board::turn ? "Black" : "White");
 
 	std::cout << "\n";
 }
