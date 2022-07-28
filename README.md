@@ -14,5 +14,6 @@ Features:
  * Tapered evaluation (uses game phase to "weigh" the importance of midgame score to endgame score) with piece tables
  * Minimax search with Alpha-Beta pruning
  * Move ordering is used to guess the strength of moves to speed up AB pruning
+ * Syzygy endgame tablebase (powered by [Lichess](https://github.com/lichess-org/lila-tablebase))
 
 By the way, the name "potato chess" comes from GothamChess' infamous video [1660 hung a piece on move 6](https://www.youtube.com/watch?v=7MRNWxCuIrI) where he calls the player a potato

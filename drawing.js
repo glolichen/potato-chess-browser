@@ -15,6 +15,7 @@ const LAST_MOVE_DARK = "#aaa23a";
 const LAST_MOVE_LIGHT = "#cdd26a";
 
 decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+// decode("8/8/8/4k3/8/8/7P/7K w - - 0 1");
 console.clear();
 
 document.getElementById("fen").value = encode();
@@ -328,70 +329,6 @@ function click(current) {
 	}
 	else
 		selected = null;
-}
-
-function computerMove() {
-	let bookMoves = book.get(encode().split(" ")[0]);
-	if (bookMoves != undefined) {
-		let bookMove = bookMoves[Math.floor(Math.random() * bookMoves.length)];
-		for (let move of moveGen()) {
-			if (moveToString(move) == bookMove) {
-				document.getElementById("depth").innerHTML = "<b>Depth: Book Move</b>";
-				document.getElementById("eval").innerHTML = "<b>Evaluation: -</b>";
-				document.getElementById("move").innerHTML = `<b>Move: ${bookMove}</b>`;
-
-				makeMove(move);
-				highlightLastMove(move);
-				moves = moveGen();
-				update();
-
-				return;
-			}
-		}
-	}
-
-	const worker = new Worker("./searchWorker.js");
-	worker.postMessage([encode(), TIME]);
-	worker.onmessage = e => {
-		makeMove(e.data[0]);
-
-		let text = "";
-		let gameEnd = false;
-		if (fiftyMoveClock >= 50)  {
-			text = "Draw by 50 move rule";
-			gameEnd = true;
-		}
-		if (insufMat())  {
-			text = "Draw by insufficient material";
-			gameEnd = true;
-		}
-		if (gameEnd) {
-			let paragraph = document.createElement("p");
-			paragraph.textContent = text;
-			
-			let button = document.createElement("button");
-			button.onclick = () => {
-				result.removeAttribute("open");
-			}
-			button.textContent = "OK";
-
-			result.append(paragraph);
-			result.append(button);
-
-			setTimeout(() => result.setAttribute("open", ""), 100);
-		}
-
-		document.getElementById("fen").value = encode();
-		highlightLastMove(e.data[0]);
-
-		document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
-		document.getElementById("eval").innerHTML = `<b>Evaluation: ${e.data[2] > 0 ? "+" : ""}${e.data[2] / 100}</b>`;
-
-		document.getElementById("move").innerHTML = `<b>Move: ${moveToString(e.data[0])}</b>`;
-
-		update();
-		moves = moveGen();
-	}
 }
 
 function highlightLastMove(move) {
