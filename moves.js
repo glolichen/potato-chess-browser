@@ -9,6 +9,7 @@ function makeMove(move) {
 	}
 	else
 		document.getElementById("pgn").textContent += " " + moveToSAN(move) + "\n";
+	document.getElementById("pgn").scrollTop = document.getElementById("pgn").scrollHeight;
 
     if (['p', 'P'].includes(PIECES[board[move.source]]) || move.capture != 0)
         fiftyMoveClock = 0;
@@ -134,7 +135,6 @@ function moveToSAN(move) {
 	let fileDes = "";
 	let rankDes = "";
 	for (let otherMove of legalMoves) {
-		// console.log(moveToUCI(otherMove));
 		if (PIECES[board[otherMove.source]].toUpperCase() == piece && otherMove.dest == move.dest) {
 			if (moveToUCI(otherMove) == moveToUCI(move))
 				continue;
