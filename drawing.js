@@ -163,6 +163,7 @@ function init() {
 	document.getElementById("queen").onclick = () => {
 		freezeBoard = false;
 		board[promotionSquare] = getColor(board[promotionSquare]) ? PIECES.indexOf("q") : PIECES.indexOf("Q");
+		document.getElementById("pgn").textContent += "=" + PIECES[board[promotionSquare]];
 		update();
 		computerMove();
 		document.getElementById("promotion").removeAttribute("open");
@@ -170,6 +171,7 @@ function init() {
 	document.getElementById("rook").onclick = () => {
 		freezeBoard = false;
 		board[promotionSquare] = getColor(board[promotionSquare]) ? PIECES.indexOf("r") : PIECES.indexOf("R");
+		document.getElementById("pgn").textContent += "=" + PIECES[board[promotionSquare]];
 		update();
 		computerMove();
 		document.getElementById("promotion").removeAttribute("open");
@@ -177,6 +179,7 @@ function init() {
 	document.getElementById("bishop").onclick = () => {
 		freezeBoard = false;
 		board[promotionSquare] = getColor(board[promotionSquare]) ? PIECES.indexOf("b") : PIECES.indexOf("B");
+		document.getElementById("pgn").textContent += "=" + PIECES[board[promotionSquare]];
 		update();
 		computerMove();
 		document.getElementById("promotion").removeAttribute("open");
@@ -184,6 +187,7 @@ function init() {
 	document.getElementById("knight").onclick = () => {
 		freezeBoard = false;
 		board[promotionSquare] = getColor(board[promotionSquare]) ? PIECES.indexOf("n") : PIECES.indexOf("N");
+		document.getElementById("pgn").textContent += "=" + PIECES[board[promotionSquare]];
 		update();
 		computerMove();
 		document.getElementById("promotion").removeAttribute("open");
@@ -394,7 +398,7 @@ document.getElementById("loadButton").onclick = () => {
 document.getElementById("closeButton").onclick = () => {
 	document.getElementById("resetInput").removeAttribute("open");
 }
-document.getElementById("pgn").setAttribute("style", `width: ${SIZE * 3}px; height: ${SIZE * 8 - 9}px;`);
+document.getElementById("pgn").setAttribute("style", `width: ${SIZE * 2}px; height: ${SIZE * 8 - 9}px;`);
 
 init();
 initSidePicker();
