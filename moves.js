@@ -109,7 +109,7 @@ function moveToString(move) {
     asString += notationToSAN(move.source);
     asString += notationToSAN(move.dest);
     if (move.promote != 0)
-        asString += PIECES[move.promote];
+        asString += PIECES[move.promote].toLowerCase();
     return asString;
 }
 

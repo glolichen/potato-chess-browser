@@ -36,7 +36,6 @@ var book = new Map();
 
 const TIME = 1500;
 
-var initialized = false;
 var promotionSquare = -1;
 
 function init() {
@@ -350,7 +349,6 @@ function highlightLastMove(move) {
 
 function initSidePicker() {
 	document.getElementById("whiteButton").onclick = () => {
-		initialized = true;
 		freezeBoard = false;
 		document.getElementById("color").removeAttribute("open");
 		moves = moveGen();
@@ -359,7 +357,6 @@ function initSidePicker() {
 			computerMove();
 	}
 	document.getElementById("blackButton").onclick = () => {
-		initialized = true;
 		humanSide = true;
 		freezeBoard = false;
 		document.getElementById("color").removeAttribute("open");
@@ -373,11 +370,9 @@ function initSidePicker() {
 }
 
 document.getElementById("reset").onclick = () => {
-	if (initialized) {
-		document.getElementById("resetInput").setAttribute("open", "");
-		init();
-		update();
-	}
+	document.getElementById("resetInput").setAttribute("open", "");
+	init();
+	update();
 }
 document.getElementById("loadButton").onclick = () => {
 	let fen = document.getElementById("resetFenInput").value;

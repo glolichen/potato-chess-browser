@@ -63,10 +63,11 @@ function computerMove() {
 			pieceCount++;
 	}
 
-	if (pieceCount <= 6) {
+	if (pieceCount <= 7) {
 		fetch(`https://tablebase.lichess.ovh/standard?fen=${encode()}`).then(response => response.json()).then(response => {
 			let baseMove = response.moves[0].uci;
 			let allMoves = moveGen();
+			console.log(baseMove);
 			for (let move of allMoves) {
 				if (baseMove == moveToString(move)) {
 					let result = "Draw";
