@@ -42,7 +42,7 @@ function computerMove() {
 	if (bookMoves != undefined) {
 		let bookMove = bookMoves[Math.floor(Math.random() * bookMoves.length)];
 		for (let move of moveGen()) {
-			if (moveToString(move) == bookMove) {
+			if (moveToUCI(move) == bookMove) {
 				document.getElementById("depth").innerHTML = "<b>Depth: Book Move</b>";
 				document.getElementById("eval").innerHTML = "<b>Evaluation: -</b>";
 				document.getElementById("move").innerHTML = `<b>Move: ${bookMove}</b>`;
@@ -67,9 +67,8 @@ function computerMove() {
 		fetch(`https://tablebase.lichess.ovh/standard?fen=${encode()}`).then(response => response.json()).then(response => {
 			let baseMove = response.moves[0].uci;
 			let allMoves = moveGen();
-			console.log(baseMove);
 			for (let move of allMoves) {
-				if (baseMove == moveToString(move)) {
+				if (baseMove == moveToUCI(move)) {
 					let result = "Draw";
 					let category = response.moves[0].category;
 					if (category == "win")
@@ -141,7 +140,7 @@ function computerMove() {
 		document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
 		document.getElementById("eval").innerHTML = `<b>Evaluation: ${e.data[2] > 0 ? "+" : ""}${e.data[2] / 100}</b>`;
 
-		document.getElementById("move").innerHTML = `<b>Move: ${moveToString(e.data[0])}</b>`;
+		document.getElementById("move").innerHTML = `<b>Move: ${moveToUCI(e.data[0])}</b>`;
 
 		update();
 		moves = moveGen();

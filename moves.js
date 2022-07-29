@@ -104,7 +104,21 @@ function castle(dir) {
     }
 }
 
-function moveToString(move) {
+function moveToSAN(move) {
+	let dest = notationToSAN(move.dest);
+	let piece = PIECES[board[move.source]].toUpperCase();
+	let promote = "";
+	if (piece == "P") {
+		piece = "";
+		if (move.capture != 0)
+			piece = notationToSAN(move.source)[0];
+		if (move.promote != 0)
+			promote = "=" + PIECES[move.promote];
+	}
+	
+	return piece + (move.capture == 0 ? "" : "x") + dest + promote; 
+}
+function moveToUCI(move) {
 	let asString = "";
     asString += notationToSAN(move.source);
     asString += notationToSAN(move.dest);
