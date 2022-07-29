@@ -222,7 +222,7 @@ search::SearchResult search::search(int timeMS) {
 	int depth = 1;
 	bool isMate = false;
 
-	for (; depth <= 8; depth++) {
+	for (; depth <= 11; depth++) {
 		int eval = search::minimax(depth, INT_MIN, INT_MAX, 0);
 		topMoveNull = false;
 
