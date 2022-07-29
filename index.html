@@ -10,15 +10,27 @@
 		<img src="./Assets/capture.png" class="hidden">
 
 		<div id="container">
-			<table id="board"></table>
+			<table>
+				<tr>
+					<td>
+						<table id="board"></table>
+					</td>
+					<td>
+						<pre>   </pre>
+					</td>
+					<td>
+						<textarea id="pgn" readonly></textarea>
+					</td>
+				</tr>
+			</table>
 			<br>
 			<input type="text" id="fen" class="fen" readonly>
 			<br><hr><br>
 			<div style="text-align: center;">
 				<span id="depth" class="info"><b>Depth: </b></span><br>
 				<span id="eval" class="info"><b>Evaluation: </b></span><br>
-				<span id="move" class="info"><b>Move: </b></span><br><br>
 			</div>
+			<br>
 			<div id="buttonContainer">
 				<button id="reset">Reset</button>
 				<pre>  </pre>

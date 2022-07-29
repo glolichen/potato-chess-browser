@@ -3,6 +3,13 @@ const WHITE = false;
 const BLACK = true;
 
 function makeMove(move) {
+	if (!turn) {
+		document.getElementById("pgn").textContent += moveClock + ". " + moveToSAN(move);
+		moveClock++;
+	}
+	else
+		document.getElementById("pgn").textContent += " " + moveToSAN(move) + "\n";
+
     if (['p', 'P'].includes(PIECES[board[move.source]]) || move.capture != 0)
         fiftyMoveClock = 0;
     else
@@ -105,7 +112,14 @@ function castle(dir) {
 }
 
 function moveToSAN(move) {
+	if (move.castle == 1)
+		return "O-O";
+	if (move.castle == 2)
+		return "O-O-O";
+
+	let source = notationToSAN(move.source);
 	let dest = notationToSAN(move.dest);
+
 	let piece = PIECES[board[move.source]].toUpperCase();
 	let promote = "";
 	if (piece == "P") {
@@ -115,8 +129,27 @@ function moveToSAN(move) {
 		if (move.promote != 0)
 			promote = "=" + PIECES[move.promote];
 	}
+
+	let legalMoves = moveGen();
+	let fileDes = "";
+	let rankDes = "";
+	for (let otherMove of legalMoves) {
+		// console.log(moveToUCI(otherMove));
+		if (PIECES[board[otherMove.source]].toUpperCase() == piece && otherMove.dest == move.dest) {
+			if (moveToUCI(otherMove) == moveToUCI(move))
+				continue;
+
+			let otherSource = notationToSAN(otherMove.source);
+			if (otherSource[0] == source[0])
+				rankDes = source[1];
+			if (otherSource[1] == source[1])
+				fileDes = source[0];
+		}
+	}
 	
-	return piece + (move.capture == 0 ? "" : "x") + dest + promote; 
+	console.log("=======================");
+
+	return piece + fileDes + rankDes + (move.capture == 0 ? "" : "x") + dest + promote; 
 }
 function moveToUCI(move) {
 	let asString = "";

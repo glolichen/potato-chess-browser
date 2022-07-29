@@ -22,6 +22,7 @@ button {
 dialog {
 	text-align: center;
 	padding-bottom: 1.5%;
+	width: fit-content;
 }
 img {
 	position: absolute;
@@ -43,6 +44,7 @@ p, dialog {
 	font-size: 1.2rem;
 }
 table {
+	margin: 0px;
 	border-spacing: 0px;
 }
 td {
@@ -61,7 +63,7 @@ td, img {
 }
 .fen {
 	font-size: 1.2rem;
-	width: 45rem;
+	width: 100%;
 	text-align: center;
 }
 .hidden {
@@ -93,7 +95,7 @@ td, img {
 	transform: translateX(-50%);
 }
 #container {
-	padding-top: 10%;
+	padding-top: 5%;
 	position: absolute;
 	left: 50%;
 	top: 40%;
@@ -108,9 +110,17 @@ td, img {
 #depthInput {
 	width: 3.5%;
 }
+#pgn {
+	resize: none;
+	text-align: center;
+	font-size: large;
+}
 #promotion {
 	padding-left: 2%;
 	padding-right: 2%;
+}
+#resetFenInput {
+	width: 50rem;
 }
 #result {
 	padding-left: 4%;

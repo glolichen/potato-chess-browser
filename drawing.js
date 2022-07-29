@@ -385,7 +385,6 @@ document.getElementById("loadButton").onclick = () => {
 
 	document.getElementById("depth").innerHTML = "<b>Depth: </b>"
 	document.getElementById("eval").innerHTML = "<b>Eval: </b>"
-	document.getElementById("move").innerHTML = "<b>Move: </b>"
 
 	update();
 	document.getElementById("resetInput").removeAttribute("open");
@@ -395,6 +394,7 @@ document.getElementById("loadButton").onclick = () => {
 document.getElementById("closeButton").onclick = () => {
 	document.getElementById("resetInput").removeAttribute("open");
 }
+document.getElementById("pgn").setAttribute("style", `width: ${SIZE * 3}px; height: ${SIZE * 8 - 9}px;`);
 
 init();
 initSidePicker();

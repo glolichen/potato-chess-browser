@@ -45,7 +45,6 @@ function computerMove() {
 			if (moveToUCI(move) == bookMove) {
 				document.getElementById("depth").innerHTML = "<b>Depth: Book Move</b>";
 				document.getElementById("eval").innerHTML = "<b>Evaluation: -</b>";
-				document.getElementById("move").innerHTML = `<b>Move: ${bookMove}</b>`;
 
 				makeMove(move);
 				highlightLastMove(move);
@@ -78,7 +77,6 @@ function computerMove() {
 
 					document.getElementById("depth").innerHTML = "<b>Depth: Endgame Tablebase Move</b>";
 					document.getElementById("eval").innerHTML = `<b>Evaluation: ${result}</b>`;
-					document.getElementById("move").innerHTML = `<b>Move: ${baseMove}</b>`;
 	
 					makeMove(move);
 					highlightLastMove(move);
@@ -106,6 +104,9 @@ function computerMove() {
 
 	worker.postMessage([encode(), TIME]);
 	worker.onmessage = e => {
+		document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
+		document.getElementById("eval").innerHTML = `<b>Evaluation: ${e.data[2] > 0 ? "+" : ""}${e.data[2] / 100}</b>`;
+		
 		makeMove(e.data[0]);
 
 		let text = "";
@@ -137,11 +138,6 @@ function computerMove() {
 		document.getElementById("fen").value = encode();
 		highlightLastMove(e.data[0]);
 
-		document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
-		document.getElementById("eval").innerHTML = `<b>Evaluation: ${e.data[2] > 0 ? "+" : ""}${e.data[2] / 100}</b>`;
-
-		document.getElementById("move").innerHTML = `<b>Move: ${moveToUCI(e.data[0])}</b>`;
-
 		update();
 		moves = moveGen();
 
@@ -149,7 +145,6 @@ function computerMove() {
 		worker.terminate();
 	}
 }
-
 
 function insufMat() {
 	pieces = [];
