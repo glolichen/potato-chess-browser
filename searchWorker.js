@@ -8,6 +8,8 @@ onmessage = e => {
 		
 		let out = Module["search"](e.data[1]);
 
+		console.log(out);
+
 		let move = new Move(out.move.source, out.move.dest, charToPiece(out.move.capture), out.move.castle, 
 			charToPiece(out.move.promote), convertSignal(out.move.signal), out.move.isEp);
 

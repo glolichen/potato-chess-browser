@@ -94,7 +94,17 @@ function computerMove() {
 		return;
 	}
 
-	const worker = new Worker("./searchWorker.js");
+	let worker = new Worker("./searchWorker.js");
+
+	let done = false;
+
+	setTimeout(() => {
+		if (!done) {
+			console.log("worker stuck, terminated");
+			worker.terminate();
+		}
+	}, TIME + 1000);
+
 	worker.postMessage([encode(), TIME]);
 	worker.onmessage = e => {
 		makeMove(e.data[0]);
@@ -135,6 +145,9 @@ function computerMove() {
 
 		update();
 		moves = moveGen();
+
+		done = true;
+		worker.terminate();
 	}
 }
 
