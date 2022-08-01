@@ -92,13 +92,13 @@ function computerMove() {
 	}
 
 	let worker = new Worker("./searchWorker.js");
-
 	let done = false;
 
 	setTimeout(() => {
 		if (!done) {
-			console.log("worker stuck, terminated");
+			alert("worker stuck, terminated");
 			worker.terminate();
+			computerMove();
 		}
 	}, TIME + 1000);
 

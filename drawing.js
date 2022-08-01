@@ -167,6 +167,7 @@ function init() {
 		update();
 		computerMove();
 		document.getElementById("promotion").removeAttribute("open");
+		moves = moveGen();
 	}
 	document.getElementById("rook").onclick = () => {
 		freezeBoard = false;
@@ -175,6 +176,7 @@ function init() {
 		update();
 		computerMove();
 		document.getElementById("promotion").removeAttribute("open");
+		moves = moveGen();
 	}
 	document.getElementById("bishop").onclick = () => {
 		freezeBoard = false;
@@ -183,6 +185,7 @@ function init() {
 		update();
 		computerMove();
 		document.getElementById("promotion").removeAttribute("open");
+		moves = moveGen();
 	}
 	document.getElementById("knight").onclick = () => {
 		freezeBoard = false;
@@ -191,6 +194,7 @@ function init() {
 		update();
 		computerMove();
 		document.getElementById("promotion").removeAttribute("open");
+		moves = moveGen();
 	}
 
 	document.getElementById("close").onclick = () => {
@@ -200,6 +204,8 @@ function init() {
 	document.getElementById("resetFenInput").value = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 }
 function update() {
+	for (let piece of document.querySelectorAll(".highlight"))
+		piece.remove();
 	for (let piece of document.querySelectorAll(".piece"))
 		piece.remove();
 
@@ -263,6 +269,11 @@ function click(current) {
 				background-color: ${isLight(selected) ? LIGHT : DARK}`);
 			makeMove(move);
 
+			if (promote) {
+				highlightLastMove(move);
+				return;
+			}
+
 			let text = "";
 			let gameEnd = false;
 			if (fiftyMoveClock >= 50)  {
@@ -293,9 +304,6 @@ function click(current) {
 			selected = null;
 
 			highlightLastMove(move);
-
-			for (let piece of document.querySelectorAll(".highlight"))
-				piece.remove();
 
 			update();
 			movesFromSelected.length = 0;
