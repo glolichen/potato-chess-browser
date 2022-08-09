@@ -1,6 +1,6 @@
 const error = document.getElementById("error");
 
-document.getElementById("back").onclick = () => window.location.replace("/index.html");
+document.getElementById("back").onclick = () => window.location.replace("../index.html");
 
 console.clear();
 
@@ -49,7 +49,7 @@ document.getElementById("startButton").onclick = () => {
 
 	document.getElementById("count").textContent = "Working...";
 
-	const worker = new Worker("/js/perftWorker.js");
+	const worker = new Worker("./js/perftWorker.js");
 	running = true;
 	worker.postMessage([fen, depth]);
 	worker.onmessage = e => {

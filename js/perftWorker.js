@@ -1,6 +1,6 @@
 onmessage = e => {
-	importScripts("/js/board.js");
-	importScripts("/js/engine.js");
+	importScripts("./board.js");
+	importScripts("./engine.js");
 	Module["onRuntimeInitialized"] = () => {
 		let out = Module.perft(e.data[0], e.data[1]);
 		postMessage(out);
