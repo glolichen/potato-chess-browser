@@ -15,7 +15,7 @@ namespace search {
 
 	int minimax(bitboard::Position *board, int depth, int alpha, int beta, int depthFromStart);
 
-	SearchResult search(int timeMS);
+	SearchResult search(std::string fen, int timeMS);
 
 	bool evalIsMate(int eval);
 }

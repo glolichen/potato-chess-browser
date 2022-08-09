@@ -33,5 +33,10 @@
   "directory": "/home/jayden/Desktop/Programs/potato-chess/src/bitboard/build",
   "command": "/usr/bin/clang++ -g -o CMakeFiles/potato-chess.dir/perft.cpp.o -c /home/jayden/Desktop/Programs/potato-chess/src/bitboard/perft.cpp",
   "file": "/home/jayden/Desktop/Programs/potato-chess/src/bitboard/perft.cpp"
+},
+{
+  "directory": "/home/jayden/Desktop/Programs/potato-chess/src/bitboard/build",
+  "command": "/usr/bin/clang++ -g -o CMakeFiles/potato-chess.dir/search.cpp.o -c /home/jayden/Desktop/Programs/potato-chess/src/bitboard/search.cpp",
+  "file": "/home/jayden/Desktop/Programs/potato-chess/src/bitboard/search.cpp"
 }
 ]

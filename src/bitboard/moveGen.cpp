@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstring>
 #include <iostream>
 #include <vector>
@@ -502,4 +503,47 @@ void moveGen::moveGen(bitboard::Position *board, std::vector<int> *moves) {
 				moves->push_back(NEW_MOVE(kingPos, 5, 2, 0, 0));
 		}
 	}
+}
+
+int pieceValue[6] = { 100, 320, 340, 500, 900, 0 };
+
+bool sortMoveOrder(std::pair<int, int> o1, std::pair<int, int> o2) {
+    return o1.second > o2.second;
+}
+
+void moveGen::moveGenWithOrdering(bitboard::Position *board, std::vector<int> *moves) {
+    std::vector<int> unorderedMoves;
+    moveGen::moveGen(board, &unorderedMoves);
+
+    std::vector<std::pair<int, int>> score;
+    for (int move : unorderedMoves) {
+        int estimatedScore = 0;
+
+		int source = SOURCE(move);
+		int dest = DEST(move);
+		int promote = PROMOTE(move);
+		int capture = board->mailbox[dest];
+		if (capture >= 6)
+			capture -= 6;
+
+        if (capture != -1) {
+			int moved = board->mailbox[source];
+			if (moved >= 6)
+				moved -= 6;
+			
+            int movedPiece = pieceValue[moved];
+            int capturedPiece = pieceValue[capture];
+
+            estimatedScore = std::max(capturedPiece - movedPiece, 1) * capturedPiece;
+        }
+        if (promote)
+            estimatedScore += 1000;
+
+        score.push_back({move, estimatedScore});
+    }
+
+    std::sort(score.begin(), score.end(), sortMoveOrder);
+
+    for (std::pair<int, int> move : score)
+        moves->push_back(move.first);
 }

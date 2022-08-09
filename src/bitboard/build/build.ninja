@@ -259,6 +259,12 @@ build CMakeFiles/potato-chess.dir/perft.cpp.o: CXX_COMPILER__potato-chess_Debug 
   OBJECT_DIR = CMakeFiles/potato-chess.dir
   OBJECT_FILE_DIR = CMakeFiles/potato-chess.dir
 
+build CMakeFiles/potato-chess.dir/search.cpp.o: CXX_COMPILER__potato-chess_Debug /home/jayden/Desktop/Programs/potato-chess/src/bitboard/search.cpp || cmake_object_order_depends_target_potato-chess
+  DEP_FILE = CMakeFiles/potato-chess.dir/search.cpp.o.d
+  FLAGS = -g
+  OBJECT_DIR = CMakeFiles/potato-chess.dir
+  OBJECT_FILE_DIR = CMakeFiles/potato-chess.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target potato-chess
@@ -267,7 +273,7 @@ build CMakeFiles/potato-chess.dir/perft.cpp.o: CXX_COMPILER__potato-chess_Debug 
 #############################################
 # Link the executable potato-chess
 
-build potato-chess: CXX_EXECUTABLE_LINKER__potato-chess_Debug CMakeFiles/potato-chess.dir/bitboard.cpp.o CMakeFiles/potato-chess.dir/eval.cpp.o CMakeFiles/potato-chess.dir/main.cpp.o CMakeFiles/potato-chess.dir/maps.cpp.o CMakeFiles/potato-chess.dir/move.cpp.o CMakeFiles/potato-chess.dir/moveGen.cpp.o CMakeFiles/potato-chess.dir/perft.cpp.o
+build potato-chess: CXX_EXECUTABLE_LINKER__potato-chess_Debug CMakeFiles/potato-chess.dir/bitboard.cpp.o CMakeFiles/potato-chess.dir/eval.cpp.o CMakeFiles/potato-chess.dir/main.cpp.o CMakeFiles/potato-chess.dir/maps.cpp.o CMakeFiles/potato-chess.dir/move.cpp.o CMakeFiles/potato-chess.dir/moveGen.cpp.o CMakeFiles/potato-chess.dir/perft.cpp.o CMakeFiles/potato-chess.dir/search.cpp.o
   FLAGS = -g
   LINK_FLAGS = -rdynamic
   OBJECT_DIR = CMakeFiles/potato-chess.dir

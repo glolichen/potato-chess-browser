@@ -1,0 +1,16 @@
+# ninja log v5
+4	381	1660053572921632432	CMakeFiles/potato-chess.dir/perft.cpp.o	1f14b80a5270e923
+1	389	1660053572931631562	CMakeFiles/potato-chess.dir/move.cpp.o	4cf140b9bd4b3ab1
+0	408	1660053572951629818	CMakeFiles/potato-chess.dir/bitboard.cpp.o	2d661e84871de152
+1	417	1660053572961628946	CMakeFiles/potato-chess.dir/main.cpp.o	22f647189898e08d
+4	449	1660053572991626329	CMakeFiles/potato-chess.dir/moveGen.cpp.o	dd4289f7d2211468
+1	471	1660053573011624584	CMakeFiles/potato-chess.dir/eval.cpp.o	93cf1d66d616056c
+1	501	1660053573051621101	CMakeFiles/potato-chess.dir/maps.cpp.o	53055d7d197ddec6
+1	352	1660053587350388296	CMakeFiles/potato-chess.dir/search.cpp.o	2d53322aa82d6b5d
+352	420	1660053587420382327	potato-chess	54113c725980d4f3
+1	179	1660053627387072735	CMakeFiles/potato-chess.dir/main.cpp.o	22f647189898e08d
+179	241	1660053627447067913	potato-chess	54113c725980d4f3
+1	354	1660053658954592535	CMakeFiles/potato-chess.dir/search.cpp.o	2d53322aa82d6b5d
+354	417	1660053659014587924	potato-chess	54113c725980d4f3
+1	190	1660053687782424302	CMakeFiles/potato-chess.dir/main.cpp.o	22f647189898e08d
+190	254	1660053687842419881	potato-chess	54113c725980d4f3

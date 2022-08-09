@@ -10,10 +10,9 @@
 
 #include "bitboard.h"
 #include "eval.h"
+#include "maps.h"
 #include "moveGen.h"
 #include "search.h"
-
-using ull = unsigned long long;
 
 struct TTEntry {
 	int depth;
@@ -26,11 +25,11 @@ bool topMoveNull;
 int topMove; // top move stored through iterative deepening
 // std::map<std::tuple<ull, ull, ull>, TTEntry> transposition; // transposition table
 
-int limit;
+ull limit;
 
 int search::minimax(bitboard::Position *board, int depth, int alpha, int beta, int depthFromStart) {
 	//check if we have reached the time limit and should end the search
-	int now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	ull now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	if (now >= limit)
 		return SEARCH_EXPIRED;
 
@@ -42,7 +41,7 @@ int search::minimax(bitboard::Position *board, int depth, int alpha, int beta, i
 		return 0;
 
 	std::vector<int> moves;
-	moveGen::moveGen(board, &moves);
+	moveGen::moveGenWithOrdering(board, &moves);
 
 	// place the previous best move to the top of the list
 	// this should speed up alpha-beta pruning by allowing us to prune most if not all branches
@@ -171,7 +170,7 @@ int search::minimax(bitboard::Position *board, int depth, int alpha, int beta, i
 	return evaluation;
 }
 
-search::SearchResult search::search(int timeMS) {
+search::SearchResult search::search(std::string fen, int timeMS) {
 	//iterative deepening
 	//search with depth of one ply first
 	//then increase depth until time runs out
@@ -183,9 +182,12 @@ search::SearchResult search::search(int timeMS) {
 	//and we can search the best move first in the deeper search
 	//transposition table is still intact which means that we can still use alpha and beta values from before
 
+	bitboard::decode(fen);
+
 	topMoveNull = true;
 
 	eval::init();
+	maps::init();
 
 	std::pair<int, int> best;
 	limit = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
