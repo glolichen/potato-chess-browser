@@ -64,7 +64,7 @@ function init() {
 			if (board[notation] > 0) {
 				const image = document.createElement("img");
 				image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
-				image.src = `Assets/${getImage(board[notation])}.png`;
+				image.src = `./Assets/${getImage(board[notation])}.png`;
 				image.className = "piece";
 				light.appendChild(image);
 			}
@@ -85,7 +85,7 @@ function init() {
 			if (board[notation] > 0) {
 				const image = document.createElement("img");
 				image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
-				image.src = `Assets/${getImage(board[notation])}.png`;
+				image.src = `./Assets/${getImage(board[notation])}.png`;
 				image.className = "piece";
 				dark.appendChild(image);
 			}
@@ -120,7 +120,7 @@ function init() {
 			if (board[notation] > 0) {
 				const image = document.createElement("img");
 				image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
-				image.src = `Assets/${getImage(board[notation])}.png`;
+				image.src = `./Assets/${getImage(board[notation])}.png`;
 				image.className = "piece";
 				dark.appendChild(image);
 			}
@@ -141,7 +141,7 @@ function init() {
 			if (board[notation] > 0) {
 				const image = document.createElement("img");
 				image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
-				image.src = `Assets/${getImage(board[notation])}.png`;
+				image.src = `./Assets/${getImage(board[notation])}.png`;
 				image.className = "piece";
 				light.appendChild(image);
 			}
@@ -217,7 +217,7 @@ function update() {
 
 		const image = document.createElement("img");
 		image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
-		image.src = `Assets/${getImage(board[notation])}.png`;
+		image.src = `./Assets/${getImage(board[notation])}.png`;
 		image.className = "piece";
 		document.getElementById(notation.toString())?.appendChild(image);
 	}
@@ -238,7 +238,7 @@ function click(current) {
 					if (move.promote == 0 || move.promote == 5 || move.promote == 11) {
 						const image = document.createElement("img");
 						image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; opacity: 50%`);
-						image.src = board[move.dest] > 0 ? "Assets/capture.png" : "Assets/highlight.png";
+						image.src = board[move.dest] > 0 ? "./Assets/capture.png" : "./Assets/highlight.png";
 						image.className = "highlight";
 						document.getElementById(move.dest.toString())?.appendChild(image);
 					}
@@ -330,7 +330,7 @@ function click(current) {
 				if (move.promote == 0 || move.promote == 5 || move.promote == 11) {
 					const image = document.createElement("img");
 					image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; opacity: 50%`);
-					image.src = board[move.dest] > 0 ? "Assets/capture.png" : "Assets/highlight.png";
+					image.src = board[move.dest] > 0 ? "./Assets/capture.png" : "./Assets/highlight.png";
 					image.className = "highlight";
 					document.getElementById(move.dest.toString())?.appendChild(image);
 				}
