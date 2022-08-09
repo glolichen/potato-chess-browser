@@ -3,7 +3,7 @@
 #include <string>
 
 #include "board.h"
-#include "moves.h"
+#include "move.h"
 
 int contains(int side, int square) {
 	return find(board::pieces[side].begin(), board::pieces[side].end(), square) != board::pieces[side].end();
@@ -13,7 +13,7 @@ void del(int side, int square) {
 	board::pieces[side].erase(remove(board::pieces[side].begin(), board::pieces[side].end(), square), board::pieces[side].end());
 }
 
-void moves::makeMove(moves::Move* move) {
+void move::makeMove(move::Move* move) {
 	board::enPassant = -1;
 	board::turn = !board::turn;
 
@@ -36,7 +36,7 @@ void moves::makeMove(moves::Move* move) {
 		board::q = false;
 
 	if (move->castle) {
-		moves::castle(move->castle);
+		move::castle(move->castle);
 		return;
 	}
 
@@ -91,7 +91,7 @@ void moves::makeMove(moves::Move* move) {
 	board::board[move->dest] = board::board[move->source];
 	board::board[move->source] = 0;
 }
-void moves::unmakeMove(moves::Move* move) {
+void move::unmakeMove(move::Move* move) {
 	board::enPassant = -1;
 	board::turn = !board::turn;
 
@@ -114,7 +114,7 @@ void moves::unmakeMove(moves::Move* move) {
 		board::q = true;
 
 	if (move->castle) {
-		moves::uncastle(move->castle);
+		move::uncastle(move->castle);
 	}
 
 	if (move->isEp) {
@@ -164,7 +164,7 @@ void moves::unmakeMove(moves::Move* move) {
 	board::board[move->dest] = move->capture;
 }
 
-void moves::castle(int dir) {
+void move::castle(int dir) {
 	if (dir == 1) {
 		if (board::turn) {
 			board::board[114] = 0;
@@ -215,7 +215,7 @@ void moves::castle(int dir) {
 		}
 	}
 }
-void moves::uncastle(int dir) {
+void move::uncastle(int dir) {
 	if (dir == 1) {
 		if (!board::turn) {
 			board::board[115] = 0;
@@ -247,7 +247,7 @@ void moves::uncastle(int dir) {
 	}
 }
 
-moves::SimpleMove moves::convertUCI(std::string UCIMove) {
+move::SimpleMove move::convertUCI(std::string UCIMove) {
 	int oy = UCIMove[0];
 	int ox = UCIMove[1] - '0';
 	int ny = UCIMove[2];
@@ -258,6 +258,6 @@ moves::SimpleMove moves::convertUCI(std::string UCIMove) {
 	nx = 8 - nx;
 	ny = ny - 'a';
 
-	moves::SimpleMove result = {board::toNotation(ox, oy), board::toNotation(nx, ny)};
+	move::SimpleMove result = {board::toNotation(ox, oy), board::toNotation(nx, ny)};
 	return result;
 }

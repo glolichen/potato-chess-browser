@@ -2,22 +2,18 @@
 #define SEARCH_H
 
 #include <string>
-#include "moves.h"
+#include "bitboard.h"
+#include "move.h"
 
 namespace search {
 	struct SearchResult {
-		moves::Move move;
+		int move;
 		int depth;
 		int eval;
 		bool mateFound;
 	};
 
-	extern moves::Move topMove;
-	extern int topPosition[144];
-
-	int minimax(int depth, int alpha, int beta, int depthFromStart);
-
-	int quiscence(int alpha, int beta);
+	int minimax(bitboard::Position *board, int depth, int alpha, int beta, int depthFromStart);
 
 	SearchResult search(int timeMS);
 

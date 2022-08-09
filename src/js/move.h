@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-namespace moves {
+namespace move {
 	struct Move {
 		int source; // Original square
 		int dest; // Square where piece will be after move

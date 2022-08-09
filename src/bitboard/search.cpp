@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <chrono>
+#include <cstring>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
@@ -7,13 +8,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "attacked.h"
-#include "board.h"
-#include "constants.h"
+#include "bitboard.h"
 #include "eval.h"
-#include "hashing.h"
 #include "moveGen.h"
-#include "moves.h"
 #include "search.h"
 
 using ull = unsigned long long;
@@ -26,22 +23,12 @@ struct TTEntry {
 const int SEARCH_EXPIRED = INT_MIN + 500;
 
 bool topMoveNull;
-moves::Move search::topMove; // top move stored through iterative deepening
+int topMove; // top move stored through iterative deepening
 // std::map<std::tuple<ull, ull, ull>, TTEntry> transposition; // transposition table
 
 int limit;
 
-bool sameMove(moves::Move move1, moves::Move move2) { // are two moves the same
-	return (move1.capture == move2.capture) &&
-		   (move1.castle == move2.castle) &&
-		   (move1.dest == move2.dest) &&
-		   (move1.isEp == move2.isEp) &&
-		   (move1.promote == move2.promote) &&
-		   (move1.signal == move2.signal) &&
-		   (move1.source == move2.source);
-}
-
-int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
+int search::minimax(bitboard::Position *board, int depth, int alpha, int beta, int depthFromStart) {
 	//check if we have reached the time limit and should end the search
 	int now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	if (now >= limit)
@@ -49,19 +36,19 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
 
 	int evaluation = 0;
 	if (depth == 0)
-		return eval::evaluate();
+		return eval::evaluate(board);
 
-	if (board::fiftyMoveClock >= 50)
+	if (board->fiftyMoveClock >= 50)
 		return 0;
 
-	std::vector<moves::Move> moves;
-	moveGen::moveGenWithOrdering(&moves);
+	std::vector<int> moves;
+	moveGen::moveGen(board, &moves);
 
 	// place the previous best move to the top of the list
 	// this should speed up alpha-beta pruning by allowing us to prune most if not all branches
 	if (depthFromStart == 0 && !topMoveNull) {
 		for (int i = 0; i < static_cast<int>(moves.size()); i++) {
-			if (sameMove(moves[i], topMove)) {
+			if (moves[i] == topMove) {
 				moves.erase(moves.begin() + i);
 				break;
 			}
@@ -70,26 +57,11 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
 	}
 
 	if (moves.size() == 0) { // check whether there are legal moves
-		char king = board::turn ? 'k' : 'K';
-		bool inCheck = false;
-
-		std::vector<checks::Check> attacked;
-		attacked::getAttacked(&attacked);
-		for (checks::Check c : attacked) {
-			if (board::board[c.coord] == king) {
-				inCheck = true;
-				break;
-			}
-		}
-
-		int multiply = 1;
-		if (board::turn == constants::WHITE)
-			multiply = -1;
-
-		if (inCheck)
+		if (moveGen::getChecks(board, board->turn)) {
+			int multiply = board->turn ? 1 : -1;
 			return INT_MAX * multiply - multiply * depthFromStart; // checkmate
-		else
-			return 0; // stalemate (draw)
+		}
+		return 0;
 	}
 
 	// std::tuple<ull, ull, ull> hashes = hashing::getZobristHash();
@@ -101,24 +73,24 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
 	//	 }
 	// }
 
-	if (board::turn == constants::WHITE && depth > 0) { // white's turn - computer tries to maximize evaluation
+	if (!board->turn && depth) { // white's turn - computer tries to maximize evaluation
 		evaluation = INT_MIN;
 
-		std::vector<std::pair<moves::Move, int>> allEval;
+		std::vector<std::pair<int, int>> allEval;
 
-		for (moves::Move move : moves) {
-			int oldFiftyMoveClock = board::fiftyMoveClock;
-			if (move.capture || tolower(move.source))
-				board::fiftyMoveClock = 0;
+		for (int move : moves) {
+			if (board->mailbox[DEST(move)] != -1 || board->mailbox[SOURCE(move)] == PAWN || board->mailbox[SOURCE(move)] == PAWN + 6)
+				board->fiftyMoveClock = 0;
 			else
-				board::fiftyMoveClock++;
+				board->fiftyMoveClock++;
 
-			moves::makeMove(&move);
+			bitboard::Position newBoard;
+			memcpy(&newBoard, board, sizeof(*board));
+			move::makeMove(&newBoard, move);
 
-			int curEval = search::minimax(depth - 1, alpha, beta, depthFromStart + 1);
+			int curEval = search::minimax(&newBoard, depth - 1, alpha, beta, depthFromStart + 1);
 
-			moves::unmakeMove(&move);
-			board::fiftyMoveClock = oldFiftyMoveClock;
+			// board-fiftyMoveClock = oldFiftyMoveClock;
 
 			if (curEval == SEARCH_EXPIRED)
 				return SEARCH_EXPIRED;
@@ -144,24 +116,24 @@ int search::minimax(int depth, int alpha, int beta, int depthFromStart) {
 			return topEval;
 		}
 	}
-	else if (board::turn == constants::BLACK && depth > 0) { // black's turn - computer tries to minimize evaluation
+	else if (board->turn && depth) { // black's turn - computer tries to minimize evaluation
 		evaluation = INT_MAX;
 
-		std::vector<std::pair<moves::Move, int>> allEval;
+		std::vector<std::pair<int, int>> allEval;
 
-		for (moves::Move move: moves) {
-			int oldFiftyMoveClock = board::fiftyMoveClock;
-			if (move.capture || tolower(move.source))
-				board::fiftyMoveClock = 0;
+		for (int move: moves) {
+			if (board->mailbox[DEST(move)] != -1 || board->mailbox[SOURCE(move)] == PAWN || board->mailbox[SOURCE(move)] == PAWN + 6)
+				board->fiftyMoveClock = 0;
 			else
-				board::fiftyMoveClock++;
+				board->fiftyMoveClock++;
 
-			moves::makeMove(&move);
+			bitboard::Position newBoard;
+			memcpy(&newBoard, board, sizeof(*board));
+			move::makeMove(&newBoard, move);
 
-			int curEval = search::minimax(depth - 1, alpha, beta, depthFromStart + 1);
+			int curEval = search::minimax(&newBoard, depth - 1, alpha, beta, depthFromStart + 1);
 
-			moves::unmakeMove(&move);
-			board::fiftyMoveClock = oldFiftyMoveClock;
+			// board::fiftyMoveClock = oldFiftyMoveClock;
 
 			if (curEval == SEARCH_EXPIRED)
 				return SEARCH_EXPIRED;
@@ -213,9 +185,9 @@ search::SearchResult search::search(int timeMS) {
 
 	topMoveNull = true;
 
-	eval::initPieceTables();
+	eval::init();
 
-	std::pair<moves::Move, int> best;
+	std::pair<int, int> best;
 	limit = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	limit += timeMS;
 
@@ -223,7 +195,7 @@ search::SearchResult search::search(int timeMS) {
 	bool isMate = false;
 
 	for (; depth <= 100; depth++) {
-		int eval = search::minimax(depth, INT_MIN, INT_MAX, 0);
+		int eval = search::minimax(&bitboard::board, depth, INT_MIN, INT_MAX, 0);
 		topMoveNull = false;
 
 		if (eval == SEARCH_EXPIRED) {

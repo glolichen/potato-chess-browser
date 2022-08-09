@@ -16,7 +16,6 @@ const LAST_MOVE_LIGHT = "#cdd26a";
 
 decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 // decode("8/8/8/4k3/8/8/7P/7K w - - 0 1");
-console.clear();
 
 document.getElementById("fen").value = encode();
 
@@ -39,7 +38,7 @@ const TIME = 1500;
 var promotionSquare = -1;
 
 function init() {
-	document.getElementById("perft").onclick = () => window.location.replace("./perft.html");
+	document.getElementById("perft").onclick = () => window.location.replace("/perft.html");
 
 	let current = 0;
 	document.getElementById("board").innerHTML = "";
@@ -65,7 +64,7 @@ function init() {
 			if (board[notation] > 0) {
 				const image = document.createElement("img");
 				image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
-				image.src = `./Assets/${getImage(board[notation])}.png`;
+				image.src = `/Assets/${getImage(board[notation])}.png`;
 				image.className = "piece";
 				light.appendChild(image);
 			}
@@ -86,7 +85,7 @@ function init() {
 			if (board[notation] > 0) {
 				const image = document.createElement("img");
 				image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
-				image.src = `./Assets/${getImage(board[notation])}.png`;
+				image.src = `/Assets/${getImage(board[notation])}.png`;
 				image.className = "piece";
 				dark.appendChild(image);
 			}
@@ -121,7 +120,7 @@ function init() {
 			if (board[notation] > 0) {
 				const image = document.createElement("img");
 				image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
-				image.src = `./Assets/${getImage(board[notation])}.png`;
+				image.src = `/Assets/${getImage(board[notation])}.png`;
 				image.className = "piece";
 				dark.appendChild(image);
 			}
@@ -142,7 +141,7 @@ function init() {
 			if (board[notation] > 0) {
 				const image = document.createElement("img");
 				image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
-				image.src = `./Assets/${getImage(board[notation])}.png`;
+				image.src = `/Assets/${getImage(board[notation])}.png`;
 				image.className = "piece";
 				light.appendChild(image);
 			}
@@ -218,7 +217,7 @@ function update() {
 
 		const image = document.createElement("img");
 		image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px;`);
-		image.src = `./Assets/${getImage(board[notation])}.png`;
+		image.src = `/Assets/${getImage(board[notation])}.png`;
 		image.className = "piece";
 		document.getElementById(notation.toString())?.appendChild(image);
 	}
@@ -239,7 +238,7 @@ function click(current) {
 					if (move.promote == 0 || move.promote == 5 || move.promote == 11) {
 						const image = document.createElement("img");
 						image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; opacity: 50%`);
-						image.src = board[move.dest] > 0 ? "./Assets/capture.png" : "./Assets/highlight.png";
+						image.src = board[move.dest] > 0 ? "/Assets/capture.png" : "/Assets/highlight.png";
 						image.className = "highlight";
 						document.getElementById(move.dest.toString())?.appendChild(image);
 					}
@@ -331,7 +330,7 @@ function click(current) {
 				if (move.promote == 0 || move.promote == 5 || move.promote == 11) {
 					const image = document.createElement("img");
 					image.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; opacity: 50%`);
-					image.src = board[move.dest] > 0 ? "./Assets/capture.png" : "./Assets/highlight.png";
+					image.src = board[move.dest] > 0 ? "/Assets/capture.png" : "/Assets/highlight.png";
 					image.className = "highlight";
 					document.getElementById(move.dest.toString())?.appendChild(image);
 				}

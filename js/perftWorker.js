@@ -1,22 +1,9 @@
 onmessage = e => {
-	importScripts("./board.js");
-	importScripts("./engine.js");
+	importScripts("/js/board.js");
+	importScripts("/js/engine.js");
 	Module["onRuntimeInitialized"] = () => {
-		let startTime = new Date().getTime();
-		let out = Module["runPerft"](e.data[0], e.data[1]);
-		let elapsed = new Date().getTime() - startTime;
-
-		let total = 0;
-		let breakdown = [];
-		for (let i = 0; i < out.size(); i++) {
-			let possible = out.get(i).possible;
-			let move = out.get(i).moves;
-			let moveAsString = moveToString(move.source, move.dest, move.promote);
-			breakdown.push([moveAsString, possible]);
-			total += possible;
-		}
-
-		postMessage([total, elapsed, breakdown]);
+		let out = Module.perft(e.data[0], e.data[1]);
+		postMessage(out);
 	};
 }
 
