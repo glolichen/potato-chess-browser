@@ -7,7 +7,7 @@ Features:
    * Compiled using the command `em++ -O3 -lembind -o engine.js *.cpp -fno-signed-zeros -freciprocal-math -ffp-contract=fast -ffinite-math-only -ffast-math`
    * Yes, I know options like `-ffast-math` will break floating point arithmetic, but none of them are used in my code and I see a small but real performance increase by using them
  * Can also be used as a desktop app (electron) for maximum performance
- * 144-long array board representation (because I don't understand bitboards)
+ * Bitboard-based move generator
  * 22 million nodes per second move generator
    * Keeps track of pinned pieces and the direction they are pinned
    * Keeps track of squares attacked by the opponent to prevent king from moving there
