@@ -38,7 +38,7 @@ const TIME = 1500;
 var promotionSquare = -1;
 
 function init() {
-	document.getElementById("perft").onclick = () => window.location.replace("./perft.html");
+	document.getElementById("perft").onclick = () => window.location.replace("/potato-chess/perft.html");
 
 	let current = 0;
 	document.getElementById("board").innerHTML = "";
