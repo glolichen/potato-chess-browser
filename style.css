@@ -1,6 +1,6 @@
 @font-face {
 	font-family: noto;
-	src: url(./potato-chess/Assets/NotoSans-Regular.ttf);
+	src: url(/potato-chess/Assets/NotoSans-Regular.ttf);
 }
 
 * {
