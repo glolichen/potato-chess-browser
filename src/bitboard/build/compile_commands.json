@@ -11,6 +11,11 @@
 },
 {
   "directory": "/home/jayden/Desktop/Programs/potato-chess/src/bitboard/build",
+  "command": "/usr/bin/clang++ -g -o CMakeFiles/potato-chess.dir/hash.cpp.o -c /home/jayden/Desktop/Programs/potato-chess/src/bitboard/hash.cpp",
+  "file": "/home/jayden/Desktop/Programs/potato-chess/src/bitboard/hash.cpp"
+},
+{
+  "directory": "/home/jayden/Desktop/Programs/potato-chess/src/bitboard/build",
   "command": "/usr/bin/clang++ -g -o CMakeFiles/potato-chess.dir/main.cpp.o -c /home/jayden/Desktop/Programs/potato-chess/src/bitboard/main.cpp",
   "file": "/home/jayden/Desktop/Programs/potato-chess/src/bitboard/main.cpp"
 },

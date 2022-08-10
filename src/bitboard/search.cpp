@@ -1,15 +1,14 @@
-#include <algorithm>
 #include <chrono>
 #include <cstring>
-#include <cmath>
-#include <cstdlib>
 #include <iostream>
 #include <limits.h>
-#include <unordered_map>
+#include <map>
+#include <tuple>
 #include <vector>
 
 #include "bitboard.h"
 #include "eval.h"
+#include "hash.h"
 #include "maps.h"
 #include "moveGen.h"
 #include "search.h"
@@ -22,8 +21,8 @@ struct TTEntry {
 const int SEARCH_EXPIRED = INT_MIN + 500;
 
 bool topMoveNull;
-int topMove; // top move stored through iterative deepening
-// std::map<std::tuple<ull, ull, ull>, TTEntry> transposition; // transposition table
+int topMove;
+std::map<std::tuple<ull, ull, ull>, TTEntry> transposition;
 
 ull limit;
 
@@ -63,14 +62,12 @@ int search::minimax(bitboard::Position *board, int depth, int alpha, int beta, i
 		return 0;
 	}
 
-	// std::tuple<ull, ull, ull> hashes = hashing::getZobristHash();
-	// if (transposition.count(hashes)) {
-	//	 TTEntry found = transposition.at(hashes);
-	//	 if (depth <= found.depth) {
-	//		 std::cout << "MATCH FOUND!\n";
-	//		 return found.eval;
-	//	 }
-	// }
+	std::tuple<ull, ull, ull> hashes = hash::hash(board);
+	if (transposition.count(hashes)) {
+		TTEntry found = transposition.at(hashes);
+		if (depth <= found.depth)
+			return found.eval;
+	}
 
 	if (!board->turn && depth) { // white's turn - computer tries to maximize evaluation
 		evaluation = INT_MIN;
@@ -88,8 +85,6 @@ int search::minimax(bitboard::Position *board, int depth, int alpha, int beta, i
 			move::makeMove(&newBoard, move);
 
 			int curEval = search::minimax(&newBoard, depth - 1, alpha, beta, depthFromStart + 1);
-
-			// board-fiftyMoveClock = oldFiftyMoveClock;
 
 			if (curEval == SEARCH_EXPIRED)
 				return SEARCH_EXPIRED;
@@ -132,8 +127,6 @@ int search::minimax(bitboard::Position *board, int depth, int alpha, int beta, i
 
 			int curEval = search::minimax(&newBoard, depth - 1, alpha, beta, depthFromStart + 1);
 
-			// board::fiftyMoveClock = oldFiftyMoveClock;
-
 			if (curEval == SEARCH_EXPIRED)
 				return SEARCH_EXPIRED;
 
@@ -159,13 +152,13 @@ int search::minimax(bitboard::Position *board, int depth, int alpha, int beta, i
 		}
 	}
 
-	// if (transposition.count(hashes) == 0)
-	//	 transposition.insert({ hashes, { depth, evaluation } });
-	// else {
-	//	 TTEntry previous = transposition.at(hashes);
-	//	 if (depth > previous.depth)
-	//		 transposition.at(hashes) = { depth, evaluation };
-	// }
+	if (transposition.count(hashes) == 0)
+		transposition.insert({ hashes, { depth, evaluation } });
+	else {
+		TTEntry previous = transposition.at(hashes);
+		if (depth > previous.depth)
+			transposition.at(hashes) = { depth, evaluation };
+	}
 
 	return evaluation;
 }
@@ -187,6 +180,7 @@ search::SearchResult search::search(std::string fen, int timeMS) {
 	topMoveNull = true;
 
 	eval::init();
+	hash::init();
 	maps::init();
 
 	std::pair<int, int> best;

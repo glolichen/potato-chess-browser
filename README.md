@@ -13,6 +13,7 @@ Features:
    * Keeps track of squares attacked by the opponent to prevent king from moving there
  * Tapered evaluation (uses game phase to "weigh" the importance of midgame score to endgame score) with piece tables
  * Minimax search with Alpha-Beta pruning
+ * Transposition table with Zobrist Hashing
  * Move ordering is used to guess the strength of moves to speed up AB pruning
  * Syzygy endgame tablebase (powered by [Lichess](https://github.com/lichess-org/lila-tablebase))
 
