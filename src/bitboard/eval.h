@@ -5,10 +5,7 @@
 
 namespace eval {
 	void init();
-
-	int evaluate(bitboard::Position *board);
-
-	int kingLocationEval(bitboard::Position *board, int endPhase);
+	int evaluate(bitboard::Position &board);
 }
 
 #endif

@@ -196,7 +196,7 @@ void eval::init() {
 	}
 }
 
-int eval::evaluate(bitboard::Position *board) {
+int eval::evaluate(bitboard::Position &board) {
 	int midgame[2], endgame[2];
 	int midgameMaterial[2], endgameMaterial[2];
 	int gamePhase = 0;
@@ -206,11 +206,10 @@ int eval::evaluate(bitboard::Position *board) {
 	midgameMaterial[0] = 0, midgameMaterial[1] = 0;
 	endgameMaterial[0] = 0, endgameMaterial[1] = 0;
 
-	int size = 0;
 	std::vector<int> listPieces;
 	for (int side = 0; side <= 1; side++) {
 		for (int i = 0; i < 6; i++) {
-			ull pieces = board->pieces[side][i];
+			ull pieces = board.pieces[side][i];
 			while (pieces) {
 				int pos = __builtin_ctzll(pieces);
 				listPieces.push_back(i);
@@ -249,27 +248,4 @@ int eval::evaluate(bitboard::Position *board) {
 	int endPhase = 24 - midPhase;
 
 	return (midgameScore * midPhase + endgameScore * endPhase) / 24/* + eval::kingLocationEval(endPhase)*/;
-}
-
-int eval::kingLocationEval(bitboard::Position *board, int endPhase) {
-	// int ownKing = board::king[board::turn] - 26;
-	// ownKing -= (ownKing / 12) * 4;
-	// int ownKingX = ownKing / 12;
-	// int ownKingY = ownKing % 12;
-
-	// int enemyKing = board::king[!board::turn] - 26;
-	// enemyKing -= (enemyKing / 12) * 4;
-	// int enemyKingX = enemyKing / 12;
-	// int enemyKingY = enemyKing % 12;
-
-	// int enemyKingDstFromEdgeX = 3 - std::min(abs(3 - enemyKingX), abs(enemyKingX - 4));
-	// int enemyKingDstFromEdgeY = 3 - std::min(abs(3 - enemyKingY), abs(enemyKingY - 4));
-	// int enemyKingDstFromEdge = enemyKingDstFromEdgeX + enemyKingDstFromEdgeY;
-
-	// int enemyKingDstFromOwn = std::abs(ownKingX - enemyKingX) + std::abs(ownKingY - enemyKingY);
-
-	// int weight = endPhase * 10;
-	// return (enemyKingDstFromEdge + (enemyKingDstFromOwn * 0.75)) * weight;
-
-	return 0;
 }

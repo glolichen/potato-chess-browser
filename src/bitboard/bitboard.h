@@ -34,9 +34,9 @@ namespace bitboard {
 	std::vector<std::string> split(std::string str, char splitOn);
 
 	void decode(std::string fen);
-	std::string encode(Position *board);
+	std::string encode(Position &board);
 
-	void printBoard(Position *board);
+	void printBoard(Position &board);
 }
 
 #endif

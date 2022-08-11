@@ -9,7 +9,7 @@ namespace perft {
 		int time;
 	};
 	PerftResult test(std::string fen, int depth);
-	ull perft(bitboard::Position *board, int depth, bool first);
+	ull perft(bitboard::Position &board, int depth);
 }
 
 #endif

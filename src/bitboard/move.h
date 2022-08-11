@@ -10,7 +10,7 @@
 
 namespace move {
 	void printMove(int move, bool newLine);
-	void makeMove(bitboard::Position *board, int move);
+	void makeMove(bitboard::Position &board, int move);
 }
 
 #endif

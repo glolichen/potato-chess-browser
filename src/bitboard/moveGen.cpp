@@ -8,15 +8,15 @@
 #include "moveGen.h"
 #include "move.h"
 
-ull getPawnMoves(bitboard::Position *board, int square) {
-	int multiplier = board->turn ? -1 : 1;
-	if (QUERY(board->allPieces, square + 8 * multiplier))
+ull getPawnMoves(bitboard::Position &board, int square) {
+	int multiplier = board.turn ? -1 : 1;
+	if (QUERY(board.allPieces, square + 8 * multiplier))
 		return 0ull;
 	ull moves = (1ull << (square + 8 * multiplier));
-	if ((square / 8 == 1 && !board->turn) || (square / 8 == 6 && board->turn))
+	if ((square / 8 == 1 && !board.turn) || (square / 8 == 6 && board.turn))
 		moves |= (1ull << (square + 16 * multiplier));
 
-	ull answer = moves & ~board->allPieces;
+	ull answer = moves & ~board.allPieces;
 	return answer;
 }
 
@@ -39,28 +39,28 @@ ull getPawnAttacks(int square, bool color) {
 ull getKnightAttacks(int square) {
 	return maps::knight[square];
 }
-ull getBishopAttacks(bitboard::Position *board, ull *piecesNoKing, int square) {
+ull getBishopAttacks(bitboard::Position &board, ull &piecesNoKing, int square) {
 	ull attacks, blockers;
 
-	blockers = maps::bishop[square][0] & *piecesNoKing;
+	blockers = maps::bishop[square][0] & piecesNoKing;
 	if (blockers)
 		attacks = ~maps::bishop[__builtin_ctzll(blockers)][0] & maps::bishop[square][0];
 	else
 		attacks = maps::bishop[square][0];
 	
-	blockers = maps::bishop[square][1] & *piecesNoKing;
+	blockers = maps::bishop[square][1] & piecesNoKing;
 	if (blockers)
 		attacks |= ~maps::bishop[63 - __builtin_clzll(blockers)][1] & maps::bishop[square][1];
 	else
 		attacks |= maps::bishop[square][1];
 
-	blockers = maps::bishop[square][2] & *piecesNoKing;
+	blockers = maps::bishop[square][2] & piecesNoKing;
 	if (blockers)
 		attacks |= ~maps::bishop[63 - __builtin_clzll(blockers)][2] & maps::bishop[square][2];
 	else
 		attacks |= maps::bishop[square][2];
 
-	blockers = maps::bishop[square][3] & *piecesNoKing;
+	blockers = maps::bishop[square][3] & piecesNoKing;
 	if (blockers)
 		attacks |= ~maps::bishop[__builtin_ctzll(blockers)][3] & maps::bishop[square][3];
 	else
@@ -68,28 +68,28 @@ ull getBishopAttacks(bitboard::Position *board, ull *piecesNoKing, int square) {
 
 	return attacks;
 }
-ull getRookAttacks(bitboard::Position *board, ull *piecesNoKing, int square) {
+ull getRookAttacks(bitboard::Position &board, ull &piecesNoKing, int square) {
 	ull attacks, blockers;
 	
-	blockers = maps::rook[square][0] & *piecesNoKing;
+	blockers = maps::rook[square][0] & piecesNoKing;
 	if (blockers)
 		attacks = ~maps::rook[__builtin_ctzll(blockers)][0] & maps::rook[square][0];
 	else
 		attacks = maps::rook[square][0];
 	
-	blockers = maps::rook[square][1] & *piecesNoKing;
+	blockers = maps::rook[square][1] & piecesNoKing;
 	if (blockers)
 		attacks |= ~maps::rook[63 - __builtin_clzll(blockers)][1] & maps::rook[square][1];
 	else
 		attacks |= maps::rook[square][1];
 
-	blockers = maps::rook[square][2] & *piecesNoKing;
+	blockers = maps::rook[square][2] & piecesNoKing;
 	if (blockers)
 		attacks |= ~maps::rook[63 - __builtin_clzll(blockers)][2] & maps::rook[square][2];
 	else
 		attacks |= maps::rook[square][2];
 
-	blockers = maps::rook[square][3] & *piecesNoKing;
+	blockers = maps::rook[square][3] & piecesNoKing;
 	if (blockers)
 		attacks |= ~maps::rook[__builtin_ctzll(blockers)][3] & maps::rook[square][3];
 	else
@@ -97,7 +97,7 @@ ull getRookAttacks(bitboard::Position *board, ull *piecesNoKing, int square) {
 
 	return attacks;
 }
-ull getQueenAttacks(bitboard::Position *board, ull *piecesNoKing, int square) {
+ull getQueenAttacks(bitboard::Position &board, ull &piecesNoKing, int square) {
 	return getBishopAttacks(board, piecesNoKing, square) | getRookAttacks(board, piecesNoKing, square);
 }
 ull getKingAttacks(int square) {
@@ -129,47 +129,47 @@ ull getKingAttacks(int square) {
 	return attacks;
 } 
 
-ull getAttacked(bitboard::Position *board, bool color) {
-	ull piecesNoKing = board->allPieces ^ board->pieces[color][KING];
+ull getAttacked(bitboard::Position &board, bool color) {
+	ull piecesNoKing = board.allPieces ^ board.pieces[color][KING];
 	color = !color;
 	ull pieces, attacks = 0;
 
-	pieces = board->pieces[color][PAWN];
+	pieces = board.pieces[color][PAWN];
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
 		attacks |= getPawnAttacks(pos, color);
 		SET0(pieces, pos);
 	}
 
-	pieces = board->pieces[color][KNIGHT];
+	pieces = board.pieces[color][KNIGHT];
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
 		attacks |= getKnightAttacks(pos);
 		SET0(pieces, pos);
 	}
 	
-	pieces = board->pieces[color][BISHOP];
+	pieces = board.pieces[color][BISHOP];
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		attacks |= getBishopAttacks(board, &piecesNoKing, pos);
+		attacks |= getBishopAttacks(board, piecesNoKing, pos);
 		SET0(pieces, pos);
 	}
 
-	pieces = board->pieces[color][ROOK];
+	pieces = board.pieces[color][ROOK];
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		attacks |= getRookAttacks(board, &piecesNoKing, pos);
+		attacks |= getRookAttacks(board, piecesNoKing, pos);
 		SET0(pieces, pos);
 	}
 	
-	pieces = board->pieces[color][QUEEN];
+	pieces = board.pieces[color][QUEEN];
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		attacks |= getQueenAttacks(board, &piecesNoKing, pos);
+		attacks |= getQueenAttacks(board, piecesNoKing, pos);
 		SET0(pieces, pos);
 	}
 	
-	pieces = board->pieces[color][KING];
+	pieces = board.pieces[color][KING];
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
 		attacks |= getKingAttacks(pos);
@@ -178,24 +178,24 @@ ull getAttacked(bitboard::Position *board, bool color) {
 
 	return attacks;
 }
-ull moveGen::getChecks(bitboard::Position *board, bool color) {
-	int kingPos = __builtin_ctzll(board->pieces[color][KING]);
+ull moveGen::getChecks(bitboard::Position &board, bool color) {
+	int kingPos = __builtin_ctzll(board.pieces[color][KING]);
 
-	ull checks = getPawnAttacks(kingPos, color) & board->pieces[!color][PAWN];
-	checks |= getKnightAttacks(kingPos) & board->pieces[!color][KNIGHT];
-	checks |= getBishopAttacks(board, &board->allPieces, kingPos) &	(board->pieces[!color][BISHOP] | board->pieces[!color][QUEEN]);
-	checks |= getRookAttacks(board, &board->allPieces, kingPos) & (board->pieces[!color][ROOK] | board->pieces[!color][QUEEN]);
+	ull checks = getPawnAttacks(kingPos, color) & board.pieces[!color][PAWN];
+	checks |= getKnightAttacks(kingPos) & board.pieces[!color][KNIGHT];
+	checks |= getBishopAttacks(board, board.allPieces, kingPos) &	(board.pieces[!color][BISHOP] | board.pieces[!color][QUEEN]);
+	checks |= getRookAttacks(board, board.allPieces, kingPos) & (board.pieces[!color][ROOK] | board.pieces[!color][QUEEN]);
 	
 	return checks;
 }
-ull getPinned(bitboard::Position *board, bool color) {
-	int pinnedPiece, kingPos = __builtin_ctzll(board->pieces[color][KING]);;
+ull getPinned(bitboard::Position &board, bool color) {
+	int pinnedPiece, kingPos = __builtin_ctzll(board.pieces[color][KING]);;
 	ull blockers, pinned = 0;
-	ull ourPieces = board->pieces[color][ALL];
-	ull rookqueen = board->pieces[!color][ROOK] | board->pieces[!color][QUEEN];
-	ull bishopqueen = board->pieces[!color][BISHOP] | board->pieces[!color][QUEEN];
+	ull ourPieces = board.pieces[color][ALL];
+	ull rookqueen = board.pieces[!color][ROOK] | board.pieces[!color][QUEEN];
+	ull bishopqueen = board.pieces[!color][BISHOP] | board.pieces[!color][QUEEN];
 	
-	blockers = maps::rook[kingPos][0] & board->allPieces;
+	blockers = maps::rook[kingPos][0] & board.allPieces;
 	if (blockers) {
 		pinnedPiece = __builtin_ctzll(blockers);
 		SET0(blockers, pinnedPiece);
@@ -206,7 +206,7 @@ ull getPinned(bitboard::Position *board, bool color) {
 		}
 	}
 	
-	blockers = maps::rook[kingPos][1] & board->allPieces;
+	blockers = maps::rook[kingPos][1] & board.allPieces;
 	if (blockers) {
 		pinnedPiece = 63 - __builtin_clzll(blockers);
 		SET0(blockers, pinnedPiece);
@@ -217,7 +217,7 @@ ull getPinned(bitboard::Position *board, bool color) {
 		}
 	}
 	
-	blockers = maps::rook[kingPos][2] & board->allPieces;
+	blockers = maps::rook[kingPos][2] & board.allPieces;
 	if (blockers) {
 		pinnedPiece = 63 - __builtin_clzll(blockers);
 		SET0(blockers, pinnedPiece);
@@ -228,7 +228,7 @@ ull getPinned(bitboard::Position *board, bool color) {
 		}
 	}
 	
-	blockers = maps::rook[kingPos][3] & board->allPieces;
+	blockers = maps::rook[kingPos][3] & board.allPieces;
 	if (blockers) {
 		pinnedPiece = __builtin_ctzll(blockers);
 		SET0(blockers, pinnedPiece);
@@ -239,7 +239,7 @@ ull getPinned(bitboard::Position *board, bool color) {
 		}
 	}
 	
-	blockers = maps::bishop[kingPos][0] & board->allPieces;
+	blockers = maps::bishop[kingPos][0] & board.allPieces;
 	if (blockers) {
 		pinnedPiece = __builtin_ctzll(blockers);
 		SET0(blockers, pinnedPiece);
@@ -250,7 +250,7 @@ ull getPinned(bitboard::Position *board, bool color) {
 		}
 	}
 	
-	blockers = maps::bishop[kingPos][1] & board->allPieces;
+	blockers = maps::bishop[kingPos][1] & board.allPieces;
 	if (blockers) {
 		pinnedPiece = 63 - __builtin_clzll(blockers);
 		SET0(blockers, pinnedPiece);
@@ -261,7 +261,7 @@ ull getPinned(bitboard::Position *board, bool color) {
 		}
 	}
 	
-	blockers = maps::bishop[kingPos][2] & board->allPieces;
+	blockers = maps::bishop[kingPos][2] & board.allPieces;
 	if (blockers) {
 		pinnedPiece = 63 - __builtin_clzll(blockers);
 		SET0(blockers, pinnedPiece);
@@ -272,7 +272,7 @@ ull getPinned(bitboard::Position *board, bool color) {
 		}
 	}
 	
-	blockers = maps::bishop[kingPos][3] & board->allPieces;
+	blockers = maps::bishop[kingPos][3] & board.allPieces;
 	if (blockers) {
 		pinnedPiece = __builtin_ctzll(blockers);
 		SET0(blockers, pinnedPiece);
@@ -286,98 +286,92 @@ ull getPinned(bitboard::Position *board, bool color) {
 	return pinned;
 }
 
-void moveGen::moveGen(bitboard::Position *board, std::vector<int> *moves) {
-	moves->clear();
+void moveGen::moveGen(bitboard::Position &board, std::vector<int> &moves) {
+	moves.clear();
 
-	ull attacked = getAttacked(board, board->turn);
-	ull checks = getChecks(board, board->turn);
-	ull pinned = getPinned(board, board->turn);
+	ull attacked = getAttacked(board, board.turn);
+	ull checks = getChecks(board, board.turn);
+	ull pinned = getPinned(board, board.turn);
 	ull pieces, blocks;
 
-	int kingPos = __builtin_ctzll(board->pieces[board->turn][KING]);
-	if (board->enPassant != -1) {
-		int dir = board->turn ? 1 : -1;
-		int center = board->enPassant + (dir * 8);
+	int kingPos = __builtin_ctzll(board.pieces[board.turn][KING]);
+	if (board.enPassant != -1) {
+		int dir = board.turn ? 1 : -1;
+		int center = board.enPassant + (dir * 8);
 
-		int pawn = PAWN + (board->turn ? 6 : 0);
+		int pawn = PAWN + (board.turn ? 6 : 0);
 
-		if (board->mailbox[center - 1] == pawn && center % 8 > 0) {
-			int move = NEW_MOVE(center - 1, board->enPassant, 0, 0, 1);
+		if (board.mailbox[center - 1] == pawn && center % 8 > 0) {
+			int move = NEW_MOVE(center - 1, board.enPassant, 0, 0, 1);
 
 			bitboard::Position newBoard;
-			memcpy(&newBoard, board, sizeof(*board));
+			memcpy(&newBoard, &board, sizeof(board));
 
-			move::makeMove(&newBoard, move);
-			if (!getChecks(&newBoard, !newBoard.turn))
-				moves->push_back(move);
+			move::makeMove(newBoard, move);
+			if (!getChecks(newBoard, !newBoard.turn))
+				moves.push_back(move);
 		}
-		if (board->mailbox[center + 1] == pawn && center % 8 < 7) {
-			int move = NEW_MOVE(center + 1, board->enPassant, 0, 0, 1);
+		if (board.mailbox[center + 1] == pawn && center % 8 < 7) {
+			int move = NEW_MOVE(center + 1, board.enPassant, 0, 0, 1);
 
 			bitboard::Position newBoard;
-			memcpy(&newBoard, board, sizeof(*board));
+			memcpy(&newBoard, &board, sizeof(board));
 
-			move::makeMove(&newBoard, move);
-			if (!getChecks(&newBoard, !newBoard.turn))
-				moves->push_back(move);
+			move::makeMove(newBoard, move);
+			if (!getChecks(newBoard, !newBoard.turn))
+				moves.push_back(move);
 		}
 	}
 
 	if (checks) {
 		if (checks & (checks - 1)) { // double check
-			ull attacks = getKingAttacks(kingPos) & ~attacked & ~board->pieces[board->turn][ALL];
+			ull attacks = getKingAttacks(kingPos) & ~attacked & ~board.pieces[board.turn][ALL];
 			while (attacks) {
 				int pos = __builtin_ctzll(attacks);
-				moves->push_back(NEW_MOVE(kingPos, pos, 0, 0, 0));
+				moves.push_back(NEW_MOVE(kingPos, pos, 0, 0, 0));
 				SET0(attacks, pos);
 			}
 			return;
 		}
 
 		int checkerPos = __builtin_ctzll(checks);
-		if (board->mailbox[checkerPos] == KNIGHT || board->mailbox[checkerPos] == KNIGHT + 6)
+		ull filled = (1ull << checkerPos) | (1ull << kingPos);
+		filled = maps::fill[__builtin_ctzll(filled)][63 - __builtin_clzll(filled)];
+		if (maps::pinnedOffsets[kingPos].count(kingPos - checkerPos))
+			blocks = maps::pinnedOffsets[kingPos].at(kingPos - checkerPos) & filled & ~board.pieces[board.turn][KING];
+		else
 			blocks = 1ull << checkerPos;
-		else {
-			try {
-				ull filled = (1ull << checkerPos) | (1ull << kingPos);
-				filled = maps::fill[__builtin_ctzll(filled)][63 - __builtin_clzll(filled)];
-				blocks = maps::pinnedOffsets[kingPos].at(kingPos - checkerPos) & filled & ~board->pieces[board->turn][KING];
-			}
-			catch (...) {
-				blocks = 1ull << checkerPos;
-			}
-		}
 	}
 	else
 		blocks = ~0ull;
 
-	pieces = board->pieces[board->turn][PAWN] & ~pinned;
+	pieces = board.pieces[board.turn][PAWN] & ~pinned;
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		ull attacks = ((getPawnAttacks(pos, board->turn) & board->pieces[!board->turn][ALL]) | 
+		ull attacks = ((getPawnAttacks(pos, board.turn) & board.pieces[!board.turn][ALL]) | 
 			getPawnMoves(board, pos)) & blocks;
 		while (attacks) {
 			int dest = __builtin_ctzll(attacks);
 			switch (dest / 8) {
 				case 0:
 				case 7:
-					moves->push_back(NEW_MOVE(pos, dest, 0, QUEEN, 0));
-					moves->push_back(NEW_MOVE(pos, dest, 0, ROOK, 0));
-					moves->push_back(NEW_MOVE(pos, dest, 0, BISHOP, 0));
-					moves->push_back(NEW_MOVE(pos, dest, 0, KNIGHT, 0));
+					moves.push_back(NEW_MOVE(pos, dest, 0, QUEEN, 0));
+					moves.push_back(NEW_MOVE(pos, dest, 0, ROOK, 0));
+					moves.push_back(NEW_MOVE(pos, dest, 0, BISHOP, 0));
+					moves.push_back(NEW_MOVE(pos, dest, 0, KNIGHT, 0));
 					break;
 				default:
-					moves->push_back(NEW_MOVE(pos, dest, 0, 0, 0));
+					moves.push_back(NEW_MOVE(pos, dest, 0, 0, 0));
 			}
 			SET0(attacks, dest);
 		}
 		SET0(pieces, pos);
 	}
 
-	pieces = board->pieces[board->turn][PAWN] & pinned;
+	pieces = board.pieces[board.turn][PAWN] & pinned;
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		ull attacks = ((getPawnAttacks(pos, board->turn) & board->pieces[!board->turn][ALL]) | 
+		ull attacks = ((getPawnAttacks(pos, board.turn) & board.pieces[!board.turn][ALL]) | 
 			getPawnMoves(board, pos)) & blocks;
 		attacks &= maps::pinnedOffsetsAll[kingPos].at(kingPos - pos);
 		while (attacks) {
@@ -385,122 +379,122 @@ void moveGen::moveGen(bitboard::Position *board, std::vector<int> *moves) {
 			switch (dest / 8) {
 				case 0:
 				case 7:
-					moves->push_back(NEW_MOVE(pos, dest, 0, QUEEN, 0));
-					moves->push_back(NEW_MOVE(pos, dest, 0, ROOK, 0));
-					moves->push_back(NEW_MOVE(pos, dest, 0, BISHOP, 0));
-					moves->push_back(NEW_MOVE(pos, dest, 0, KNIGHT, 0));
+					moves.push_back(NEW_MOVE(pos, dest, 0, QUEEN, 0));
+					moves.push_back(NEW_MOVE(pos, dest, 0, ROOK, 0));
+					moves.push_back(NEW_MOVE(pos, dest, 0, BISHOP, 0));
+					moves.push_back(NEW_MOVE(pos, dest, 0, KNIGHT, 0));
 					break;
 				default:
-					moves->push_back(NEW_MOVE(pos, dest, 0, 0, 0));
+					moves.push_back(NEW_MOVE(pos, dest, 0, 0, 0));
 			}
 			SET0(attacks, dest);
 		}
 		SET0(pieces, pos);
 	}
 
-	pieces = board->pieces[board->turn][KNIGHT] & ~pinned;
+	pieces = board.pieces[board.turn][KNIGHT] & ~pinned;
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		ull attacks = getKnightAttacks(pos) & ~board->pieces[board->turn][ALL] & blocks;
+		ull attacks = getKnightAttacks(pos) & ~board.pieces[board.turn][ALL] & blocks;
 		while (attacks) {
 			int dest = __builtin_ctzll(attacks);
-			moves->push_back(NEW_MOVE(pos, dest, 0, 0, 0));
+			moves.push_back(NEW_MOVE(pos, dest, 0, 0, 0));
 			SET0(attacks, dest);
 		}
 		SET0(pieces, pos);
 	}
 
-	pieces = board->pieces[board->turn][BISHOP] & ~pinned;
+	pieces = board.pieces[board.turn][BISHOP] & ~pinned;
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		ull attacks = getBishopAttacks(board, &board->allPieces, pos) & ~board->pieces[board->turn][ALL] & blocks;
+		ull attacks = getBishopAttacks(board, board.allPieces, pos) & ~board.pieces[board.turn][ALL] & blocks;
 		while (attacks) {
 			int dest = __builtin_ctzll(attacks);
-			moves->push_back(NEW_MOVE(pos, dest, 0, 0, 0));
+			moves.push_back(NEW_MOVE(pos, dest, 0, 0, 0));
 			SET0(attacks, dest);
 		}
 		SET0(pieces, pos);
 	}
 
-	pieces = board->pieces[board->turn][BISHOP] & pinned;
+	pieces = board.pieces[board.turn][BISHOP] & pinned;
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		ull attacks = getBishopAttacks(board, &board->allPieces, pos) & maps::pinnedOffsetsAll[pos].at(kingPos - pos) & ~board->pieces[board->turn][ALL] & blocks;
+		ull attacks = getBishopAttacks(board, board.allPieces, pos) & maps::pinnedOffsetsAll[pos].at(kingPos - pos) & ~board.pieces[board.turn][ALL] & blocks;
 		while (attacks) {
 			int dest = __builtin_ctzll(attacks);
-			moves->push_back(NEW_MOVE(pos, dest, 0, 0, 0));
+			moves.push_back(NEW_MOVE(pos, dest, 0, 0, 0));
 			SET0(attacks, dest);
 		}
 		SET0(pieces, pos);
 	}
 
-	pieces = board->pieces[board->turn][ROOK] & ~pinned;
+	pieces = board.pieces[board.turn][ROOK] & ~pinned;
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		ull attacks = getRookAttacks(board, &board->allPieces, pos) & ~board->pieces[board->turn][ALL] & blocks;
+		ull attacks = getRookAttacks(board, board.allPieces, pos) & ~board.pieces[board.turn][ALL] & blocks;
 		while (attacks) {
 			int dest = __builtin_ctzll(attacks);
-			moves->push_back(NEW_MOVE(pos, dest, 0, 0, 0));
+			moves.push_back(NEW_MOVE(pos, dest, 0, 0, 0));
 			SET0(attacks, dest);
 		}
 		SET0(pieces, pos);
 	}
 
-	pieces = board->pieces[board->turn][ROOK] & pinned;
+	pieces = board.pieces[board.turn][ROOK] & pinned;
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		ull attacks = getRookAttacks(board, &board->allPieces, pos) & maps::pinnedOffsetsAll[pos].at(kingPos - pos) & ~board->pieces[board->turn][ALL] & blocks;
+		ull attacks = getRookAttacks(board, board.allPieces, pos) & maps::pinnedOffsetsAll[pos].at(kingPos - pos) & ~board.pieces[board.turn][ALL] & blocks;
 		while (attacks) {
 			int dest = __builtin_ctzll(attacks);
-			moves->push_back(NEW_MOVE(pos, dest, 0, 0, 0));
+			moves.push_back(NEW_MOVE(pos, dest, 0, 0, 0));
 			SET0(attacks, dest);
 		}
 		SET0(pieces, pos);
 	}
 
-	pieces = board->pieces[board->turn][QUEEN] & ~pinned;
+	pieces = board.pieces[board.turn][QUEEN] & ~pinned;
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		ull attacks = getQueenAttacks(board, &board->allPieces, pos) & ~board->pieces[board->turn][ALL] & blocks;
+		ull attacks = getQueenAttacks(board, board.allPieces, pos) & ~board.pieces[board.turn][ALL] & blocks;
 		while (attacks) {
 			int dest = __builtin_ctzll(attacks);
-			moves->push_back(NEW_MOVE(pos, dest, 0, 0, 0));
+			moves.push_back(NEW_MOVE(pos, dest, 0, 0, 0));
 			SET0(attacks, dest);
 		}
 		SET0(pieces, pos);
 	}
 
-	pieces = board->pieces[board->turn][QUEEN] & pinned;
+	pieces = board.pieces[board.turn][QUEEN] & pinned;
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		ull attacks = getQueenAttacks(board, &board->allPieces, pos) & maps::pinnedOffsetsAll[pos].at(kingPos - pos) & ~board->pieces[board->turn][ALL] & blocks;
+		ull attacks = getQueenAttacks(board, board.allPieces, pos) & maps::pinnedOffsetsAll[pos].at(kingPos - pos) & ~board.pieces[board.turn][ALL] & blocks;
 		while (attacks) {
 			int dest = __builtin_ctzll(attacks);
-			moves->push_back(NEW_MOVE(pos, dest, 0, 0, 0));
+			moves.push_back(NEW_MOVE(pos, dest, 0, 0, 0));
 			SET0(attacks, dest);
 		}
 		SET0(pieces, pos);
 	}
 
-	ull attacks = getKingAttacks(kingPos) & ~attacked & ~board->pieces[board->turn][ALL];
+	ull attacks = getKingAttacks(kingPos) & ~attacked & ~board.pieces[board.turn][ALL];
 	while (attacks) {
 		int dest = __builtin_ctzll(attacks);
-		moves->push_back(NEW_MOVE(kingPos, dest, 0, 0, 0));
+		moves.push_back(NEW_MOVE(kingPos, dest, 0, 0, 0));
 		SET0(attacks, dest);
 	}
 
 	if (!checks) {
-		if (board->turn) {
-			if (board->castle[2] && !(attacked & 432345564227567616ull) && !(board->allPieces & 432345564227567616ull))
-				moves->push_back(NEW_MOVE(kingPos, 57, 1, 0, 0));
-			if (board->castle[3] && !(attacked & 3458764513820540928ull) && !(board->allPieces & 8070450532247928832ull))
-				moves->push_back(NEW_MOVE(kingPos, 61, 2, 0, 0));
+		if (board.turn) {
+			if (board.castle[2] && !(attacked & 432345564227567616ull) && !(board.allPieces & 432345564227567616ull))
+				moves.push_back(NEW_MOVE(kingPos, 57, 1, 0, 0));
+			if (board.castle[3] && !(attacked & 3458764513820540928ull) && !(board.allPieces & 8070450532247928832ull))
+				moves.push_back(NEW_MOVE(kingPos, 61, 2, 0, 0));
 		}
 		else {
-			if (board->castle[0] && !(attacked & 6ull) && !(board->allPieces & 6ull))
-				moves->push_back(NEW_MOVE(kingPos, 1, 1, 0, 0));
-			if (board->castle[1] && !(attacked & 48ull) && !(board->allPieces & 112ull))
-				moves->push_back(NEW_MOVE(kingPos, 5, 2, 0, 0));
+			if (board.castle[0] && !(attacked & 6ull) && !(board.allPieces & 6ull))
+				moves.push_back(NEW_MOVE(kingPos, 1, 1, 0, 0));
+			if (board.castle[1] && !(attacked & 48ull) && !(board.allPieces & 112ull))
+				moves.push_back(NEW_MOVE(kingPos, 5, 2, 0, 0));
 		}
 	}
 }
@@ -511,9 +505,9 @@ bool sortMoveOrder(std::pair<int, int> o1, std::pair<int, int> o2) {
     return o1.second > o2.second;
 }
 
-void moveGen::moveGenWithOrdering(bitboard::Position *board, std::vector<int> *moves) {
+void moveGen::moveGenWithOrdering(bitboard::Position &board, std::vector<int> &moves) {
     std::vector<int> unorderedMoves;
-    moveGen::moveGen(board, &unorderedMoves);
+    moveGen::moveGen(board, unorderedMoves);
 
     std::vector<std::pair<int, int>> score;
     for (int move : unorderedMoves) {
@@ -522,12 +516,12 @@ void moveGen::moveGenWithOrdering(bitboard::Position *board, std::vector<int> *m
 		int source = SOURCE(move);
 		int dest = DEST(move);
 		int promote = PROMOTE(move);
-		int capture = board->mailbox[dest];
+		int capture = board.mailbox[dest];
 		if (capture >= 6)
 			capture -= 6;
 
         if (capture != -1) {
-			int moved = board->mailbox[source];
+			int moved = board.mailbox[source];
 			if (moved >= 6)
 				moved -= 6;
 			
@@ -545,5 +539,5 @@ void moveGen::moveGenWithOrdering(bitboard::Position *board, std::vector<int> *m
     std::sort(score.begin(), score.end(), sortMoveOrder);
 
     for (std::pair<int, int> move : score)
-        moves->push_back(move.first);
+        moves.push_back(move.first);
 }

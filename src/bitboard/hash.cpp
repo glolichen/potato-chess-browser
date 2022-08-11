@@ -19,17 +19,17 @@ void hash::init() {
 	}
 }
 
-std::tuple<ull, ull, ull> hash::hash(bitboard::Position *board) {
+std::tuple<ull, ull, ull> hash::hash(bitboard::Position &board) {
 	ull hash1 = 0;
 	ull hash2 = 0;
 	ull hash3 = 0;
 	ull *hashLocations[3] = { &hash1, &hash2, &hash3 };
 
 	for (int i = 0; i < 3; i++) {
-		ull pieces = board->allPieces;
+		ull pieces = board.allPieces;
 		while (pieces) {
 			int pos = __builtin_ctzll(pieces);
-			int piece = board->mailbox[pos];
+			int piece = board.mailbox[pos];
 			if (piece != -1)
 				*hashLocations[i] ^= zobristTables[i][pos][piece];
 			SET0(pieces, pos);
