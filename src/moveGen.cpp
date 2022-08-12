@@ -335,12 +335,16 @@ void moveGen::moveGen(const bitboard::Position &board, std::vector<int> &moves) 
 		}
 
 		int checkerPos = __builtin_ctzll(checks);
-		ull filled = (1ull << checkerPos) | (1ull << kingPos);
-		filled = maps::fill[__builtin_ctzll(filled)][63 - __builtin_clzll(filled)];
-		if (maps::pinnedOffsets[kingPos].count(kingPos - checkerPos))
-			blocks = maps::pinnedOffsets[kingPos].at(kingPos - checkerPos) & filled & ~board.pieces[board.turn][KING];
-		else
+		if (board.mailbox[checkerPos] == KNIGHT || board.mailbox[checkerPos] == KNIGHT + 6)
 			blocks = 1ull << checkerPos;
+		else {
+			ull filled = (1ull << checkerPos) | (1ull << kingPos);
+			filled = maps::fill[__builtin_ctzll(filled)][63 - __builtin_clzll(filled)];
+			if (maps::pinnedOffsets[kingPos].count(kingPos - checkerPos))
+				blocks = maps::pinnedOffsets[kingPos].at(kingPos - checkerPos) & filled & ~board.pieces[board.turn][KING];
+			else
+				blocks = 1ull << checkerPos;
+		}
 	}
 	else
 		blocks = ~0ull;
