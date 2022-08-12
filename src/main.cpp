@@ -10,19 +10,19 @@
 // #include "search.h"
 
 // int main() {
-// 	maps::init();
-// 	eval::init();
+// 	// maps::init();
+// 	// eval::init();
 
-// 	bitboard::decode("r1b1kbnr/pppp1p1p/2n2qp1/4p3/4P3/3P1N2/PPP1BPPP/RNBQK2R w KQkq - 0 5");
-// 	std::vector<int> moves;
-// 	moveGen::moveGen(bitboard::board, moves);
-// 	for (const int& move : moves)
-// 		move::printMove(move, true);
-// 	std::cout << moves.size();
+// 	// bitboard::decode("r1b1kbnr/pppp1p1p/2n2qp1/4p3/4P3/3P1N2/PPP1BPPP/RNBQK2R w KQkq - 0 5");
+// 	// std::vector<int> moves;
+// 	// moveGen::moveGen(bitboard::board, moves);
+// 	// for (const int &move : moves)
+// 	// 	move::printMove(move, true);
+// 	// std::cout << moves.size();
 
-// 	// auto search = search::search("rnb1k2r/pp2bp1p/2p1p1p1/8/8/1BN2N2/PPPB1KPP/R2Q3R b kq - 0 15", 3000);
-// 	// move::printMove(search.move, true);
-// 	// std::cout << search.depth;
+// 	auto search = search::search("rnbqkb1r/ppp1pppp/8/8/2B5/2n2Q2/PPPP1PPP/R1B1K1NR b KQkq - 1 5", 5000);
+// 	move::printMove(search.move, true);
+// 	std::cout << search.depth;
 
 // 	// bitboard::decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 // 	// auto hashes1 = hashing::hash(&bitboard::board);

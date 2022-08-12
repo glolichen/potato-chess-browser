@@ -7,18 +7,7 @@ function moveGen() {
 
 	if (legalMoves.length == 0) {
 		gameOver = true;
-
-		let inCheck = false;
-		let attacked = Module.getAttacked();
-
-		for (let i = 0; i < attacked.size(); i++) {
-			if (attacked.get(i).coord == king[turn ? 1 : 0]) {
-				inCheck = true;
-				break;
-			}
-		}
-
-		document.getElementById("resultText").textContent = inCheck ? "Checkmate" : "Stalemate";
+		document.getElementById("resultText").textContent = Module.getAttacked(encode()) ? "Checkmate" : "Stalemate";
 		setTimeout(() => document.getElementById("result").setAttribute("open", ""), 100);
 	}
 

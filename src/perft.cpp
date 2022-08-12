@@ -25,7 +25,7 @@ perft::PerftResult perft::test(std::string fen, int depth) {
 	return { std::to_string(result), (int) (end - start) };
 }
 
-ull perft::perft(bitboard::Position &board, int depth) {
+ull perft::perft(const bitboard::Position &board, int depth) {
 	std::vector<int> moves;
 	moveGen::moveGen(board, moves);
 
@@ -34,7 +34,7 @@ ull perft::perft(bitboard::Position &board, int depth) {
 
 	ull positions = 0;
 
-	for (int move : moves) {
+	for (const int &move : moves) {
 		bitboard::Position newBoard;
 		memcpy(&newBoard, &board, sizeof(board));
 		move::makeMove(newBoard, move);

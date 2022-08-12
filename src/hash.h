@@ -6,7 +6,7 @@
 
 namespace hash {
 	void init();
-	std::tuple<ull, ull, ull> hash(bitboard::Position &board);
+	std::tuple<ull, ull, ull> hash(const bitboard::Position &board);
 }
 
 #endif

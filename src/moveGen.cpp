@@ -8,7 +8,7 @@
 #include "moveGen.h"
 #include "move.h"
 
-ull getPawnMoves(bitboard::Position &board, int square) {
+ull getPawnMoves(const bitboard::Position &board, int square) {
 	int multiplier = board.turn ? -1 : 1;
 	if (QUERY(board.allPieces, square + 8 * multiplier))
 		return 0ull;
@@ -39,7 +39,7 @@ ull getPawnAttacks(int square, bool color) {
 ull getKnightAttacks(int square) {
 	return maps::knight[square];
 }
-ull getBishopAttacks(bitboard::Position &board, ull &piecesNoKing, int square) {
+ull getBishopAttacks(const bitboard::Position &board, const ull &piecesNoKing, int square) {
 	ull attacks, blockers;
 
 	blockers = maps::bishop[square][0] & piecesNoKing;
@@ -68,7 +68,7 @@ ull getBishopAttacks(bitboard::Position &board, ull &piecesNoKing, int square) {
 
 	return attacks;
 }
-ull getRookAttacks(bitboard::Position &board, ull &piecesNoKing, int square) {
+ull getRookAttacks(const bitboard::Position &board, const ull &piecesNoKing, int square) {
 	ull attacks, blockers;
 	
 	blockers = maps::rook[square][0] & piecesNoKing;
@@ -97,7 +97,7 @@ ull getRookAttacks(bitboard::Position &board, ull &piecesNoKing, int square) {
 
 	return attacks;
 }
-ull getQueenAttacks(bitboard::Position &board, ull &piecesNoKing, int square) {
+ull getQueenAttacks(const bitboard::Position &board, const ull &piecesNoKing, int square) {
 	return getBishopAttacks(board, piecesNoKing, square) | getRookAttacks(board, piecesNoKing, square);
 }
 ull getKingAttacks(int square) {
@@ -129,7 +129,7 @@ ull getKingAttacks(int square) {
 	return attacks;
 } 
 
-ull getAttacked(bitboard::Position &board, bool color) {
+ull getAttacked(const bitboard::Position &board, bool color) {
 	ull piecesNoKing = board.allPieces ^ board.pieces[color][KING];
 	color = !color;
 	ull pieces, attacks = 0;
@@ -178,17 +178,17 @@ ull getAttacked(bitboard::Position &board, bool color) {
 
 	return attacks;
 }
-ull moveGen::getChecks(bitboard::Position &board, bool color) {
+ull moveGen::getChecks(const bitboard::Position &board, bool color) {
 	int kingPos = __builtin_ctzll(board.pieces[color][KING]);
 
 	ull checks = getPawnAttacks(kingPos, color) & board.pieces[!color][PAWN];
 	checks |= getKnightAttacks(kingPos) & board.pieces[!color][KNIGHT];
-	checks |= getBishopAttacks(board, board.allPieces, kingPos) &	(board.pieces[!color][BISHOP] | board.pieces[!color][QUEEN]);
+	checks |= getBishopAttacks(board, board.allPieces, kingPos) & (board.pieces[!color][BISHOP] | board.pieces[!color][QUEEN]);
 	checks |= getRookAttacks(board, board.allPieces, kingPos) & (board.pieces[!color][ROOK] | board.pieces[!color][QUEEN]);
 	
 	return checks;
 }
-ull getPinned(bitboard::Position &board, bool color) {
+ull getPinned(const bitboard::Position &board, bool color) {
 	int pinnedPiece, kingPos = __builtin_ctzll(board.pieces[color][KING]);;
 	ull blockers, pinned = 0;
 	ull ourPieces = board.pieces[color][ALL];
@@ -286,7 +286,7 @@ ull getPinned(bitboard::Position &board, bool color) {
 	return pinned;
 }
 
-void moveGen::moveGen(bitboard::Position &board, std::vector<int> &moves) {
+void moveGen::moveGen(const bitboard::Position &board, std::vector<int> &moves) {
 	moves.clear();
 
 	ull attacked = getAttacked(board, board.turn);
@@ -503,12 +503,12 @@ int pieceValue[6] = { 100, 320, 340, 500, 900, 0 };
 bool sortMoveOrder(std::pair<int, int> o1, std::pair<int, int> o2) {
     return o1.second > o2.second;
 }
-void moveGen::moveGenWithOrdering(bitboard::Position &board, std::vector<int> &moves) {
+void moveGen::moveGenWithOrdering(const bitboard::Position &board, std::vector<int> &moves) {
     std::vector<int> unorderedMoves;
     moveGen::moveGen(board, unorderedMoves);
 
     std::vector<std::pair<int, int>> score;
-    for (int move : unorderedMoves) {
+    for (const int &move : unorderedMoves) {
         int estimatedScore = 0;
 
 		int source = SOURCE(move);
@@ -536,7 +536,7 @@ void moveGen::moveGenWithOrdering(bitboard::Position &board, std::vector<int> &m
 
     std::sort(score.begin(), score.end(), sortMoveOrder);
 
-    for (std::pair<int, int> move : score)
+    for (const std::pair<int, int> &move : score)
         moves.push_back(move.first);
 }
 

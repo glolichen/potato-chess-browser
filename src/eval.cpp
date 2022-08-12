@@ -196,7 +196,7 @@ void eval::init() {
 	}
 }
 
-int eval::evaluate(bitboard::Position &board) {
+int eval::evaluate(const bitboard::Position &board) {
 	int midgame[2], endgame[2];
 	int midgameMaterial[2], endgameMaterial[2];
 	int gamePhase = 0;
@@ -229,7 +229,7 @@ int eval::evaluate(bitboard::Position &board) {
 
 	if (listPieces.size() < 4) {
 		bool insufMat = true;
-		for (int piece : listPieces) {
+		for (const int &piece : listPieces) {
 			if (piece == PAWN || piece == ROOK || piece == QUEEN) {
 				insufMat = false;
 				break;

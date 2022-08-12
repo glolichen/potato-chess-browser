@@ -112,7 +112,7 @@ void bitboard::decode(std::string fen) {
 		board.pieces[BLACK][ALL] |= board.pieces[BLACK][i];
 	}
 }
-std::string bitboard::encode(bitboard::Position &board) {
+std::string bitboard::encode(const bitboard::Position &board) {
 	std::string fen = "";
 	for (int i = 0; i < 8; i++) {
 		int empty = 0;
@@ -175,7 +175,7 @@ std::string bitboard::encode(bitboard::Position &board) {
 	return fen;
 }
 
-void bitboard::printBoard(bitboard::Position &board) {
+void bitboard::printBoard(const bitboard::Position &board) {
 	std::cout << "╭───┬───┬───┬───┬───┬───┬───┬───╮" << "\n";
 
 	for (int i = 0; i < 8; i++) {

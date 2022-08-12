@@ -28,6 +28,8 @@ function decode(fen) {
 	fiftyMoveClock = parseInt(result[4]);
 	moveClock = parseInt(result[5]);
 
+	K = false, Q = false, k = false, q = false;
+
 	let castle = result[2];
 	if (castle.includes("K"))
 		K = true;

@@ -8,8 +8,8 @@ namespace perft {
 		std::string answer;
 		int time;
 	};
-	PerftResult test(std::string fen, int depth);
-	ull perft(bitboard::Position &board, int depth);
+	PerftResult test(const std::string fen, int depth);
+	ull perft(const bitboard::Position &board, int depth);
 }
 
 #endif

@@ -21,7 +21,7 @@ std::map<std::tuple<ull, ull, ull>, int> transposition;
 
 ull limit;
 
-int search::minimax(bitboard::Position &board, int depth, int alpha, int beta, int depthFromStart) {
+int search::minimax(const bitboard::Position &board, int depth, int alpha, int beta, int depthFromStart) {
 	//check if we have reached the time limit and should end the search
 	ull now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	if (now >= limit)
@@ -73,14 +73,13 @@ int search::minimax(bitboard::Position &board, int depth, int alpha, int beta, i
 
 	if (!board.turn && depth) { // white's turn - computer tries to maximize evaluation
 		evaluation = INT_MIN;
-		for (int move : moves) {
-			if (board.mailbox[DEST(move)] != -1 || board.mailbox[SOURCE(move)] == PAWN || board.mailbox[SOURCE(move)] == PAWN + 6)
-				board.fiftyMoveClock = 0;
-			else
-				board.fiftyMoveClock++;
-
+		for (const int &move : moves) {
 			bitboard::Position newBoard;
 			memcpy(&newBoard, &board, sizeof(board));
+			if (board.mailbox[DEST(move)] != -1 || board.mailbox[SOURCE(move)] == PAWN || board.mailbox[SOURCE(move)] == PAWN + 6)
+				newBoard.fiftyMoveClock = 0;
+			else
+				newBoard.fiftyMoveClock++;
 			move::makeMove(newBoard, move);
 
 			int curEval = search::minimax(newBoard, depth - 1, alpha, beta, depthFromStart + 1);
@@ -100,14 +99,13 @@ int search::minimax(bitboard::Position &board, int depth, int alpha, int beta, i
 	}
 	else if (board.turn && depth) { // black's turn - computer tries to minimize evaluation
 		evaluation = INT_MAX;
-		for (int move : moves) {
-			if (board.mailbox[DEST(move)] != -1 || board.mailbox[SOURCE(move)] == PAWN || board.mailbox[SOURCE(move)] == PAWN + 6)
-				board.fiftyMoveClock = 0;
-			else
-				board.fiftyMoveClock++;
-
+		for (const int &move : moves) {
 			bitboard::Position newBoard;
 			memcpy(&newBoard, &board, sizeof(board));
+			if (board.mailbox[DEST(move)] != -1 || board.mailbox[SOURCE(move)] == PAWN || board.mailbox[SOURCE(move)] == PAWN + 6)
+				newBoard.fiftyMoveClock = 0;
+			else
+				newBoard.fiftyMoveClock++;
 			move::makeMove(newBoard, move);
 
 			int curEval = search::minimax(newBoard, depth - 1, alpha, beta, depthFromStart + 1);

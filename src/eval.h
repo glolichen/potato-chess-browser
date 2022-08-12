@@ -5,7 +5,7 @@
 
 namespace eval {
 	void init();
-	int evaluate(bitboard::Position &board);
+	int evaluate(const bitboard::Position &board);
 }
 
 #endif

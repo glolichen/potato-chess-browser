@@ -19,7 +19,7 @@ void hash::init() {
 	}
 }
 
-std::tuple<ull, ull, ull> hash::hash(bitboard::Position &board) {
+std::tuple<ull, ull, ull> hash::hash(const bitboard::Position &board) {
 	ull hash1 = 0;
 	ull hash2 = 0;
 	ull hash3 = 0;
