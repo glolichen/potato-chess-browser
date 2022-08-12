@@ -1,36 +1,3 @@
-function moveGen() {
-	try {
-		Module.decode(encode());
-	}
-	catch {
-		return
-	}
-	let out = Module.moveGen();
-
-	let legalMoves = [];
-	for (let i = 0; i < out.size(); i++)
-		legalMoves.push(out.get(i));
-
-	if (legalMoves.length == 0) {
-		gameOver = true;
-
-		let inCheck = false;
-		let attacked = Module.getAttacked();
-
-		for (let i = 0; i < attacked.size(); i++) {
-			if (attacked.get(i).coord == king[turn ? 1 : 0]) {
-				inCheck = true;
-				break;
-			}
-		}
-
-		document.getElementById("resultText").textContent = inCheck ? "Checkmate" : "Stalemate";
-		setTimeout(() => document.getElementById("result").setAttribute("open", ""), 100);
-	}
-
-	return legalMoves;
-}
-
 function computerMove() {
 	let bookMoves = book.get(encode().split(" ")[0]);
 	if (bookMoves != undefined) {
@@ -40,7 +7,8 @@ function computerMove() {
 				document.getElementById("depth").innerHTML = "<b>Depth: Book Move</b>";
 				document.getElementById("eval").innerHTML = "<b>Evaluation: -</b>";
 
-				makeMove(move);
+				decode(Module.makeMove(encode(), move));
+
 				highlightLastMove(move);
 				moves = moveGen();
 				update();
@@ -51,7 +19,7 @@ function computerMove() {
 	}
 
 	let pieceCount = 0;
-	for (let i = 0; i < 144; i++) {
+	for (let i = 0; i < 64; i++) {
 		if (board[i] > 0)
 			pieceCount++;
 	}
@@ -72,7 +40,7 @@ function computerMove() {
 					document.getElementById("depth").innerHTML = "<b>Depth: Endgame Tablebase Move</b>";
 					document.getElementById("eval").innerHTML = `<b>Evaluation: ${result}</b>`;
 	
-					makeMove(move);
+					decode(Module.makeMove(encode(), move));
 					highlightLastMove(move);
 					moves = moveGen();
 					update();
@@ -101,7 +69,7 @@ function computerMove() {
 		document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
 		document.getElementById("eval").innerHTML = `<b>Evaluation: ${e.data[2] > 0 ? "+" : ""}${e.data[2] / 100}</b>`;
 		
-		makeMove(e.data[0]);
+		decode(Module.makeMove(encode(), e.data[0]));
 
 		let text = "";
 		let gameEnd = false;

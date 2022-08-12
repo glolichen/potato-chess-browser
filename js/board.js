@@ -2,7 +2,6 @@ const FILES = "abcdefgh";
 const NUMBERS = "0123456789";
 
 var board = [];
-var king = [];
 
 var enPassant = -1;
 
@@ -19,10 +18,8 @@ var fiftyMoveClock = 0;
 function decode(fen) {
 	document.getElementById("pgn").textContent = "";
 
-	board.length = 144;
+	board.length = 64;
 	board.fill(-1);
-
-	king.length = 2;
 
 	let result = fen.split(" ");
 
@@ -49,7 +46,7 @@ function decode(fen) {
 	let lines = result[0].split("/");
 
 	for (let i = 0; i < 8; i++) {
-		let cur = 2;
+		let cur = 0;
 		let curRank = lines[i];
 		for (let j = 0; j < curRank.length; j++) {
 			if (NUMBERS.includes(curRank[j])) {
@@ -57,23 +54,18 @@ function decode(fen) {
 				continue;
 			}
 
-			board[i * 12 + cur + 24] = PIECES.indexOf(curRank[j]);
+			board[i * 8 + cur] = PIECES.indexOf(curRank[j]);
 			cur++;
 		}
 	}
 
-	for (let i = 2; i < 10; i++) {
-		for (let j = 2; j < 10; j++) {
-			let index = i * 12 + j;
+	for (let i = 0; i < 8; i++) {
+		for (let j = 0; j < 8; j++) {
+			let index = i * 8 + j;
 			if (board[index] == -1) {
 				board[index] = 0;
 				continue;
 			}
-
-			if (PIECES[board[index]] == "K")
-				king[0] = index;
-			if (PIECES[board[index]] == "k")
-				king[1] = index;
 		}
 	}
 
@@ -82,26 +74,25 @@ function decode(fen) {
 		moveClock++;
 	}
 }
-
 function encode() {
 	let fen = "";
-	for (let i = 2; i < 10; i++) {
+	for (let i = 0; i < 8; i++) {
 		let empty = 0;
-		for (let j = 2; j < 10; j++) {
-			if (board[i * 12 + j] == 0)
+		for (let j = 0; j < 8; j++) {
+			if (board[i * 8 + j] == 0)
 				empty++;
 			else {
 				if (empty != 0)
 					fen += empty;
 				empty = 0;
-				fen += PIECES[board[i * 12 + j]];
+				fen += PIECES[board[i * 8 + j]];
 			}
 		}
 
 		if (empty != 0)
 			fen += empty;
 
-		if (i != 9)
+		if (i < 7)
 			fen += "/";
 	}
 	fen += " ";
@@ -197,9 +188,6 @@ function notationToXY(coord) {
 	if (coord == -1 || board[coord] == -1)
 		return "-1";
 
-	coord -= 26;
-	coord -= Math.floor(coord / 12) * 4;
-
 	let x = Math.floor(coord / 8).toString();
 	let y = (coord % 8).toString();
 
@@ -207,31 +195,34 @@ function notationToXY(coord) {
 }
 
 function notationToSAN(coord) {
+	if (coord == -1 || board[coord] == -1)
+		return "-1";
+
 	let xy = notationToXY(coord);
 
-	let y = 8-NUMBERS.indexOf(xy[0]);
+	let y = 8 - NUMBERS.indexOf(xy[0]);
 	let x = FILES[NUMBERS.indexOf(xy[1])];
 
 	return x + y;
 }
 
 function SANToNotation(san) {
-	let y = FILES.indexOf(san[0]) + 2;
-	let x = 8 - parseInt(san[1]) + 2;
-	return x * 12 + y;
+	let y = FILES.indexOf(san[0]);
+	let x = 8 - parseInt(san[1]);
+	return x * 8 + y;
 }
 
 function XYToNotation(xy) {
-	return (parseInt(xy[1]) + 2) + parseInt(xy[0]) * 12 + 24;
+	return parseInt(xy[1]) + parseInt(xy[0]) * 8;
 }
 
 function printBoard() {
 	console.log("+---+---+---+---+---+---+---+---+");
 
-	for (let i = 2; i < 10; i++) {
+	for (let i = 0; i < 8; i++) {
 		let line = "|";
-		for (let j = 2; j < 10; j++) {
-			let index = i * 12 + j;
+		for (let j = 0; j < 8; j++) {
+			let index = i * 8 + j;
 			let print = " ";
 
 			if (board[index] != 0)

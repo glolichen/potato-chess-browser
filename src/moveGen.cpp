@@ -500,11 +500,9 @@ void moveGen::moveGen(bitboard::Position &board, std::vector<int> &moves) {
 }
 
 int pieceValue[6] = { 100, 320, 340, 500, 900, 0 };
-
 bool sortMoveOrder(std::pair<int, int> o1, std::pair<int, int> o2) {
     return o1.second > o2.second;
 }
-
 void moveGen::moveGenWithOrdering(bitboard::Position &board, std::vector<int> &moves) {
     std::vector<int> unorderedMoves;
     moveGen::moveGen(board, unorderedMoves);
@@ -540,4 +538,23 @@ void moveGen::moveGenWithOrdering(bitboard::Position &board, std::vector<int> &m
 
     for (std::pair<int, int> move : score)
         moves.push_back(move.first);
+}
+
+bool moveGen::getChecksForJS(std::string fen) {
+	maps::init();
+	bitboard::decode(fen);
+	return (bool) moveGen::getChecks(bitboard::board, bitboard::board.turn);
+}
+std::vector<move::Move> moveGen::moveGenForJS(std::string fen) {
+	maps::init();
+	bitboard::decode(fen);
+
+	std::vector<int> movesInt;
+	moveGen::moveGen(bitboard::board, movesInt);
+
+	std::vector<move::Move> moves;
+	for (const int &move : movesInt)
+		moves.push_back({ 63 - SOURCE(move), 63 - DEST(move), CASTLE(move), PROMOTE(move), (bool) IS_EP(move) });
+
+	return moves;
 }

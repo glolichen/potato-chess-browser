@@ -164,3 +164,14 @@ void move::makeMove(bitboard::Position &board, int move) {
 
 	board.turn = !board.turn;
 }
+
+std::string move::makeMoveForJS(std::string fen, move::Move move) {
+	bitboard::decode(fen);
+
+	move.source = 63 - move.source;
+	move.dest = 63 - move.dest;
+	int moveInt = NEW_MOVE(move.source, move.dest, move.castle, move.promote, move.isEp);
+
+	move::makeMove(bitboard::board, moveInt);
+	return bitboard::encode(bitboard::board);
+}

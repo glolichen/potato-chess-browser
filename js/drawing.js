@@ -53,7 +53,7 @@ function init() {
 
 			let notation = XYToNotation(`${Math.floor(current / 8)}${current % 8}`);
 			if (humanSide == true)
-				notation = XYToNotation(`${Math.floor((63-current) / 8)}${(63-current) % 8}`);
+				notation = XYToNotation(`${Math.floor((63 - current) / 8)}${(63 - current) % 8}`);
 			
 			light.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; background-color: ${LIGHT};`);
 			light.className = "square";
@@ -208,10 +208,10 @@ function update() {
 	for (let piece of document.querySelectorAll(".piece"))
 		piece.remove();
 
-	for (let i = 0; i < 144; i++) {
+	for (let i = 0; i < 64; i++) {
 		let notation = i;
 		if (humanSide)
-			notation = 143-i;
+			notation = 63 - i;
 		if (board[notation] <= 0)
 			continue;
 
@@ -266,7 +266,8 @@ function click(current) {
 
 			document.getElementById(selected.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; 
 				background-color: ${isLight(selected) ? LIGHT : DARK}`);
-			makeMove(move);
+			
+			decode(Module.makeMove(encode(), move));
 
 			if (promote) {
 				highlightLastMove(move);
