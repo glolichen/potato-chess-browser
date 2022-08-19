@@ -18,9 +18,9 @@ namespace move {
 		int promote;
 		bool isEp;
 	};
-	void printMove(int move, bool newLine);
-	void makeMove(bitboard::Position &board, int move);
-	std::string makeMoveForJS(std::string fen, move::Move move);
+	void print_move(int move, bool newLine);
+	void make_move(bitboard::Position &board, int move);
+	std::string make_move_for_JS(std::string fen, move::Move move);
 }
 
 #endif

@@ -7,10 +7,10 @@
 #include <emscripten/bind.h>
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(my_module) {
-	function("getAttacked", &moveGen::getChecksForJS);
-	function("makeMove", &move::makeMoveForJS);
-	function("moveGen", &moveGen::moveGenForJS);
+EMSCRIPTEN_BINDINGS(module) {
+	function("getAttacked", &moveGen::get_checks_for_JS);
+	function("makeMove", &move::make_move_for_JS);
+	function("moveGen", &moveGen::move_gen_for_JS);
 	function("perft", &perft::test);
 	function("search", &search::search);
 	value_object<move::Move>("Move")
@@ -26,7 +26,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 		.field("move", &search::SearchResult::move)
 		.field("depth", &search::SearchResult::depth)
 		.field("eval", &search::SearchResult::eval)
-		.field("mateFound", &search::SearchResult::mateFound);
+		.field("mateFound", &search::SearchResult::mate_found);
 	register_vector<int>("IntVector");
 	register_vector<move::Move>("MoveVector");
 }

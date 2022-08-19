@@ -10,14 +10,14 @@ namespace search {
 		int move;
 		int depth;
 		int eval;
-		bool mateFound;
+		bool mate_found;
 	};
 
-	int minimax(const bitboard::Position &board, int depth, int alpha, int beta, int depthFromStart);
+	int minimax(const bitboard::Position &board, int depth, int alpha, int beta, int depth_from_start);
 
-	SearchResult search(std::string fen, int timeMS);
+	SearchResult search(std::string fen, int time_MS);
 
-	bool evalIsMate(int eval);
+	bool eval_is_mate(int eval);
 }
 
 #endif

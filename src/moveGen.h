@@ -6,12 +6,12 @@
 #include "move.h"
 
 namespace moveGen {
-	ull getChecks(const bitboard::Position &board, bool color);
-	void moveGen(const bitboard::Position &board, std::vector<int> &moves);
-	void moveGenWithOrdering(const bitboard::Position &board, std::vector<int> &moves);
+	ull get_checks(const bitboard::Position &board, bool color);
+	void move_gen(const bitboard::Position &board, std::vector<int> &moves);
+	void move_gen_with_ordering(const bitboard::Position &board, std::vector<int> &moves);
 
-	bool getChecksForJS(std::string fen);
-	std::vector<move::Move> moveGenForJS(std::string fen);
+	bool get_checks_for_JS(std::string fen);
+	std::vector<move::Move> move_gen_for_JS(std::string fen);
 }
 
 #endif

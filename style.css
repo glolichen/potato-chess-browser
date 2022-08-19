@@ -74,6 +74,9 @@ td, img {
 .red {
 	color: red;
 }
+.topBuffer {
+	height: 2rem;
+}
 .square {
 	position: relative;
 }

@@ -20,9 +20,9 @@
 // 	// 	move::printMove(move, true);
 // 	// std::cout << moves.size();
 
-// 	// auto search = search::search("rnbqkb1r/ppp1pppp/8/8/2B5/2n2Q2/PPPP1PPP/R1B1K1NR b KQkq - 1 5", 5000);
-// 	// move::printMove(search.move, true);
-// 	// std::cout << search.depth;
+// 	auto search = search::search("rn1qkbnr/pbpp1ppp/1p2p3/3P4/4P3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 5", 5000);
+// 	move::print_move(search.move, true);
+// 	std::cout << search.depth;
 
 // 	// bitboard::decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 // 	// auto hashes1 = hashing::hash(&bitboard::board);
@@ -34,7 +34,7 @@
 
 // 	// move::printMove(211648, true);
 
-// 	perft::test("r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1", 5);
+// 	// perft::test("r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1", 5);
 
 // 	return 0;
 // }

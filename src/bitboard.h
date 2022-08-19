@@ -14,16 +14,16 @@ enum Pieces { PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, ALL };
 
 namespace bitboard {
 	struct Position {
-		ull allPieces;
+		ull all_pieces;
 		ull pieces[2][7];
 		int mailbox[64];
 
 		bool turn;
-		int enPassant;
+		int en_passant;
 		bool castle[4];
 
-		int fiftyMoveClock;
-		int fullMove;
+		int fifty_move_clock;
+		int full_move;
 	};
 
 	extern Position board;
@@ -31,12 +31,12 @@ namespace bitboard {
 	extern std::string squares[];
 	extern std::string pieces;
 
-	std::vector<std::string> split(std::string str, char splitOn);
+	std::vector<std::string> split(std::string str, char split_on);
 
 	void decode(std::string fen);
 	std::string encode(const Position &board);
 
-	void printBoard(const Position &board);
+	void print_board(const Position &board);
 }
 
 #endif
