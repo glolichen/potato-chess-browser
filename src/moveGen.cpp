@@ -333,15 +333,19 @@ void moveGen::move_gen(const bitboard::Position &board, std::vector<int> &moves)
 			}
 			return;
 		}
-
+		
 		int checker_pos = __builtin_ctzll(checks);
-		if (board.mailbox[checker_pos] == KNIGHT || board.mailbox[checker_pos] == KNIGHT + 6)
+		int piece = board.mailbox[checker_pos];
+		if (piece >= 6)
+			piece -= 6;
+
+		if (board.mailbox[checker_pos] == KNIGHT)
 			blocks = 1ull << checker_pos;
 		else {
 			ull filled = (1ull << checker_pos) | (1ull << king_pos);
 			filled = maps::fill[__builtin_ctzll(filled)][63 - __builtin_clzll(filled)];
-			if (maps::pinned_offsets[king_pos].count(king_pos - checker_pos))
-				blocks = maps::pinned_offsets[king_pos].at(king_pos - checker_pos) & filled & ~board.pieces[board.turn][KING];
+			if (maps::pinned_offsets[piece][king_pos].count(king_pos - checker_pos))
+				blocks = maps::pinned_offsets[piece][king_pos].at(king_pos - checker_pos) & filled & ~board.pieces[board.turn][KING];
 			else
 				blocks = 1ull << checker_pos;
 		}

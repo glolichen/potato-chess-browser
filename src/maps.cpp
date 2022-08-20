@@ -7,7 +7,7 @@ ull maps::knight[64];
 ull maps::rook[64][4]; // 0 = north, 1 = east, 2 = south, 3 = east, 4 = all
 ull maps::bishop[64][4]; // 0 = northeast, 1 = southeast, 2 = southwest, 3 = northwest, 4 = all
 ull maps::fill[64][64];
-std::unordered_map<int, ull> maps::pinned_offsets[64];
+std::unordered_map<int, ull> maps::pinned_offsets[6][64];
 std::unordered_map<int, ull> maps::pinned_offsets_all[64];
 	
 void maps::init() {
@@ -54,14 +54,14 @@ void maps::init() {
 			SET1(maps::knight[x * 8 + y], (x - 2) * 8 + y - 1);
 
 		for (int j = 1; j <= 7; j++) {
-			maps::pinned_offsets[i].insert({ j * -8, maps::rook[i][0] });
-			maps::pinned_offsets[i].insert({ j * 8, maps::rook[i][2] });
-			maps::pinned_offsets[i].insert({ j * 1, maps::rook[i][1] });
-			maps::pinned_offsets[i].insert({ j * -1, maps::rook[i][3] });
-			maps::pinned_offsets[i].insert({ j * -7, maps::bishop[i][0] });
-			maps::pinned_offsets[i].insert({ j * 7, maps::bishop[i][2] });
-			maps::pinned_offsets[i].insert({ j * 9, maps::bishop[i][1] });
-			maps::pinned_offsets[i].insert({ j * -9, maps::bishop[i][3] });
+			maps::pinned_offsets[ROOK][i].insert({ j * -8, maps::rook[i][0] });
+			maps::pinned_offsets[ROOK][i].insert({ j * 8, maps::rook[i][2] });
+			maps::pinned_offsets[ROOK][i].insert({ j * 1, maps::rook[i][1] });
+			maps::pinned_offsets[ROOK][i].insert({ j * -1, maps::rook[i][3] });
+			maps::pinned_offsets[BISHOP][i].insert({ j * -7, maps::bishop[i][0] });
+			maps::pinned_offsets[BISHOP][i].insert({ j * 7, maps::bishop[i][2] });
+			maps::pinned_offsets[BISHOP][i].insert({ j * 9, maps::bishop[i][1] });
+			maps::pinned_offsets[BISHOP][i].insert({ j * -9, maps::bishop[i][3] });
 
 			maps::pinned_offsets_all[i].insert({ j * -8, maps::rook[i][0] | maps::rook[i][2] });
 			maps::pinned_offsets_all[i].insert({ j * 8, maps::rook[i][0] | maps::rook[i][2] });
