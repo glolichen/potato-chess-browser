@@ -16,8 +16,6 @@ var moveClock = 1;
 var fiftyMoveClock = 0;
 
 function decode(fen) {
-	document.getElementById("pgn").textContent = "";
-
 	board.length = 64;
 	board.fill(-1);
 
@@ -69,11 +67,6 @@ function decode(fen) {
 				continue;
 			}
 		}
-	}
-
-	if (turn) {
-		document.getElementById("pgn").textContent = moveClock + "...";
-		moveClock++;
 	}
 }
 function encode() {

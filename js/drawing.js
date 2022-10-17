@@ -15,7 +15,6 @@ const LAST_MOVE_DARK = "#aaa23a";
 const LAST_MOVE_LIGHT = "#cdd26a";
 
 decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-// decode("8/8/8/4k3/8/8/7P/7K w - - 0 1");
 
 document.getElementById("fen").value = encode();
 
@@ -267,6 +266,14 @@ function click(current) {
 			document.getElementById(selected.toString())?.setAttribute("style", `width: ${SIZE}px; height: ${SIZE}px; 
 				background-color: ${isLight(selected) ? LIGHT : DARK}`);
 			
+			if (!turn) {
+				document.getElementById("pgn").textContent += moveClock + ". " + moveToSAN(move);
+				moveClock++;
+			}
+			else
+				document.getElementById("pgn").textContent += " " + moveToSAN(move) + "\n";
+			document.getElementById("pgn").scrollTop = document.getElementById("pgn").scrollHeight;
+			
 			decode(Module.makeMove(encode(), move));
 
 			if (promote) {
@@ -387,6 +394,12 @@ document.getElementById("reset").onclick = () => {
 	update();
 }
 document.getElementById("loadButton").onclick = () => {
+	document.getElementById("pgn").textContent = "";
+	if (turn) {
+		document.getElementById("pgn").textContent = moveClock + "...";
+		moveClock++;
+	}
+
 	let fen = document.getElementById("resetFenInput").value;
 	if (!validFEN(fen)) {
 		alert("Invalid FEN");
@@ -406,7 +419,7 @@ document.getElementById("loadButton").onclick = () => {
 document.getElementById("closeButton").onclick = () => {
 	document.getElementById("resetInput").removeAttribute("open");
 }
-document.getElementById("pgn").setAttribute("style", `width: ${SIZE * 2}px; height: ${SIZE * 8 - 9}px;`);
+document.getElementById("pgn").setAttribute("style", `width: ${SIZE * 2.25}px; height: ${SIZE * 8 - 9}px;`);
 
 init();
 initSidePicker();

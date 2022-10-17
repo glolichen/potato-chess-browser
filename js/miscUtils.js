@@ -6,7 +6,15 @@ function computerMove() {
 			if (moveToUCI(move) == bookMove) {
 				document.getElementById("depth").innerHTML = "<b>Depth: Book Move</b>";
 				document.getElementById("eval").innerHTML = "<b>Evaluation: -</b>";
-
+				
+				if (!turn) {
+					document.getElementById("pgn").textContent += moveClock + ". " + moveToSAN(move);
+					moveClock++;
+				}
+				else
+					document.getElementById("pgn").textContent += " " + moveToSAN(move) + "\n";
+				document.getElementById("pgn").scrollTop = document.getElementById("pgn").scrollHeight;
+				
 				decode(Module.makeMove(encode(), move));
 
 				highlightLastMove(move);
@@ -40,6 +48,14 @@ function computerMove() {
 					document.getElementById("depth").innerHTML = "<b>Depth: Endgame Tablebase Move</b>";
 					document.getElementById("eval").innerHTML = `<b>Evaluation: ${result}</b>`;
 	
+					if (!turn) {
+						document.getElementById("pgn").textContent += moveClock + ". " + moveToSAN(move);
+						moveClock++;
+					}
+					else
+						document.getElementById("pgn").textContent += " " + moveToSAN(move) + "\n";
+					document.getElementById("pgn").scrollTop = document.getElementById("pgn").scrollHeight;	
+
 					decode(Module.makeMove(encode(), move));
 					highlightLastMove(move);
 					moves = moveGen();
@@ -68,6 +84,14 @@ function computerMove() {
 	worker.onmessage = e => {
 		document.getElementById("depth").innerHTML = `<b>Depth: ${e.data[1]} ${e.data[3] ? `<span class="red">(Mate in ${Math.round(e.data[1]/2)} found)</span>` : ""}</b>`;
 		document.getElementById("eval").innerHTML = `<b>Evaluation: ${e.data[2] > 0 ? "+" : ""}${e.data[2] / 100}</b>`;
+		
+		if (!turn) {
+			document.getElementById("pgn").textContent += moveClock + ". " + moveToSAN(e.data[0]);
+			moveClock++;
+		}
+		else
+			document.getElementById("pgn").textContent += " " + moveToSAN(e.data[0]) + "\n";
+		document.getElementById("pgn").scrollTop = document.getElementById("pgn").scrollHeight;
 		
 		decode(Module.makeMove(encode(), e.data[0]));
 
