@@ -13,7 +13,7 @@
 // 	maps::init();
 // 	eval::init();
 
-// 	bitboard::decode("8/R1p3p1/3k1p2/1B2r2p/r6K/8/8/8 w - - 0 37");
+// 	bitboard::decode("r1b1kbnr/ppppqppp/2n5/3P4/8/8/PPP2PPP/RNBQKBNR w KQkq - 0 5");
 // 	std::vector<int> moves;
 // 	moveGen::move_gen(bitboard::board, moves);
 // 	for (const int &move : moves)
