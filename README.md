@@ -8,7 +8,7 @@ Features:
    * Memory growth must be allowed as memory usage usually exceeds 16MB
  * Can also be used as a desktop app (electron) for maximum performance
  * Bitboard-based move generator
- * 22 million nodes per second move generator
+ * 30-100 million nodes per second move generator (depends on platform and position)
    * Keeps track of pinned pieces and the direction they are pinned
    * Keeps track of squares attacked by the opponent to prevent king from moving there
  * Tapered evaluation (uses game phase to "weigh" the importance of midgame score to endgame score) with piece tables
