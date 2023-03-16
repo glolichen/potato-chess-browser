@@ -41,20 +41,23 @@
 		maps::init();
 		eval::init();
 
-		bitboard::decode("1k6/7p/5n1p/2b4p/4r2P/7P/2Q4P/K7 w - - 0 1");
-		// bitboard::decode("8/4k3/8/8/8/2r5/3K4/4r3 w - - 0 1");
+		bitboard::decode("r1bqkb1r/pppppppp/2n5/4P3/3Pn3/5Q2/PPP2PPP/RNB1KBNR b KQkq - 0 5");
+
+		// move::print_move(moves[7], 1);
+		// std::cout << moves[7] << "\n";
+
+		move::make_move(bitboard::board, 215296);
+		bitboard::print_board(bitboard::board);
 
 		std::vector<int> moves;
 		moveGen::move_gen(bitboard::board, moves);
 
-		// for (int ]ove : moves)
-		// 	move::print_move(move, 1);
+		for (int move : moves)
+			move::print_move(move, 1);
 
-		// std::cout << moves[0] << "\n";
-
-		auto search = search::search("1K6/7p/5N1p/2B4p/4R2P/7P/2q4P/k7 b - - 0 1", 3000);
-		move::print_move(search.move, true);
-		std::cout << search.depth;
+		// auto search = search::search("rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq - 0 1", 3000);
+		// move::print_move(search.move, true);
+		// std::cout << search.depth;
 
 		// bitboard::decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 		// auto hashes1 = hashing::hash(&bitboard::board);

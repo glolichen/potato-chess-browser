@@ -4,10 +4,10 @@
 #include "move.h"
 
 void move::print_move(int move, bool newLine) {
-	std::cout << bitboard::squares[63 - SOURCE(move)];
+	std::cout << bitboard::squares[SOURCE(move)];
 
 	int dest = DEST(move);
-	std::cout << bitboard::squares[63 - dest];
+	std::cout << bitboard::squares[dest];
 
 	int promote = PROMOTE(move);
 	if (promote)

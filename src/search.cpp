@@ -13,6 +13,8 @@
 #include "moveGen.h"
 #include "search.h"
 
+#define DELTA_CUTOFF 900
+
 const int SEARCH_EXPIRED = INT_MIN + 500;
 
 bool top_move_null;
@@ -24,8 +26,14 @@ ull limit;
 // algorithm from: https://www.chessprogramming.org/Quiescence_Search
 int quiescence(const bitboard::Position &board, int alpha, int beta) {
 	int eval = eval::evaluate(board) * (board.turn ? -1 : 1);
+
 	if (eval >= beta)
 		return beta;
+
+	// if (is pawn promotion)
+
+	if (alpha <= INT_MIN + 1 && alpha >= INT_MAX - 1 && eval < alpha - DELTA_CUTOFF)
+		return alpha;
 
 	alpha = std::max(eval, alpha);
 	
