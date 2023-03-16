@@ -31,7 +31,7 @@ std::tuple<ull, ull, ull> hash::hash(const bitboard::Position &board) {
 			int pos = __builtin_ctzll(pieces);
 			int piece = board.mailbox[pos];
 			if (piece != -1)
-				*hash_locations[i] ^= zobrist_tables[i][pos][piece];
+				*(hash_locations[i]) ^= zobrist_tables[i][pos][piece];
 			SET0(pieces, pos);
 		}
 	}

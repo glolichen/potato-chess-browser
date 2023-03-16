@@ -20,7 +20,7 @@ ull get_pawn_moves(const bitboard::Position &board, int square) {
 	return answer;
 }
 
-ull get_pawn_attacks(int square, bool color) {
+ull moveGen::get_pawn_attacks(int square, bool color) {
 	ull attacks = 0;
 	if (color) {
 		if (square % 8 > 0)
@@ -36,10 +36,10 @@ ull get_pawn_attacks(int square, bool color) {
 	}
 	return attacks;
 }
-ull get_knight_attacks(int square) {
+ull moveGen::get_knight_attacks(int square) {
 	return maps::knight[square];
 }
-ull get_bishop_attacks(const bitboard::Position &board, const ull &pieces_no_king, int square) {
+ull moveGen::get_bishop_attacks(const bitboard::Position &board, const ull &pieces_no_king, int square) {
 	ull attacks, blockers;
 
 	blockers = maps::bishop[square][0] & pieces_no_king;
@@ -68,7 +68,7 @@ ull get_bishop_attacks(const bitboard::Position &board, const ull &pieces_no_kin
 
 	return attacks;
 }
-ull get_rook_attacks(const bitboard::Position &board, const ull &pieces_no_king, int square) {
+ull moveGen::get_rook_attacks(const bitboard::Position &board, const ull &pieces_no_king, int square) {
 	ull attacks, blockers;
 	
 	blockers = maps::rook[square][0] & pieces_no_king;
@@ -97,7 +97,7 @@ ull get_rook_attacks(const bitboard::Position &board, const ull &pieces_no_king,
 
 	return attacks;
 }
-ull get_queen_attacks(const bitboard::Position &board, const ull &pieces_no_king, int square) {
+ull moveGen::get_queen_attacks(const bitboard::Position &board, const ull &pieces_no_king, int square) {
 	return get_bishop_attacks(board, pieces_no_king, square) | get_rook_attacks(board, pieces_no_king, square);
 }
 ull get_king_attacks(int square) {
@@ -137,35 +137,35 @@ ull getAttacked(const bitboard::Position &board, bool color) {
 	pieces = board.pieces[color][PAWN];
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		attacks |= get_pawn_attacks(pos, color);
+		attacks |= moveGen::get_pawn_attacks(pos, color);
 		SET0(pieces, pos);
 	}
 
 	pieces = board.pieces[color][KNIGHT];
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		attacks |= get_knight_attacks(pos);
+		attacks |= moveGen::get_knight_attacks(pos);
 		SET0(pieces, pos);
 	}
 	
 	pieces = board.pieces[color][BISHOP];
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		attacks |= get_bishop_attacks(board, pieces_no_king, pos);
+		attacks |= moveGen::get_bishop_attacks(board, pieces_no_king, pos);
 		SET0(pieces, pos);
 	}
 
 	pieces = board.pieces[color][ROOK];
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		attacks |= get_rook_attacks(board, pieces_no_king, pos);
+		attacks |= moveGen::get_rook_attacks(board, pieces_no_king, pos);
 		SET0(pieces, pos);
 	}
 	
 	pieces = board.pieces[color][QUEEN];
 	while (pieces) {
 		int pos = __builtin_ctzll(pieces);
-		attacks |= get_queen_attacks(board, pieces_no_king, pos);
+		attacks |= moveGen::get_queen_attacks(board, pieces_no_king, pos);
 		SET0(pieces, pos);
 	}
 	

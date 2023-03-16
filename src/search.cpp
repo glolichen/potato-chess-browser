@@ -21,15 +21,45 @@ std::map<std::tuple<ull, ull, ull>, int> transposition;
 
 ull limit;
 
+// algorithm from: https://www.chessprogramming.org/Quiescence_Search
+int quiescence(const bitboard::Position &board, int alpha, int beta) {
+	int eval = eval::evaluate(board) * (board.turn ? -1 : 1);
+	if (eval >= beta)
+		return beta;
+
+	alpha = std::max(eval, alpha);
+	
+	std::vector<int> moves;
+	moveGen::move_gen_with_ordering(board, moves);
+
+	for (const int &move : moves) {
+		if (board.mailbox[DEST(move)] == -1)
+			continue;
+
+		bitboard::Position new_board;
+		memcpy(&new_board, &board, sizeof(board));
+		move::make_move(new_board, move);
+
+		int score = -quiescence(new_board, -beta, -alpha);
+
+		alpha = std::max(score, alpha);
+		if (score >= beta)
+			return beta;
+	}
+
+	return alpha;
+}
+
 int search::minimax(const bitboard::Position &board, int depth, int alpha, int beta, int depth_from_start) {
 	//check if we have reached the time limit and should end the search
 	ull now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	if (now >= limit)
 		return SEARCH_EXPIRED;
 
-	int evaluation = 0;
-	if (depth == 0)
-		return eval::evaluate(board);
+	if (depth == 0) {
+		return quiescence(board, alpha, beta) * (board.turn ? -1 : 1);
+		// return eval::evaluate(board);
+	}
 
 	if (board.fifty_move_clock >= 50)
 		return 0;
@@ -38,7 +68,7 @@ int search::minimax(const bitboard::Position &board, int depth, int alpha, int b
 	moveGen::move_gen_with_ordering(board, moves);
 
 	// place the previous best move to the top of the list
-	// this should speed up alpha-beta pruning by allowing us to prune most if not all branches
+	// this should speed up alpha-beta pruning by allowing us to prune most branches
 	if (depth_from_start == 0 && !top_move_null) {
 		for (int i = 0; i < moves.size(); i++) {
 			if (moves[i] == bestMove) {
@@ -69,24 +99,23 @@ int search::minimax(const bitboard::Position &board, int depth, int alpha, int b
 		}
 	}
 
+	int evaluation = board.turn ? INT_MAX : INT_MIN;
 	int top_move;
 
-	if (!board.turn && depth) { // white's turn - computer tries to maximize evaluation
-		evaluation = INT_MIN;
-		for (const int &move : moves) {
-			bitboard::Position new_board;
-			memcpy(&new_board, &board, sizeof(board));
-			if (board.mailbox[DEST(move)] != -1 || board.mailbox[SOURCE(move)] == PAWN || board.mailbox[SOURCE(move)] == PAWN + 6)
-				new_board.fifty_move_clock = 0;
-			else
-				new_board.fifty_move_clock++;
-			move::make_move(new_board, move);
+	for (const int &move : moves) {
+		bitboard::Position new_board;
+		memcpy(&new_board, &board, sizeof(board));
+		if (board.mailbox[DEST(move)] != -1 || board.mailbox[SOURCE(move)] == PAWN || board.mailbox[SOURCE(move)] == PAWN + 6)
+			new_board.fifty_move_clock = 0;
+		else
+			new_board.fifty_move_clock++;
+		move::make_move(new_board, move);
 
-			int cur_eval = search::minimax(new_board, depth - 1, alpha, beta, depth_from_start + 1);
+		int cur_eval = search::minimax(new_board, depth - 1, alpha, beta, depth_from_start + 1);
+		if (cur_eval == SEARCH_EXPIRED)
+			return SEARCH_EXPIRED;
 
-			if (cur_eval == SEARCH_EXPIRED)
-				return SEARCH_EXPIRED;
-
+		if (!board.turn) { // white
 			if (cur_eval > evaluation) {
 				evaluation = cur_eval;
 				top_move = move;
@@ -96,23 +125,7 @@ int search::minimax(const bitboard::Position &board, int depth, int alpha, int b
 			if (beta <= alpha)
 				break;
 		}
-	}
-	else if (board.turn && depth) { // black's turn - computer tries to minimize evaluation
-		evaluation = INT_MAX;
-		for (const int &move : moves) {
-			bitboard::Position new_board;
-			memcpy(&new_board, &board, sizeof(board));
-			if (board.mailbox[DEST(move)] != -1 || board.mailbox[SOURCE(move)] == PAWN || board.mailbox[SOURCE(move)] == PAWN + 6)
-				new_board.fifty_move_clock = 0;
-			else
-				new_board.fifty_move_clock++;
-			move::make_move(new_board, move);
-
-			int cur_eval = search::minimax(new_board, depth - 1, alpha, beta, depth_from_start + 1);
-
-			if (cur_eval == SEARCH_EXPIRED)
-				return SEARCH_EXPIRED;
-
+		else { // black
 			if (cur_eval < evaluation) {
 				evaluation = cur_eval;
 				top_move = move;
@@ -160,6 +173,7 @@ search::SearchResult search::search(std::string fen, int time_MS) {
 	int depth = 1;
 	bool is_mate = false;
 
+	// for (; depth <= 1; depth++) {
 	for (; depth <= 100; depth++) {
 		int eval = search::minimax(bitboard::board, depth, INT_MIN, INT_MAX, 0);
 		top_move_null = false;

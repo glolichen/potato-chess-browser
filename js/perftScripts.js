@@ -61,6 +61,7 @@ document.getElementById("startButton").onclick = () => {
 }
 
 function clear() {
+	console.clear();
 	document.getElementById("count").textContent = "";
 	document.getElementById("time").textContent = "";
 	document.getElementById("nps").textContent = "";

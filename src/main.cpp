@@ -1,40 +1,73 @@
-// #include <iostream>
-// #include <tuple>
+#include <iostream>
+#include <tuple>
 
-// #include "bitboard.h"
-// #include "eval.h"
-// #include "maps.h"
-// #include "move.h"
-// #include "moveGen.h"
-// #include "perft.h"
-// #include "search.h"
+#include "bitboard.h"
+#include "eval.h"
+#include "maps.h"
+#include "move.h"
+#include "moveGen.h"
+#include "perft.h"
+#include "search.h"
 
-// int main() {
-// 	maps::init();
-// 	eval::init();
+#ifdef __EMSCRIPTEN__
+	#include <vector>
+	#include <emscripten/bind.h>
+	using namespace emscripten;
+	EMSCRIPTEN_BINDINGS(module) {
+		function("getAttacked", &moveGen::get_checks_for_JS);
+		function("makeMove", &move::make_move_for_JS);
+		function("moveGen", &moveGen::move_gen_for_JS);
+		function("perft", &perft::test);
+		function("search", &search::search);
+		value_object<move::Move>("Move")
+			.field("source", &move::Move::source)
+			.field("dest", &move::Move::dest)
+			.field("castle", &move::Move::castle)
+			.field("promote", &move::Move::promote)
+			.field("isEp", &move::Move::isEp);
+		value_object<perft::PerftResult>("PerftResult")
+			.field("answer", &perft::PerftResult::answer)
+			.field("time", &perft::PerftResult::time);
+		value_object<search::SearchResult>("SearchResult")
+			.field("move", &search::SearchResult::move)
+			.field("depth", &search::SearchResult::depth)
+			.field("eval", &search::SearchResult::eval)
+			.field("mateFound", &search::SearchResult::mate_found);
+		register_vector<int>("IntVector");
+		register_vector<move::Move>("MoveVector");
+	}
+#else
+	int main() {
+		maps::init();
+		eval::init();
 
-// 	bitboard::decode("r1b1kbnr/ppppqppp/2n5/3P4/8/8/PPP2PPP/RNBQKBNR w KQkq - 0 5");
-// 	std::vector<int> moves;
-// 	moveGen::move_gen(bitboard::board, moves);
-// 	for (const int &move : moves)
-// 		move::print_move(move, true);
-// 	std::cout << moves.size();
+		bitboard::decode("1k6/7p/5n1p/2b4p/4r2P/7P/2Q4P/K7 w - - 0 1");
+		// bitboard::decode("8/4k3/8/8/8/2r5/3K4/4r3 w - - 0 1");
 
-// 	// auto search = search::search("rn1qkbnr/pbpp1ppp/1p2p3/3P4/4P3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 5", 5000);
-// 	// move::print_move(search.move, true);
-// 	// std::cout << search.depth;
+		std::vector<int> moves;
+		moveGen::move_gen(bitboard::board, moves);
 
-// 	// bitboard::decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-// 	// auto hashes1 = hashing::hash(&bitboard::board);
+		// for (int ]ove : moves)
+		// 	move::print_move(move, 1);
 
-// 	// bitboard::decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-// 	// auto hashes2 = hashing::hash(&bitboard::board);
+		// std::cout << moves[0] << "\n";
 
-// 	// std::cout << (hashes1 == hashes2) << "\n";
+		auto search = search::search("1K6/7p/5N1p/2B4p/4R2P/7P/2q4P/k7 b - - 0 1", 3000);
+		move::print_move(search.move, true);
+		std::cout << search.depth;
 
-// 	// move::printMove(211648, true);
+		// bitboard::decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+		// auto hashes1 = hashing::hash(&bitboard::board);
 
-// 	// perft::test("r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1", 5);
+		// bitboard::decode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+		// auto hashes2 = hashing::hash(&bitboard::board);
 
-// 	return 0;
-// }
+		// std::cout << (hashes1 == hashes2) << "\n";
+
+		// move::printMove(211648, true);
+
+		// perft::test("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", 5);
+
+		return 0;
+	}
+#endif
