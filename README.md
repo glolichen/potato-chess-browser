@@ -1,5 +1,7 @@
 # Potato Chess
 
+## Fork of https://github.com/glolichen/potato-chess-uci
+
 A chess engine written in C++ and compiled to Web Assembly
 
 Features:
@@ -16,5 +18,3 @@ Features:
  * Transposition table with Zobrist Hashing
  * Move ordering is used to guess the strength of moves to speed up AB pruning
  * Syzygy endgame tablebase (powered by [Lichess](https://github.com/lichess-org/lila-tablebase))
-
-By the way, the name "potato chess" comes from GothamChess' infamous video [1660 hung a piece on move 6](https://www.youtube.com/watch?v=7MRNWxCuIrI) where he calls the player a potato
